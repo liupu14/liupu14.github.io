@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Rython与散点图绘制 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Rython与散点图绘制" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-13
+
+写在前面
+上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/" />
+<meta property="article:published_time" content="2018-08-17T22:51:07+00:00" />
+<meta property="article:modified_time" content="2018-08-17T22:51:07+00:00" />
+<meta itemprop="name" content="Rython与散点图绘制">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-13
+
+写在前面
+上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！">
+<meta itemprop="datePublished" content="2018-08-17T22:51:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-17T22:51:07&#43;00:00" />
+<meta itemprop="wordCount" content="322">
+
+
+
+<meta itemprop="keywords" content="python,R,商务绘图," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Rython与散点图绘制"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-13
+
+写在前面
+上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/&amp;text=Rython%e4%b8%8e%e6%95%a3%e7%82%b9%e5%9b%be%e7%bb%98%e5%88%b6" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/&amp;title=Rython%e4%b8%8e%e6%95%a3%e7%82%b9%e5%9b%be%e7%bb%98%e5%88%b6" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Rython与散点图绘制</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-08-17T22:51:07Z">August 17, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-13</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！</p>
+<h3 id="matplotlib">matplotlib与散点图</h3>
+<p>作为祖师级别的绘图库，matplotlib奠定了其它python绘图库的基础，因此使用python绘制图形自然离不开对于matplotlib库的相关介绍。虽然，相比其它绘图库，matplotlib库绘制图形稍显繁琐，然而熟练地掌握了matplotlib库，才能随心所欲地对各种python图形进行格式设置，所以在小编以后介绍的任意图表绘制中，都将先介绍怎么使用matplotlib库实现，而后再介绍各种更加快速地绘制方法。本期文章主要讲解散点图的绘制，鉴于散点图可能是你遇到的最多的一种图表形式，大家应该已经足够熟悉了散点图的相关概念，所以这里就不再长篇大论散点图了，仅仅介绍一下散点图的绘制过程。如果各位对于小编前期的文章有所了解，那么就会知道使用python绘制散点图存在多种方法，不管使用那种方法，其绘制过程都不是很复杂。这里首先讲一下怎么使用matplotlib绘制最基本的散点图。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相应的库，并且设置绘图嵌入环境</span>
+<span style="color:#f92672">import</span> matplotlib <span style="color:#f92672">as</span> mpl
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">%</span>matplotlib inline
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>]  <span style="color:#75715e"># 中文正常显示</span>
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes.unicode_minus</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">=</span>False  <span style="color:#75715e"># 负数正常显示</span>
+
+<span style="color:#75715e"># 创建数据集</span>
+x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)
+y <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> x <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)
+
+<span style="color:#75715e"># 使用matplotlib绘制散点图</span>
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure()
+ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">111</span>)
+ax<span style="color:#f92672">.</span>scatter(x,y)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">matplotlib与散点图</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/kIDZckX.png" alt="matplotlib与散点图">
+使用matplotlib库绘制散点图最关键的一步就是ax.scatter，其它命令主要是对图形进行格式化或者进行图形的显示设置等，同时要提醒各位的是，使用matplotlib库绘制图形存在两种方式，小编这里混合使用了两种方式，对于两种方式的介绍小编在前期的文章中已经介绍过了，所以这里不再赘述，以后小编会以方便为基准混合使用这两种绘图方式。在对matplotlib库绘制散点图有了基本了解后，下面转入到更加高级的绘图系统。</p>
+<h3 id="seaborn">seaborn与散点图</h3>
+<p>seaborn是基于matplotlib库开发出的一种更加高级的绘图库，它的开发方便了python对于静态图表的绘制，因此小编建议在绘制静态图表时使用这种绘图系统，而对于图形样式的设置则可以参照matplotlib的语法。下文以seaborn库自带的iris数据集为例来进行散点图绘制的讲解，关于这个数据集相信看过小编文章的朋友已经有所了解了，这里就不再赘述。下面首先绘制一个最基本的散点图。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
+<span style="color:#f92672">from</span> seaborn <span style="color:#f92672">import</span> load_dataset
+iris <span style="color:#f92672">=</span> load_dataset(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">iris</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>]  <span style="color:#75715e"># 中文正常显示</span>
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes.unicode_minus</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> False  <span style="color:#75715e"># 负数正常显示</span>
+sns<span style="color:#f92672">.</span>set(style <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">whitegrid</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#f92672">%</span>matplotlib inline
+sns<span style="color:#f92672">.</span>relplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,data <span style="color:#f92672">=</span> iris)
+</code></pre></div><p><img src="https://i.imgur.com/j6L8vUF.png" alt="seaborn与散点图01">
+可以看出这里小编使用了seaborn库中的relplot()函数，其实relplot()函数主要是用来绘制关系型图表的，其名字为relation+plot的复合。所以relplot函数被用来绘制散点图和线形图这两种关系型图表，默认情况下绘制散点图，当然也可以在函数参数中通过使用<code>kind = scatter</code>来进行说明，这种新的绘图方式是在seaborn0.8版本之后引入的，所以如果要使用这种语法方式请升级你的seaborn库，如果你不想升级的话，那么就用sns.scatter()函数，不过小编这里强烈推荐你使用relplot函数。从绘制的图形中可以看出，花萼的宽度与长度存在着一定程度的正相关。不过考虑到中文绘图的习惯，这里小编改一下坐标轴名称并同时增加一下图表名称。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sns<span style="color:#f92672">.</span>relplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,data<span style="color:#f92672">=</span>iris)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn与散点图初探</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/cjeKN3m.png" alt="seaborn与散点图02">
+现在应该了解小编为什麼一定要介绍matplotlib库了吧，因为像seaborn这些高级库在绘图方面虽然存在着很大便利，但是在设置图形格式时还是会参照matplotlib的语法，因此小编也就比较习惯使用seaborn绘图，而用matplotlib设置格式（尽管seaborn自身也能设置格式，但是小编还是偏爱这种方式）。</p>
+<p>散点图是由点对构成，散点图的根本就在于其中的每一个点，这就涉及到点的三种格式：颜色、大小和形状。所以散点图的美化也主要是从这三个方面展开，小编先来介绍颜色格式的设置。因为iris数据集中的species一列为各花的种类，所以小编这里就以这一分类特征为散点图着色。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sns<span style="color:#f92672">.</span>relplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,hue <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>,data<span style="color:#f92672">=</span>iris)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn与散点图初探</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/2NpVHn1.png" alt="seaborn与散点图03">
+在新的命令中仅仅是多了<code>hue = 'species'</code>这一参数，然而图形却发生了根本变化，这就是seaborn称之为高级绘图库的原因。可以看出图形按照花的类型分别进行了散点图的绘制，这一下可以更加明显地看出花萼宽度与花萼长度之间的正相关。seaborn的这种语法类似于R语言中的ggplot2语法，它也是将特征映射，而后根据映射进行绘图。其中的<code>hue</code>是色彩色调的意思，所以描述颜色的单词不只有colour，大家顺便复习一下自己的英语水平呀。下面接着讲述形状的设置。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sns<span style="color:#f92672">.</span>relplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,style <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>,data<span style="color:#f92672">=</span>iris)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn与散点图初探</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/w8TRtyQ.png" alt="seaborn与散点图04">
+仅仅需要将参数中的<code>hue</code>换成<code>style</code>即可，当然你完全可以同时使用这两个参数，让图形既有颜色又有形状。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sns<span style="color:#f92672">.</span>relplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,hue <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>,style <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>,data<span style="color:#f92672">=</span>iris)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn与散点图初探</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/Bh10zmE.png" alt="seaborn与散点图05">
+多加一个参数即可。这里需要特别说明一点的是，如果你同时使用颜色格式和形状格式，我建议你要让这两个参数的参数值最好相同，因为相对于形状，人眼对色彩更加敏感，所以如果你对这两个参数使用了不同的参数值，就会造成你观看图形时的视觉混乱，所以如果你不是火眼金睛最好还是老实一下吧。讲完了颜色和形状，那么接下来该谈一谈大小的问题了，在一般的绘图中小编其实不怎么使用大小这一格式的，因为散点图一旦使用了大小格式，那么它就是气泡图了，小编是不怎么喜欢使用气泡图的，不过这里还是介绍一下大小格式的设置。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sns<span style="color:#f92672">.</span>relplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,size <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>,data<span style="color:#f92672">=</span>iris)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn与散点图初探</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/C2GaMZv.png" alt="seaborn与散点图06">
+这里散点图大小的设置还是以species为基础的，所以同一类型花朵的点大小相同，这在美学角度是很不完美的，大小的设置就是为了使得点的大小能够反映值的大小，所以小编这里建议喜欢气泡图的朋友在设置大小这个格式的时候务必使用连续性变量。介绍完了散点图常用的三种格式设置，是时候进一步了。散点图一般用来反映变量之间的关系，所以很多时候散点图本身伴随有拟合线，这才是一副完美的散点图应该具有的特征，因此对于seaborn的介绍最后以这种图的绘制而告结束。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sns<span style="color:#f92672">.</span>lmplot(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_length</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepal_width</span><span style="color:#e6db74">&#39;</span>,hue <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>,data<span style="color:#f92672">=</span>iris)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn与散点图初探</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/aCdx1RE.png" alt="seaborn与散点图07">
+这里命令函数换成了lmplot()，关于这一函数会在后续文章中作进一步说明，这里就不多讲了。通过这一函数，绘制了每种类别花朵的散点图分布与拟合情况，并同时使用不同的颜色加以了标注，很明显可以看出正相关关系是成立的。</p>
+<p>介绍到这里基本上讲清楚了使用seaborn绘制散点图的基本流程，下面将绘图系统转向到R语言中的ggplot2包，小编将告诉你怎么使用ggplot2绘制这些散点图。</p>
+<h3 id="ggplot2">ggplot2与散点图</h3>
+<p>这一部分中，小编将主要以代码的形式给出，至于介绍环节则是能免则免。在正式开始之前小编强烈地建议你在R语言中安装<code>tidyverse</code>包，这个包将涵盖你学习数据分析时能够用到的全部R语言包，它就类似于python方面的Anaconda发行包。喝口凉水，让R语言代码直接开始吧！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># 检验R语言中是否安装了tidyverse包，如果没有安装则安装，而后加载这个包</span>
+if <span style="color:#a6e22e">require</span>(tidyverse){
+    <span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tidyverse&#39;</span>)
+}
+<span style="color:#a6e22e">library</span>(tidyverse)
+
+<span style="color:#75715e"># 绘制基本散点图，对应seaborn的图1</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width))
+
+<span style="color:#75715e"># 绘制seaborn的第二幅图</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot2与散点图&#39;</span>,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度&#39;</span>)
+
+<span style="color:#75715e"># 绘制第三幅图</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width,colour <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>species)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot2与散点图&#39;</span>,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度&#39;</span>)
+
+<span style="color:#75715e"># 绘制第四幅图</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width，shape <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>species)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot2与散点图&#39;</span>,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度&#39;</span>)
+
+<span style="color:#75715e"># 绘制第五幅图</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width，colour <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Species,shape <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Species)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot2与散点图&#39;</span>,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度&#39;</span>)
+
+<span style="color:#75715e">#绘制第六幅图</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width，size <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>species)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot2与散点图&#39;</span>,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度&#39;</span>)
+
+<span style="color:#75715e"># 绘制第七幅图</span>
+<span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> iris) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_smooth</span>(<span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Length,y <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Sepal.Width,colour <span style="color:#f92672">=</span> iris<span style="color:#f92672">$</span>Species)) <span style="color:#f92672">+</span><span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot2与散点图&#39;</span>,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼长度&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">花萼宽度&#39;</span>)
+</code></pre></div><p>因为ggplot2相关的语法小编在这之前已有介绍，所以这里就不对这些命令多做说明了，大家可以参照着这些命令在R语言中尝试一下。</p>
+<h3 id="heading1">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下怎么使用python以及R语言去进行散点图的绘制，初步了解了python中的seaborn库以及R语言中的ggplot2包在绘制散点图时的基本语法，更多的绘图介绍将在后续展开，敬请期待。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/r" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">R</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务绘图</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/">ggplot2包介绍——深入图层语法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

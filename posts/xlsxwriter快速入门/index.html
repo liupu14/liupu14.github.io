@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>xlsxwriter快速入门 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="xlsxwriter快速入门" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-21
+
+写在前面
+写作之路愈行愈远，又到了新的一期文章更新之时。上期文章中小编和大家聊了一下怎么使用python去操作Word和PPT，即对python-docx和python-pptx进行了基本介绍，后续小编会增加对于这两个库的深入介绍。而本期文章中，小编准备开始讲解之前已经提及到的一个操作Excel的库：xlsxwriter。对于这个库的介绍，小编准备先后撰写7篇文章，争取将这个库的基本语法与命令讲解清楚。本期文章属于第一篇文章，主要对这个库进行概述性介绍，所以本期文章可以作为一篇快速入门的文章，后续文章会进行细节展开，下面进入主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" />
+<meta property="article:published_time" content="2018-05-25T22:18:11+00:00" />
+<meta property="article:modified_time" content="2018-05-25T22:18:11+00:00" />
+<meta itemprop="name" content="xlsxwriter快速入门">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-21
+
+写在前面
+写作之路愈行愈远，又到了新的一期文章更新之时。上期文章中小编和大家聊了一下怎么使用python去操作Word和PPT，即对python-docx和python-pptx进行了基本介绍，后续小编会增加对于这两个库的深入介绍。而本期文章中，小编准备开始讲解之前已经提及到的一个操作Excel的库：xlsxwriter。对于这个库的介绍，小编准备先后撰写7篇文章，争取将这个库的基本语法与命令讲解清楚。本期文章属于第一篇文章，主要对这个库进行概述性介绍，所以本期文章可以作为一篇快速入门的文章，后续文章会进行细节展开，下面进入主题。">
+<meta itemprop="datePublished" content="2018-05-25T22:18:11&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-25T22:18:11&#43;00:00" />
+<meta itemprop="wordCount" content="335">
+
+
+
+<meta itemprop="keywords" content="python,xlsxwriter,商务办公," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="xlsxwriter快速入门"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-21
+
+写在前面
+写作之路愈行愈远，又到了新的一期文章更新之时。上期文章中小编和大家聊了一下怎么使用python去操作Word和PPT，即对python-docx和python-pptx进行了基本介绍，后续小编会增加对于这两个库的深入介绍。而本期文章中，小编准备开始讲解之前已经提及到的一个操作Excel的库：xlsxwriter。对于这个库的介绍，小编准备先后撰写7篇文章，争取将这个库的基本语法与命令讲解清楚。本期文章属于第一篇文章，主要对这个库进行概述性介绍，所以本期文章可以作为一篇快速入门的文章，后续文章会进行细节展开，下面进入主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/&amp;text=xlsxwriter%e5%bf%ab%e9%80%9f%e5%85%a5%e9%97%a8" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/&amp;title=xlsxwriter%e5%bf%ab%e9%80%9f%e5%85%a5%e9%97%a8" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">xlsxwriter快速入门</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-25T22:18:11Z">May 25, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-21</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>写作之路愈行愈远，又到了新的一期文章更新之时。上期文章中小编和大家聊了一下怎么使用python去操作Word和PPT，即对python-docx和python-pptx进行了基本介绍，后续小编会增加对于这两个库的深入介绍。而本期文章中，小编准备开始讲解之前已经提及到的一个操作Excel的库：xlsxwriter。对于这个库的介绍，小编准备先后撰写7篇文章，争取将这个库的基本语法与命令讲解清楚。本期文章属于第一篇文章，主要对这个库进行概述性介绍，所以本期文章可以作为一篇快速入门的文章，后续文章会进行细节展开，下面进入主题。</p>
+<h3 id="xlsxwriterexcel">xlsxwriter与基本Excel文件创建</h3>
+<p>鉴于在前期文章中，小编已经介绍了xlsxwriter库的详细安装方法，这里小编就不再介绍这个库的安装方法了，并且小编假定你已经成功地安装了xlsxwriter库，如果你尚未进行安装，那么请参阅前期文章，以确保你正确安装。在前期文章中，小编已经讲过单纯使用xlsxwriter只能进行Excel文件的写入操作，如果要进行Excel文件的读取则需要将其与pandas进行配合使用（这一点小编会在后续文章中专门用一篇文章进行讲解），因此本文主要讲述xlsxwriter写入Excel。相信现在很多朋友都没有记账的习惯，虽然小编是一个男生，但不可否认小编还蛮喜欢记账的，这里小编就以自己每月的主要开支为例来讲述xlsxwriter创建Excel文件的过程。小编的日常开支情况主要如下表所述：</p>
+<table>
+<thead>
+<tr>
+<th align="center">开支项目</th>
+<th align="center">费用</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">房租</td>
+<td align="center">2300</td>
+<td align="center">广州房价真坑</td>
+</tr>
+<tr>
+<td align="center">水电费</td>
+<td align="center">200</td>
+<td align="center">广州天气太热</td>
+</tr>
+<tr>
+<td align="center">食品消费</td>
+<td align="center">2000</td>
+<td align="center">蛮节省的嘛</td>
+</tr>
+<tr>
+<td align="center">文娱消费</td>
+<td align="center">1000</td>
+<td align="center">能不能少去几次影院</td>
+</tr>
+<tr>
+<td align="center">阅读</td>
+<td align="center">200</td>
+<td align="center">书籍是进步的阶梯</td>
+</tr>
+</tbody>
+</table>
+<p>小编现在需要将这个写入到Excel表格中，xlsxwriter可以这么实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> xlsxwriter  <span style="color:#75715e"># 导入xlsxwriter库</span>
+
+<span style="color:#75715e"># 创建一个工作簿与工作表</span>
+workbook <span style="color:#f92672">=</span> xlsxwriter<span style="color:#f92672">.</span>Workbook(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">日常开支01.xlsx</span><span style="color:#e6db74">&#39;</span>)
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_worksheet(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">月度日常开支</span><span style="color:#e6db74">&#39;</span>)
+
+<span style="color:#75715e"># 需要写入的费用数据</span>
+expenses <span style="color:#f92672">=</span> (
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">房租</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2300</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">广州房价真坑</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">水电费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">200</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">广州天气太热</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">食品消费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2000</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">蛮节省的嘛</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">文娱消费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">1000</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">能不能少去几次影院</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">阅读</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">200</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">书籍是进步的阶梯</span><span style="color:#e6db74">&#39;</span>],
+)
+
+<span style="color:#75715e"># 开始写入数据，首先写入标题行</span>
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">开支项目</span><span style="color:#e6db74">&#39;</span>)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">费用</span><span style="color:#e6db74">&#39;</span>)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">备注</span><span style="color:#e6db74">&#39;</span>)
+
+<span style="color:#75715e"># 循环写入具体内容</span>
+row <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+col <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">for</span> item,cost,demo <span style="color:#f92672">in</span> (expenses):
+    worksheet<span style="color:#f92672">.</span>write(row,col,item)
+    worksheet<span style="color:#f92672">.</span>write(row,col <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>,cost)
+    worksheet<span style="color:#f92672">.</span>write(row,col <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>,demo)
+    row <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+
+<span style="color:#75715e"># 加入一行汇总行</span>
+worksheet<span style="color:#f92672">.</span>write(row, <span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Total</span><span style="color:#e6db74">&#39;</span>)
+worksheet<span style="color:#f92672">.</span>write(row, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">=SUM(B2:B6)</span><span style="color:#e6db74">&#39;</span>)
+worksheet<span style="color:#f92672">.</span>write(row,<span style="color:#ae81ff">2</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">——</span><span style="color:#e6db74">&#39;</span>)
+
+workbook<span style="color:#f92672">.</span>close() <span style="color:#75715e"># 关闭工作簿</span>
+</code></pre></div><p>运行以上代码，便可以创建一个名为日常开支01的Excel表格，如下截图所示：
+<img src="https://i.imgur.com/5Zn39e5.png" alt="日常开支01">
+这里，小编来逐条解析以上命令，这也将是你创建一个Excel表格的具体步骤。首先通过命令<code>import xlsxwriter</code>导入xlsxwriter库，这是一切的基础，而后采用以下命令分别创建了一个工作簿和工作表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">workbook <span style="color:#f92672">=</span> xlsxwriter<span style="color:#f92672">.</span>Workbook(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">日常开支.xlsx</span><span style="color:#e6db74">&#39;</span>)
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_worksheet(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">月度日常开支</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>值得注意的是<code>workbook.add_worksheet</code>命令创建工作表的时候可以不指定名称，默认的就是我们常见的Sheet1、Sheet2。接着使用<code>worksheet.write</code>命令向单元格中写入内容，这一命令常用形态是<code>worksheet.write(row,col,data)</code>，第一个参数是行，第二个参数是列，第三个参数是写入内容，<strong>注意在xlsxwriter中，行列索引均是从0开始的</strong>，这一点一定要高度重视，不然你可能把内容写错位置。在写入的过程中，小编先写入了标题行，而后使用循环语句写入了具体内容。其实完全可以用循环的方式同时写入标题行和内容行，不过小编不建议你这么做，因为很多时候标题行和内容行的格式是不相同的，分开写入便于对其指定不同格式，这也是单独写入汇总行的原因所在。在写入汇总行的时候，小编使用了一些新的参数内容<code>=SUM(B2:B6)</code>，熟悉Excel的朋友都知道这是典型的Excel加总公式，当然可以在xlsxwriter中使用，关于这点后续文章会进一步说明。在完成了内容的书写之后，小编采用了以下命令关闭了工作簿。在完成内容后合理关闭工作簿这点很重要，一定要切记这点。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">workbook<span style="color:#f92672">.</span>close()
+</code></pre></div><p>这样就完成了一个Excel表格的创建，但细看一下这个表格可以发现，似乎表格缺少点内涵，对于这个表格至少有两点需要完善：其一，标题行和汇总行应该加粗显示；其二，费用中应该加上单位￥。这些格式调整我们在下面展开。</p>
+<h3 id="xlsxwriterexcel1">xlsxwriter与Excel表格格式</h3>
+<p>现在已经明确了需要增加格式的两部分：给标题行和汇总行加粗以及在费用数字前面加上￥符号，小编先上代码，而后进行解释。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> xlsxwriter  <span style="color:#75715e"># 导入xlsxwriter库</span>
+
+<span style="color:#75715e"># 创建一个工作簿与工作表</span>
+workbook <span style="color:#f92672">=</span> xlsxwriter<span style="color:#f92672">.</span>Workbook(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">日常开支02.xlsx</span><span style="color:#e6db74">&#39;</span>)
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_worksheet(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">月度日常开支</span><span style="color:#e6db74">&#39;</span>)
+
+ <span style="color:#75715e"># 增加加粗格式</span>
+ bold <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: True})
+
+ <span style="color:#75715e"># 增加￥符号格式</span>
+ money <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">￥###0</span><span style="color:#e6db74">&#39;</span>})
+
+<span style="color:#75715e"># 需要写入的费用数据</span>
+expenses <span style="color:#f92672">=</span> (
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">房租</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2300</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">广州房价真坑</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">水电费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">200</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">广州天气太热</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">食品消费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2000</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">蛮节省的嘛</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">文娱消费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">1000</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">能不能少去几次影院</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">阅读</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">200</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">书籍是进步的阶梯</span><span style="color:#e6db74">&#39;</span>],
+)
+
+<span style="color:#75715e"># 开始写入数据，首先写入标题行</span>
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">开支项目</span><span style="color:#e6db74">&#39;</span>,bold)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">费用</span><span style="color:#e6db74">&#39;</span>,bold)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">备注</span><span style="color:#e6db74">&#39;</span>,bold)
+
+<span style="color:#75715e"># 循环写入具体内容</span>
+row <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+col <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">for</span> item,cost,demo <span style="color:#f92672">in</span> (expenses):
+    worksheet<span style="color:#f92672">.</span>write(row,col,item)
+    worksheet<span style="color:#f92672">.</span>write(row,col <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>,cost,money)
+    worksheet<span style="color:#f92672">.</span>write(row,col <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>,demo)
+    row <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+
+<span style="color:#75715e"># 加入一行汇总行</span>
+worksheet<span style="color:#f92672">.</span>write(row, <span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Total</span><span style="color:#e6db74">&#39;</span><span style="color:#960050;background-color:#1e0010">，</span>bold)
+worksheet<span style="color:#f92672">.</span>write(row, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">=SUM(B2:B6)</span><span style="color:#e6db74">&#39;</span>money)
+worksheet<span style="color:#f92672">.</span>write(row,<span style="color:#ae81ff">2</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">——</span><span style="color:#e6db74">&#39;</span>,bold)
+
+workbook<span style="color:#f92672">.</span>close() <span style="color:#75715e"># 关闭工作簿</span>
+</code></pre></div><p><img src="https://i.imgur.com/5WTkdNx.png" alt="日常开支02">
+这样便完成了格式设置，其实整个程序只是修改了几个地方。首先，小编通过以下命令分别引入了加粗格式和￥符号添加格式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">bold <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: True})
+money <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">￥###0</span><span style="color:#e6db74">&#39;</span>})
+</code></pre></div><p>很明显这里重要的命令就是<code>add_format</code>，这个命令会在后续文章深入介绍，这里就不再多做说明。在定义好格式之后只需要在需要添加的单元格中使用相应的格式就可以了。例如我们在标题行中想将开支项目这一项加粗，那么只需要在原来的命令中通过加入格式命令即可，即通过使用<code>worksheet.write('A1','开支项目',bold)</code>便可以完成加粗。这里小编也给出了单元格书写的另一种方式，也是你最熟悉的格式，即直接使用<code>A1</code>便可以了，不过需要注意的是这里的字母一定要写成大写，不要使用小写，这一点和Excel还是有一点不同的。现在我们基本完成了使用xlsxwriter创建Excel表格的过程，下面小编进一步介绍一下单元格的各种写入命令。</p>
+<h3 id="xlsxwriter">xlsxwriter与单元格写入命令</h3>
+<p>Excel表格中的数据有多种类型，我们经常使用的有数值类型、时间类型、文本类型，所以xlsxwriter也提供了各种类型进行写入的命令。虽然使用<code>wriet</code>命令都可以进行单元格的输入，但是这种输入存在一种问题，就是在写入时数据类型会把各种默认值替代，所以如果你不去仔细查看一下相应类型，你可能并不是很清楚写入的内容到底是以什麼类型进行的，而采用专门的写入命令就轻松地避免了这个问题，下面还是以先程序后说明的方式来进行说明吧。鉴于小编的费用单中并没有时间，这里对费用表增加一项时间列，修改后的费用表类型如下。</p>
+<table>
+<thead>
+<tr>
+<th align="center">开支项目</th>
+<th align="center">费用</th>
+<th align="center">备注</th>
+<th align="center">日期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">房租</td>
+<td align="center">2300</td>
+<td align="center">广州房价真坑</td>
+<td align="center">2018-05-01</td>
+</tr>
+<tr>
+<td align="center">水电费</td>
+<td align="center">200</td>
+<td align="center">广州天气太热</td>
+<td align="center">2018-05-05</td>
+</tr>
+<tr>
+<td align="center">食品消费</td>
+<td align="center">2000</td>
+<td align="center">蛮节省的嘛</td>
+<td align="center">2018-04-16</td>
+</tr>
+<tr>
+<td align="center">文娱消费</td>
+<td align="center">1000</td>
+<td align="center">能不能少去几次影院</td>
+<td align="center">2018-04-09</td>
+</tr>
+<tr>
+<td align="center">阅读</td>
+<td align="center">200</td>
+<td align="center">书籍是进步的阶梯</td>
+<td align="center">2018-04-26</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关库</span>
+<span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime
+<span style="color:#f92672">import</span> xlsxwriter
+
+<span style="color:#75715e"># 创建工作簿和工作表</span>
+workbook <span style="color:#f92672">=</span> xlsxwriter<span style="color:#f92672">.</span>Workbook(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">日常开支03.xlsx</span><span style="color:#e6db74">&#39;</span>)
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_worksheet(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">月度日常开支</span><span style="color:#e6db74">&#39;</span>)
+
+<span style="color:#75715e"># 加粗格式设置</span>
+bold <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: <span style="color:#ae81ff">1</span>})
+
+<span style="color:#75715e"># 增加￥符号设置</span>
+money <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">￥###0</span><span style="color:#e6db74">&#39;</span>})
+
+<span style="color:#75715e"># 增加日期设置格式</span>
+date_format <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yyyy/mm/dd</span><span style="color:#e6db74">&#39;</span>})
+
+<span style="color:#75715e"># 调整列宽</span>
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">20</span>)
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">10</span>)
+
+<span style="color:#75715e"># 写入标题行</span>
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A1</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">开支项目</span><span style="color:#e6db74">&#39;</span>, bold)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B1</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">费用</span><span style="color:#e6db74">&#39;</span>, bold)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C1</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">备注</span><span style="color:#e6db74">&#39;</span>, bold)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D1</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">日期</span><span style="color:#e6db74">&#39;</span>, bold)
+
+<span style="color:#75715e"># 表格内容</span>
+expenses <span style="color:#f92672">=</span> (
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">房租</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2300</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">广州房价真坑</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-05-01</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">水电费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">200</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">广州天气太热</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-05-05</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">食品消费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">2000</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">蛮节省的嘛</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-04-16</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">文娱消费</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">1000</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">能不能少去几次影院</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-04-09</span><span style="color:#e6db74">&#39;</span>],
+    [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">阅读</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">200</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">书籍是进步的阶梯</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-04-26</span><span style="color:#e6db74">&#39;</span>],
+)
+
+<span style="color:#75715e"># 写入单元格内容</span>
+ row <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+ col <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+ <span style="color:#66d9ef">for</span> item,cost,demo,date_str <span style="color:#f92672">in</span> (expenses):
+     date <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>strptime(date_str, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%</span><span style="color:#e6db74">Y-</span><span style="color:#e6db74">%</span><span style="color:#e6db74">m-</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
+     worksheet<span style="color:#f92672">.</span>write_string(row, col, item)
+     worksheet<span style="color:#f92672">.</span>write_number(row, col <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, cost, money)
+     worksheet<span style="color:#f92672">.</span>write_number(row, col <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, demo)
+     worksheet<span style="color:#f92672">.</span>write_datetime(row, col <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>, date, date_format)
+     row <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+
+ <span style="color:#75715e"># 写入汇总行</span>
+ worksheet<span style="color:#f92672">.</span>write(row, <span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">总计</span><span style="color:#e6db74">&#39;</span>, bold)
+ worksheet<span style="color:#f92672">.</span>write(row, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">=SUM(B2:B6)</span><span style="color:#e6db74">&#39;</span>, money)
+
+ workbook<span style="color:#f92672">.</span>close() <span style="color:#75715e"># 关闭工作簿</span>
+</code></pre></div><p><img src="https://i.imgur.com/Nbzm3gR.png" alt="日常开支03"></p>
+<p>在写入单元格时小编分别采用了三种写入命令，分别为<code>write_string`,</code>write_number<code>和</code>write_datetime<code>，通过这三种写入命令分别写入了文本格式、数值格式以及日期格式的数据。当然，xlsxwriter还有七天一些写入命令，但鉴于其使用较少，这里不再介绍，以后遇到再聊。除此之外，上面程序还引入了一种新的命令</code>worksheet.set_column`，通过命令本身就可以看出这一命令主要是用来设置列宽的，主要包含两个参数：列的位置以及列的宽度。可以看出只需要几个简单的命令就可以很快滴修改Excel数据表。所以使用xlsxwriter操作数据的最大投入时第一次写程序，在程序写好之后，你只需要对其中需要进一步完善的地方进行个别代码调整就可以了，所以就解放了你每次进行Excel数据表格式设置之苦。</p>
+<h3 id="heading1">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章主要介绍了xlsxwriter在操作Excel时的基本用法，因此本期文章可以看做是xlsxwriter的快速入门指南，后续文章将进一步介绍其中的细节命令。下期文章小编将和大家聊一下R语言中的ggplot2包，让大家了解这个绘图领域中的神器，敬请期待。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/xlsxwriter" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">xlsxwriter</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务办公</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

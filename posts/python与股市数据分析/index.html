@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python与股市数据分析 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python与股市数据分析" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-25
+
+写在前面
+上期文章中，小编和大家聊了一下机器学习之中的朴素贝叶斯算法，大致了解了这一算法在文档分类之中的作用与步骤。阔别上期，本期文章，小编准备和大家谈谈怎么使用python去处理股市数据，这可以作为投资分析系列主题的第一篇文章，在这期文章中，小编准备和大家大致聊聊怎么使用python获取股市数据、怎么将这些数据进行可视化以及在最后谈论一个经典的投资策略——移动平均策略。另外这里有一点需要特别强调：小编往后的投资分析中将主要使用国外的股票数据，当然这里的国外主要指美国。这样选择处于两方面的考虑：其一，国外股市数据相对时间较长，市场较为成熟，股市数据更具代表性；其二，基于国外股票数据得出的策略必须要在国内股市数据的测试成功之下才能使用，因此就促使了大家自己的动手实践，当然还有一点就是，小编不要为各位的任何投资行为负担责任。下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" />
+<meta property="article:published_time" content="2018-07-01T22:02:22+00:00" />
+<meta property="article:modified_time" content="2018-07-01T22:02:22+00:00" />
+<meta itemprop="name" content="Python与股市数据分析">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-25
+
+写在前面
+上期文章中，小编和大家聊了一下机器学习之中的朴素贝叶斯算法，大致了解了这一算法在文档分类之中的作用与步骤。阔别上期，本期文章，小编准备和大家谈谈怎么使用python去处理股市数据，这可以作为投资分析系列主题的第一篇文章，在这期文章中，小编准备和大家大致聊聊怎么使用python获取股市数据、怎么将这些数据进行可视化以及在最后谈论一个经典的投资策略——移动平均策略。另外这里有一点需要特别强调：小编往后的投资分析中将主要使用国外的股票数据，当然这里的国外主要指美国。这样选择处于两方面的考虑：其一，国外股市数据相对时间较长，市场较为成熟，股市数据更具代表性；其二，基于国外股票数据得出的策略必须要在国内股市数据的测试成功之下才能使用，因此就促使了大家自己的动手实践，当然还有一点就是，小编不要为各位的任何投资行为负担责任。下面正式开始。">
+<meta itemprop="datePublished" content="2018-07-01T22:02:22&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-01T22:02:22&#43;00:00" />
+<meta itemprop="wordCount" content="596">
+
+
+
+<meta itemprop="keywords" content="python,投资分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python与股市数据分析"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-25
+
+写在前面
+上期文章中，小编和大家聊了一下机器学习之中的朴素贝叶斯算法，大致了解了这一算法在文档分类之中的作用与步骤。阔别上期，本期文章，小编准备和大家谈谈怎么使用python去处理股市数据，这可以作为投资分析系列主题的第一篇文章，在这期文章中，小编准备和大家大致聊聊怎么使用python获取股市数据、怎么将这些数据进行可视化以及在最后谈论一个经典的投资策略——移动平均策略。另外这里有一点需要特别强调：小编往后的投资分析中将主要使用国外的股票数据，当然这里的国外主要指美国。这样选择处于两方面的考虑：其一，国外股市数据相对时间较长，市场较为成熟，股市数据更具代表性；其二，基于国外股票数据得出的策略必须要在国内股市数据的测试成功之下才能使用，因此就促使了大家自己的动手实践，当然还有一点就是，小编不要为各位的任何投资行为负担责任。下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/&amp;text=Python%e4%b8%8e%e8%82%a1%e5%b8%82%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/&amp;title=Python%e4%b8%8e%e8%82%a1%e5%b8%82%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python与股市数据分析</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-07-01T22:02:22Z">July 1, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-6-25</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期文章中，小编和大家聊了一下机器学习之中的朴素贝叶斯算法，大致了解了这一算法在文档分类之中的作用与步骤。阔别上期，本期文章，小编准备和大家谈谈怎么使用python去处理股市数据，这可以作为投资分析系列主题的第一篇文章，在这期文章中，小编准备和大家大致聊聊怎么使用python获取股市数据、怎么将这些数据进行可视化以及在最后谈论一个经典的投资策略——移动平均策略。另外这里有一点需要特别强调：小编往后的投资分析中将主要使用国外的股票数据，当然这里的国外主要指美国。这样选择处于两方面的考虑：其一，国外股市数据相对时间较长，市场较为成熟，股市数据更具代表性；其二，基于国外股票数据得出的策略必须要在国内股市数据的测试成功之下才能使用，因此就促使了大家自己的动手实践，当然还有一点就是，小编不要为各位的任何投资行为负担责任。下面正式开始。</p>
+<h3 id="python">使用python获取股市数据</h3>
+<p>python中获取股市数据存在多种方法，你可以使用python去爬取各大财经网站上的股票数据，你也可以通过一些现成的数据包去获得相应的股市数据，如果你对股市数据的兴趣点不是高频数据，那么使用这些现成的数据包将是非常方便的（当然这些第三方库目前也可以提供获取高频数据的途径）。小编后面的分析基于美国的股票数据，因此小编在这里选择使用python中的pandas_datareader库去获取股市的数据，关于国内股市数据的获取，小编在前期的文章中已经做过介绍，这里就不再说明。</p>
+<p>因为小编在的分析中将主要使用苹果公司（股票代码AAPL）、谷歌公司（代码GOOG）以及微软公司（代码为MSFT）的股票数据，因此小编首先需要获得这些公司的股市数据，小编的代码用来获取这些公司的数据。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入必要的库</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">from</span> pandas_datareader <span style="color:#f92672">import</span> data <span style="color:#66d9ef">as</span> web
+<span style="color:#f92672">import</span> datetime
+
+<span style="color:#75715e"># 设置起始时间</span>
+start <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>datetime(<span style="color:#ae81ff">2016</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)
+end <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>date<span style="color:#f92672">.</span>today()
+
+<span style="color:#75715e"># 分别获取苹果、谷歌以及微软起始时间内的股价数据</span>
+apple <span style="color:#f92672">=</span> web<span style="color:#f92672">.</span>DataReader(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yahoo</span><span style="color:#e6db74">&#39;</span>,start,end)
+google <span style="color:#f92672">=</span> web<span style="color:#f92672">.</span>DataReader(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GOOG</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yahoo</span><span style="color:#e6db74">&#39;</span>,start,end)
+microsoft <span style="color:#f92672">=</span> web<span style="color:#f92672">.</span>DataReader(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">MSFT</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yahoo</span><span style="color:#e6db74">&#39;</span>,start,end)
+
+<span style="color:#75715e"># 查看一下谷歌股价数据的特征</span>
+google<span style="color:#f92672">.</span>head()
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7XPPduTibufdYIISqs7Na2qicYx4pZ0Dno3TniauF8H08BFLPVj1lIEbIhdpDQR4erfz6AkEj8IcSt1g/0?wx_fmt=png" alt="谷歌股价数据">
+代码的第一部分用来导入必要的python库，使用pandas_datareader获取的数据均为pandas数据框形式，因此在这之前最好导入pandas库，而在导入pandas库之前小编习惯先导入numpy库，所以你们可以不必导入这个库，而至于导入datetime库则主要是用于处理时间的。代码的第二部分则主要用于设置股价获取的起始时间，第一句代码将股价获取的初始时间设置为2006年1月1日，而第二行代码则将介绍时间设置为今天。第三部分的代码则主要用来获取三个公司的股价数据，这主要是通过web.DataReader函数实现，这个函数的基本参数为四个：第一个为股票代码，第二个为获取来源，一般为yahoo或google，第三个和第四个参数则分别为起止时间。最后一部分的一行代码则用来显示谷歌股价的前几行，如图所示。</p>
+<p>可见，使用web.DataReader函数获取的股价数据主要包括六个指标。其中，Open是当天开盘价；high是股票当天最高价；low是股票当天最低价；close是当天收盘价；Volume为成家量交；Adjust close调整后的收盘价（之所以对股价进行调整是要剔除拆股以及分红的影响）。</p>
+<p>在获取了股价数据之后，下一部分这主要是用来可视化，毕竟人类最喜欢的阅读方法永远是图，所以下面的主题部分将包含各种图表。</p>
+<h3 id="heading1">股市数据可视化</h3>
+<p>既然有了股市数据，那么可以根据自己的想法进行可视化，这自然离不开我们的老朋友matplotlib库。小编在这一部分将介绍两种可视化思路，第一种是对单只股票股价数据的展示，第二种是对多只股票的对比展示，下面先开始单只股票的展示，这里小编以谷歌的股价为例进行展示。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入必要的库</span>
+<span style="color:#f92672">import</span> matplotlib <span style="color:#f92672">as</span> mpl
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+<span style="color:#75715e"># 设置相关的绘图环境 </span>
+<span style="color:#f92672">%</span>matplotlib inline
+plt<span style="color:#f92672">.</span>rcParam[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>]
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">figure.figsize</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> (<span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">9</span>)
+
+<span style="color:#75715e"># 绘图</span>
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>plot(grid <span style="color:#f92672">=</span> True)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">时间</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">调整后收盘价</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">谷歌股价走势图</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7XPPduTibufdYIISqs7Na2qicqbHaYTRWYueDfHeAmtfXXNibuDcXYfnKnrpqDibJup0A8XdyjlCg5ibTw/0?wx_fmt=png" alt="">
+这里主要解释一下代码的二三部分。第二部分主要用来设置作图的环境，因为小编是在jupyter notebook中进行程序撰写与调试的，因此第二部分的第一句代码主要是用来让绘制的图形直接在此页面进行显示，而第二行代码则用来设置中文字体，第三行代码用来设置图形的大小。而第三部分的代码主要用来作图，第一行是作图必须，后面三行主要用来设置图形格式。从作出的图形中可以看出，谷歌的股价基本呈现上升趋势，现在的股价水平已经接近1200美元，小编是真的一手都买不起呀。</p>
+<p>然而股价的数据一般表现为四个值：开盘、收盘、最高以及最低。所以使用线形图无法完整展示出股价的特征，这种情况下K线图就主要派上用场了。小编前面已经介绍了怎么使用python绘制K线图了，这里小编以原来的代码为基础重新构造一个更加便利的绘制K线图的函数，见下面代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> matplotlib.dates <span style="color:#f92672">import</span> DateFormatter, WeekdayLocator,DayLocator, MONDAY
+<span style="color:#f92672">from</span> matplotlib.finance <span style="color:#f92672">import</span> candlestick_ohlc
+<span style="color:#f92672">from</span> matplotlib.pylab <span style="color:#f92672">import</span> date2num
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">df_candlestick_ohlc</span>(dat, stick <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">day</span><span style="color:#e6db74">&#34;</span>, otherseries <span style="color:#f92672">=</span> None):
+    mondays <span style="color:#f92672">=</span> WeekdayLocator(MONDAY)        
+    alldays <span style="color:#f92672">=</span> DayLocator()              
+    dayFormatter <span style="color:#f92672">=</span> DateFormatter(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#39;</span>)      
+ 
+    transdat <span style="color:#f92672">=</span> dat<span style="color:#f92672">.</span>loc[:,[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Open</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">High</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]]
+    <span style="color:#66d9ef">if</span> (type(stick) <span style="color:#f92672">==</span> str):
+        <span style="color:#66d9ef">if</span> stick <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">day</span><span style="color:#e6db74">&#34;</span>:
+            plotdat <span style="color:#f92672">=</span> transdat
+            stick <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> 
+        <span style="color:#66d9ef">elif</span> stick <span style="color:#f92672">in</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">week</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">month</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">year</span><span style="color:#e6db74">&#34;</span>]:
+            <span style="color:#66d9ef">if</span> stick <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">week</span><span style="color:#e6db74">&#34;</span>:
+                transdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">week</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_datetime(transdat<span style="color:#f92672">.</span>index)<span style="color:#f92672">.</span>map(<span style="color:#66d9ef">lambda</span> x: x<span style="color:#f92672">.</span>isocalendar()[<span style="color:#ae81ff">1</span>]) <span style="color:#75715e"># Identify weeks</span>
+            <span style="color:#66d9ef">elif</span> stick <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">month</span><span style="color:#e6db74">&#34;</span>:
+                transdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">month</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_datetime(transdat<span style="color:#f92672">.</span>index)<span style="color:#f92672">.</span>map(<span style="color:#66d9ef">lambda</span> x: x<span style="color:#f92672">.</span>month) <span style="color:#75715e"># Identify months</span>
+            transdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">year</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_datetime(transdat<span style="color:#f92672">.</span>index)<span style="color:#f92672">.</span>map(<span style="color:#66d9ef">lambda</span> x: x<span style="color:#f92672">.</span>isocalendar()[<span style="color:#ae81ff">0</span>]) <span style="color:#75715e"># Identify years</span>
+            grouped <span style="color:#f92672">=</span> transdat<span style="color:#f92672">.</span>groupby(list(set([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">year</span><span style="color:#e6db74">&#34;</span>,stick]))) <span style="color:#75715e"># Group by year and other appropriate variable</span>
+            plotdat <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Open</span><span style="color:#e6db74">&#34;</span>: [], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">High</span><span style="color:#e6db74">&#34;</span>: [], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>: [], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>: []}) <span style="color:#75715e"># Create empty data frame containing what will be plotted</span>
+            <span style="color:#66d9ef">for</span> name, group <span style="color:#f92672">in</span> grouped:
+                plotdat <span style="color:#f92672">=</span> plotdat<span style="color:#f92672">.</span>append(pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Open</span><span style="color:#e6db74">&#34;</span>: group<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>],
+                                            <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">High</span><span style="color:#e6db74">&#34;</span>: max(group<span style="color:#f92672">.</span>High),
+                                            <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>: min(group<span style="color:#f92672">.</span>Low),
+                                            <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>: group<span style="color:#f92672">.</span>iloc[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>]},
+                                           index <span style="color:#f92672">=</span> [group<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">0</span>]]))
+            <span style="color:#66d9ef">if</span> stick <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">week</span><span style="color:#e6db74">&#34;</span>: stick <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
+            <span style="color:#66d9ef">elif</span> stick <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">month</span><span style="color:#e6db74">&#34;</span>: stick <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>
+            <span style="color:#66d9ef">elif</span> stick <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">year</span><span style="color:#e6db74">&#34;</span>: stick <span style="color:#f92672">=</span> <span style="color:#ae81ff">365</span>
+ 
+    <span style="color:#66d9ef">elif</span> (type(stick) <span style="color:#f92672">==</span> int <span style="color:#f92672">and</span> stick <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>):
+        transdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">stick</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>floor(i <span style="color:#f92672">/</span> stick) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(transdat<span style="color:#f92672">.</span>index))]
+        grouped <span style="color:#f92672">=</span> transdat<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">stick</span><span style="color:#e6db74">&#34;</span>)
+        plotdat <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Open</span><span style="color:#e6db74">&#34;</span>: [], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">High</span><span style="color:#e6db74">&#34;</span>: [], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>: [], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>: []}) <span style="color:#75715e"># Create empty data frame containing what will be plotted</span>
+        <span style="color:#66d9ef">for</span> name, group <span style="color:#f92672">in</span> grouped:
+            plotdat <span style="color:#f92672">=</span> plotdat<span style="color:#f92672">.</span>append(pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Open</span><span style="color:#e6db74">&#34;</span>: group<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>],
+                                        <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">High</span><span style="color:#e6db74">&#34;</span>: max(group<span style="color:#f92672">.</span>High),
+                                        <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>: min(group<span style="color:#f92672">.</span>Low),
+                                        <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>: group<span style="color:#f92672">.</span>iloc[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>]},
+                                       index <span style="color:#f92672">=</span> [group<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">0</span>]]))
+ 
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Valid inputs to argument </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">stick</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> include the strings </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">day</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">, </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">week</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">, </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">month</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">, </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">year</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">, or a positive integer</span><span style="color:#e6db74">&#39;</span>)
+ 
+ 
+    <span style="color:#75715e"># Set plot parameters, including the axis object ax used for plotting</span>
+    fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+    fig<span style="color:#f92672">.</span>subplots_adjust(bottom<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>)
+    <span style="color:#66d9ef">if</span> plotdat<span style="color:#f92672">.</span>index[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> plotdat<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">&lt;</span> pd<span style="color:#f92672">.</span>Timedelta(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">915 days</span><span style="color:#e6db74">&#39;</span>):
+        weekFormatter <span style="color:#f92672">=</span> DateFormatter(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%</span><span style="color:#e6db74">b </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#39;</span>)  <span style="color:#75715e"># e.g., Jan 12</span>
+        ax<span style="color:#f92672">.</span>xaxis<span style="color:#f92672">.</span>set_major_locator(mondays)
+        ax<span style="color:#f92672">.</span>xaxis<span style="color:#f92672">.</span>set_minor_locator(alldays)
+    <span style="color:#66d9ef">else</span>:
+        weekFormatter <span style="color:#f92672">=</span> DateFormatter(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%</span><span style="color:#e6db74">b </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%</span><span style="color:#e6db74">Y</span><span style="color:#e6db74">&#39;</span>)
+    ax<span style="color:#f92672">.</span>xaxis<span style="color:#f92672">.</span>set_major_formatter(weekFormatter)
+ 
+    ax<span style="color:#f92672">.</span>grid(True)
+ 
+    <span style="color:#75715e"># Create the candelstick chart</span>
+    candlestick_ohlc(ax, list(zip(list(date2num(plotdat<span style="color:#f92672">.</span>index<span style="color:#f92672">.</span>tolist())), plotdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Open</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>tolist(), plotdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">High</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>tolist(),
+                      plotdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>tolist(), plotdat[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>tolist())),
+                      colorup <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">red</span><span style="color:#e6db74">&#34;</span>, colordown <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">green</span><span style="color:#e6db74">&#34;</span>, width <span style="color:#f92672">=</span> stick <span style="color:#f92672">*</span> <span style="color:#f92672">.</span><span style="color:#ae81ff">4</span>)
+    plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">日期</span><span style="color:#e6db74">&#39;</span>)
+    plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">股价</span><span style="color:#e6db74">&#39;</span>)
+    plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">谷歌股价K线图</span><span style="color:#e6db74">&#39;</span>)
+ 
+    <span style="color:#75715e"># Plot other series (such as moving averages) as lines</span>
+    <span style="color:#66d9ef">if</span> otherseries <span style="color:#f92672">!=</span> None:
+        <span style="color:#66d9ef">if</span> type(otherseries) <span style="color:#f92672">!=</span> list:
+            otherseries <span style="color:#f92672">=</span> [otherseries]
+        dat<span style="color:#f92672">.</span>loc[:,otherseries]<span style="color:#f92672">.</span>plot(ax <span style="color:#f92672">=</span> ax, lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.3</span>, grid <span style="color:#f92672">=</span> True)
+ 
+    ax<span style="color:#f92672">.</span>xaxis_date()
+    ax<span style="color:#f92672">.</span>autoscale_view()
+    plt<span style="color:#f92672">.</span>setp(plt<span style="color:#f92672">.</span>gca()<span style="color:#f92672">.</span>get_xticklabels(), rotation<span style="color:#f92672">=</span><span style="color:#ae81ff">45</span>, horizontalalignment<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">right</span><span style="color:#e6db74">&#39;</span>)
+ 
+    plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p>上面小编创建了一个绘制K线图的快捷程序，之所以重新编写K线图的绘制程序是因为原库中的K线图绘制方法存在诸多不便而且每次绘制时都需要进行数据的整理，因此为了便利绘制，这里重新设计了K线图的绘制方法，其中包括天、周、月以及年度的K线图绘制，在绘制时只需要指定好相应的绘制参数即可。鉴于程序相对较长，小编这里就不再一一讲解其中的命令了，有疑问的朋友可以给我留言。下面就使用这个程序来绘制一下谷歌公司自2016年至今的日K线图。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df_candlestick_ohlc(google)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2picx4NP1AlD6iacY5picalCj04ibeicpAz0XJ3IGjKKgGE4hPnNwpKwOGMsJg/0?wx_fmt=png" alt="谷歌股价K线图">
+小编在绘制K线图的时候重新设置了图片的格式，隐去了图片的行标题和列标题以及图片标题，所以和函数稍稍有点不同，不过这个不是什麼大问题，所以不需要过多注意。</p>
+<p>上面小编分别绘制了单只股票的走势图以及K线图，但是很多时候需要对不同的股票数据进行比较，因此需要将这些股价数据整合在一张图中，这个时候K线图是很不方便的，还是需要采用线性图去进行比较，这里小编就以三家公司的调整收盘价为例来绘制相关的图表，具体如下。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">closePrice <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#34;</span>: apple[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>],
+                      <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">MSFT</span><span style="color:#e6db74">&#34;</span>: microsoft[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>],
+                      <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">GOOG</span><span style="color:#e6db74">&#34;</span>: google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>]})
+closePrice<span style="color:#f92672">.</span>plot(grid<span style="color:#f92672">=</span>True)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">时间</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">调整收盘价</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">股价走势比较图</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2picCeIcTXYTubQ7zfJePhDmC7ibDS0VmPJM253sONMZytMDs20ZIJ5n9dA/0?wx_fmt=png" alt="三家公司股价走势比价图">
+上面程序绘制了三家公司的股价走势图，程序中的第一句主要用来创建三家公司调整收盘价的数据框，而后的四条语句分别用来绘制图形以及设置相应的图片格式。不过通过这幅图形可以看出；谷歌的股价要远远地高于其它两家公司的股价，因此如果将它们放在一张图的同一个坐标系下会显得另外两家公司的股价相对没有趋势，为了解决这个问题，可以采取两种思路：其一，设置双坐标轴；其二，使用收益率数据。下面首先考虑使用双坐标轴来解决这个问题。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">closePrice <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#34;</span>: apple[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>],
+                      <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">MSFT</span><span style="color:#e6db74">&#34;</span>: microsoft[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>],
+                      <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">GOOG</span><span style="color:#e6db74">&#34;</span>: google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#34;</span>]})
+closePrice<span style="color:#f92672">.</span>plot(secondary_y <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">MSFT</span><span style="color:#e6db74">&#34;</span>], grid <span style="color:#f92672">=</span> True)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">时间</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">调整收盘价</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">股价走势比较图</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2picqATliajWdic0XMKF5CcODXFvPibzlyVsREzic6IUhYvJrZZb9uU7RZxzLw/0?wx_fmt=png" alt="双坐标股价走势图">
+这种方式虽然使得苹果公司与微软公司的股价走势相对明显，但是一定程度上双坐标的存在又给阅图造成了一定的困扰，所以下面小编将采用收益率数据去进行图形的绘制，请注意，这种方式也是在比较不同的时间序列数据时最为常用的一种方式。小编下面会采用两种收益率数据进行绘图，一种是基准收益率（即所有的数据相对于初始价格的收益率），第二种就是常用的日度收益率，即环比收益率。</p>
+<p>基准收益率（小编这里采用毛收益率）依赖于初始股价水平，这种收益率可以很明显地看出股价的走势，因此在考察时间序列的走势时，这种方式不啻是一种比较好的选择，这种收益率的计算方法为：
+$$return_t = \frac{price_t}{price_0} $$
+下面小编就依据这种收益率绘制相应的图形。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">stock_return <span style="color:#f92672">=</span> closePrice<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: x <span style="color:#f92672">/</span> x[<span style="color:#ae81ff">0</span>])
+stock_return<span style="color:#f92672">.</span>plot(grid <span style="color:#f92672">=</span> True)<span style="color:#f92672">.</span>axhline(y <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">black</span><span style="color:#e6db74">&#34;</span>, lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">时间</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">基准收益率</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">股价收益率</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2pic6ibjA06etyvbgiclfO4DQlGicULGkmAArdoOH9xXynFZ6S3hkELh40MNA/0?wx_fmt=png" alt="股价基准收益率">
+可以看出，这种方式和直接绘制股价比较图时存在一样的问题，即数据的范围差异较大引起的小范围数据显示不明显，因此，下面进一步使用日度收益率来解决这个问题，第t期的收益率可以通过下面公司进行计算：
+$$ return_t = \frac{price_{t+1}}{price_t} - 1$$
+当然也可以通过下面的公司进行计算：
+$$ return_t = \frac{price_{t}}{price_{t-1}} - 1$$
+这两种计算方式还是存在一定的差距的，因此为了避免这种影响，小编采用对数收益率方式进行计算，公式为：
+$$ return_t = \log(\frac{p_t}{p_{t-1}})$$
+下面给出基于这种收益率的程序的图形展示。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+stock_return <span style="color:#f92672">=</span> closePrice<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>log(x) <span style="color:#f92672">-</span> np<span style="color:#f92672">.</span>log(x<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>)))
+stock_return<span style="color:#f92672">.</span>plot(grid <span style="color:#f92672">=</span> True)<span style="color:#f92672">.</span>axhline(y <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">black</span><span style="color:#e6db74">&#34;</span>, lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">时间</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">收益率</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">股价收益率</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2picwdwYc7bcKiacxOCV6hxobXT5ibb8e6JO31fHHBE67SfEcFKiaJmmT9axg/0?wx_fmt=png" alt="股价对数收益率对比">
+可以看出三只股票的收益率存在趋同的趋势，远比单纯使用绝对价格更加有用。上面，小编已经相继介绍了绘制比较图的各种方式，这里稍微总结一下吧，如果想比较趋势的话，最后使用基准收益率，如果想对各公司的股价进行同等对比的话最后使用对数收益率。截止到这里，小编介绍了对于单只股票以及多只股票的绘图方式，下面小编将进行本文的最后一部分，介绍一下移动平均线，这与移动平均策略密切相关，需引起注意。</p>
+<h3 id="heading2">移动平均线图</h3>
+<p>对于时期t，一个n天的移动平均值计算公式为：
+$$MA_t^n = \frac{1}{n}\sum_{i=0}^{n-1}x_{t-i}$$
+移动平均值可以让一个系列的数据变得更平滑，有助于找到趋势。n值越大，移动平均对短期的波动越不敏感。移动平均的基本目的就是从噪音中识别趋势。快速的移动平均有偏小的n，它们更接近股票价格；而慢速的移动平均有较大的n值，这使得它们对波动不敏感从而更加稳定。对于移动平均值的计算，python的pandas库中存在现场的方法，下面小编进行这种方法介绍与绘图。首先，小编计算苹果股价的20天移动平均，并将这一移动平均值绘制在K线图之上。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">20d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>rolling(window <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>, center <span style="color:#f92672">=</span> False)<span style="color:#f92672">.</span>mean(), <span style="color:#ae81ff">2</span>)
+df_candlestick_ohlc(google<span style="color:#f92672">.</span>loc[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2017-10-01</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-06-30</span><span style="color:#e6db74">&#39;</span>,:], otherseries <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">20d</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2pic1PU6IsI5icMEQZ0dXJIwvRpvZrM0hLrvTXneCviawNTxQibujraWI8IRA/0?wx_fmt=png" alt="">
+可以看出移动平均比真实的股票价格数据平滑很多。而且这个指数是非常难改变的：一支股票的价格需要变到平局值之上或之下才能改变移动平均线的方向。因此平均线的交叉点代表了潜在的趋势变化，需要加以注意。交易者往往对不同的移动平均感兴趣，例如7天，20天和200天。要同时生成多条移动平均线也不难：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">7d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>rolling(window <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>, center <span style="color:#f92672">=</span> False)<span style="color:#f92672">.</span>mean(), <span style="color:#ae81ff">2</span>)
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">20d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>rolling(window <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>, center <span style="color:#f92672">=</span> False)<span style="color:#f92672">.</span>mean(), <span style="color:#ae81ff">2</span>)
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">200d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>rolling(window <span style="color:#f92672">=</span> <span style="color:#ae81ff">200</span>, center <span style="color:#f92672">=</span> False)<span style="color:#f92672">.</span>mean(), <span style="color:#ae81ff">2</span>) 
+df_candlestick_ohlc(google<span style="color:#f92672">.</span>loc[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2017-10-01</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-06-30</span><span style="color:#e6db74">&#39;</span>,:], otherseries <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">7d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">20d</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">200d</span><span style="color:#e6db74">&#34;</span>])
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7Uia3C2pBC5cSv2bxcwKT2piczM2gcyLlG4Ip6ghjrx1KkC6yf2nMibtP3osxpPiaK2NkBTU6w3bcxpiaA/0?wx_fmt=png" alt="">
+7天和20天的移动平均线对小的变化非常敏感，而200天的移动平均线波动最小。200天平均线显示出来总体的牛市趋势：股值总体来说一直在上升。20天移动平均线所代表的信息是熊市牛市交替，接下来有可能是牛市。这些平均线的交叉点就是交易信息点，它们代表股票价格的趋势会有所改变因而你需要作出能盈利的相应决策。这些投资决策会在后续文章中进行讲述。</p>
+<h3 id="heading3">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章和大家聊了一下怎么使用python去处理股市数据，了解了怎么使用python去获取股市数据以及对单只股票和多只股票的可视化，本期文章可以作为投资分析类文章第一篇，后续会持续进行更新。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%8A%95%E8%B5%84%E5%88%86%E6%9E%90" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">投资分析</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

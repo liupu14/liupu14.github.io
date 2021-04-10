@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>爬虫数据的数据库存储——MySQL数据库 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="爬虫数据的数据库存储——MySQL数据库" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-28
+
+写在前面
+上期文章，小编和大家聊了一下怎么使用MongoDB数据库去存储python爬取到的数据，本期小编准备再接再厉，接着介绍一下关系型数据库和爬取数据的存储。关系型数据库一直以来都是市场的主流，因此存在众多的关系型数据库管理系统，然而在这众多的数据库管理系统中，小编尤为推荐MySQL这款开源数据库，因此本文将讲解怎么将爬取到的数据存储到MySQL数据库之中，这期爬取的内容小编以豆瓣上面排名前250的书籍信息获取为主，下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/" />
+<meta property="article:published_time" content="2018-08-31T21:16:50+00:00" />
+<meta property="article:modified_time" content="2018-08-31T21:16:50+00:00" />
+<meta itemprop="name" content="爬虫数据的数据库存储——MySQL数据库">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-28
+
+写在前面
+上期文章，小编和大家聊了一下怎么使用MongoDB数据库去存储python爬取到的数据，本期小编准备再接再厉，接着介绍一下关系型数据库和爬取数据的存储。关系型数据库一直以来都是市场的主流，因此存在众多的关系型数据库管理系统，然而在这众多的数据库管理系统中，小编尤为推荐MySQL这款开源数据库，因此本文将讲解怎么将爬取到的数据存储到MySQL数据库之中，这期爬取的内容小编以豆瓣上面排名前250的书籍信息获取为主，下面正式开始。">
+<meta itemprop="datePublished" content="2018-08-31T21:16:50&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-31T21:16:50&#43;00:00" />
+<meta itemprop="wordCount" content="183">
+
+
+
+<meta itemprop="keywords" content="python,MySQL,爬虫," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="爬虫数据的数据库存储——MySQL数据库"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-28
+
+写在前面
+上期文章，小编和大家聊了一下怎么使用MongoDB数据库去存储python爬取到的数据，本期小编准备再接再厉，接着介绍一下关系型数据库和爬取数据的存储。关系型数据库一直以来都是市场的主流，因此存在众多的关系型数据库管理系统，然而在这众多的数据库管理系统中，小编尤为推荐MySQL这款开源数据库，因此本文将讲解怎么将爬取到的数据存储到MySQL数据库之中，这期爬取的内容小编以豆瓣上面排名前250的书籍信息获取为主，下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/&amp;text=%e7%88%ac%e8%99%ab%e6%95%b0%e6%8d%ae%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%98%e5%82%a8%e2%80%94%e2%80%94MySQL%e6%95%b0%e6%8d%ae%e5%ba%93" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/&amp;title=%e7%88%ac%e8%99%ab%e6%95%b0%e6%8d%ae%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%98%e5%82%a8%e2%80%94%e2%80%94MySQL%e6%95%b0%e6%8d%ae%e5%ba%93" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">爬虫数据的数据库存储——MySQL数据库</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-08-31T21:16:50Z">August 31, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-28</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期文章，小编和大家聊了一下怎么使用MongoDB数据库去存储python爬取到的数据，本期小编准备再接再厉，接着介绍一下关系型数据库和爬取数据的存储。关系型数据库一直以来都是市场的主流，因此存在众多的关系型数据库管理系统，然而在这众多的数据库管理系统中，小编尤为推荐MySQL这款开源数据库，因此本文将讲解怎么将爬取到的数据存储到MySQL数据库之中，这期爬取的内容小编以豆瓣上面排名前250的书籍信息获取为主，下面正式开始。</p>
+<h3 id="mysql">MySQL数据库</h3>
+<p>MySQL是目前最受欢迎的开源关系型数据库系统，因为其完全免费及其便捷的操作方式受到数据工作人士的极大欢迎。如果你以前没有听说过关系型数据库，那么小编建议你还是能够稍稍地去了解一下这些知识，毕竟作为一个大数据时代的人，如果对数据库一点认识都没有的话，就有点说不过去了。下面小编分别介绍一些MySQL数据库的安装、可视化管理工具MySQL workbench的安装以及MySQL与python的打通。</p>
+<h4 id="mysql1">MySQL数据库安装</h4>
+<p>相对于MongoDB数据库，MySQL数据库的安装步骤稍微多了一些，不过千万不要畏惧，因为这些步骤都是可以采取默认方式安装，下面小编就带大家领略一些MySQL的安装。</p>
+<ol>
+<li>打开浏览器，进入MySQL官网（https://www.mysql.com/），选择菜单中的Downloads按钮，进入下载页面，如图所示:
+<img src="https://i.imgur.com/7pyCJNE.png" alt="MySQL官网界面"></li>
+<li>在下载页面中选择Community选项，进入社区版下载页面（这个才是免费的，千万不要去下载成立企业版了）；
+<img src="https://i.imgur.com/xQlZyIK.png" alt="下载选择页面"></li>
+<li>在该页面中直接选择其中的DOWNLOAD命令，进入MySQL Community Server下载页面，在该界面的下部分中根据自己的操作系统进行MySQL的下载，这里记得选择MSI installer项进行下载，直接忽略弹出的登陆提示，完成下载；
+<img src="https://i.imgur.com/NHjlHdd.png" alt="下载界面"></li>
+<li>双击下载得到的exe文件进行安装，因为小编的系统上已经安装了MySQL了，这里就不再具体演示MySQL的安装，大家根据界面提示进行安装即可。</li>
+<li>在选择安装类型这一步，直接选择Developer Default按钮，然后继续下一步；</li>
+<li>设置好软件的安装路径，然后点击下一步；</li>
+<li>在这一步安装界面中采取默认就可以，直接点击其中的Execute进行安装；</li>
+<li>然后进入到配置界面，在这个界面中设置好自己的MySQL数据库登陆密码，记得一定要记住自己的命名，不然你可进不了数据库；</li>
+<li>下面直接按照提示，一直按Next进行默认安装即可，直到完成安装。</li>
+<li>因为在MySQL的安装过程中已经开启了数据库服务，因此你不需要像MongoDB那样再进行数据库服务的设置，直接在命令行中输入一下命令进入数据库服务即可。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">mysql <span style="color:#f92672">-</span>u root <span style="color:#f92672">-</span>p xxxxx(<span style="color:#960050;background-color:#1e0010">代</span><span style="color:#960050;background-color:#1e0010">表</span><span style="color:#960050;background-color:#1e0010">你</span><span style="color:#960050;background-color:#1e0010">的</span><span style="color:#960050;background-color:#1e0010">端</span><span style="color:#960050;background-color:#1e0010">口</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#960050;background-color:#1e0010">一</span><span style="color:#960050;background-color:#1e0010">般</span><span style="color:#960050;background-color:#1e0010">为</span><span style="color:#ae81ff">3306</span>)
+</code></pre></div><p>你也可以直接在开始菜单中找到MySQL的命令行打开，然后输入密码之后进入到数据库系统，通过在命令行中输入以下代码来查看你的数据库系统中存在哪些数据库。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">show databases;(<span style="color:#960050;background-color:#1e0010">分</span><span style="color:#960050;background-color:#1e0010">号</span><span style="color:#960050;background-color:#1e0010">一</span><span style="color:#960050;background-color:#1e0010">定</span><span style="color:#960050;background-color:#1e0010">不</span><span style="color:#960050;background-color:#1e0010">要</span><span style="color:#960050;background-color:#1e0010">忘</span><span style="color:#960050;background-color:#1e0010">记</span>)
+</code></pre></div><p><img src="https://i.imgur.com/YgilSAB.png" alt="MySQL命令行界面">
+至此你已经完成了MySQL的安装，不过每次都使用命令行相对有些繁琐，这里推荐一款可视化的管理工具MySQL workbench，听到这个名字你就知道这个绝对是为MySQL而生的，安装的方式特别简单，只需要在谷歌中输入MySQL workbench，然后在其官网中找到MSI installer下载项，随后安装默认的方式进行安装就可以了。在安装完成，第一次打开时，需要输入MySQL数据库的登录名与密码，这些应该都不是难事，界面真的很方便，成功登陆后可以看到界面还是很美观的。
+<img src="https://i.imgur.com/Jr7IRqh.png" alt="MySQL workbench界面">
+既然已经安装好MySQL数据库以及可视化管理工具，那么下面就需要将MySQL与python进行打通了，这需要python中的一个第三方库pymysql，对它的安装就如其它python库的安装方式一样，在命令行中输入以下命令即可：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install pymysql
+</code></pre></div><p>讲到这里相信你已经正确地安装了MySQL以及相关的工具了，至于MySQL的使用，小编这里是不准备讲的，MySQL的语法超级简单，你完全可以在网上找一份教程好好读一下，半天时间就可以上手（这里给大家推荐一本书：福塔的《MySQL必知必会》）下面正式进入实战。</p>
+<h3 id="top250mysql">豆瓣书籍top250与MySQL存储</h3>
+<p>本文准备爬取豆瓣中排名在前250的书籍信息，因为主要是为了演示怎么将爬取到数据存储到MySQL中，因此，这里就不过多爬取书籍信息了，简单的爬取一些书籍名称、作者以及书籍的豆瓣评分。同时考虑到MySQL数据库的数据存储需要预先定义数据表以及设置数据表字段，这里小编首先在MySQL workbench中通过以下命令去新建立一个用来存储书籍信息的表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">create table douban_book(
+book_name text,
+author text,
+score text
+)engine innodb default charset<span style="color:#f92672">=</span>utf8;
+</code></pre></div><p>然后你就可以在MySQL workbench的左边数据表列表中看到新生成的数据表了，下面开始将抓取的数据存入其中。
+<img src="https://i.imgur.com/pwwtQmF.png" alt="创建数据表"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># _*_ coding:utf-8 _*_</span>
+<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Author: liupu</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Filename: douban_book.py</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Date: 2018-8-31</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Description:</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # usage: 爬取豆瓣书籍top250信息并存储到MySQL中</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # platform: win7+python3+visual studio code</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+<span style="color:#75715e"># 导入必要的库</span>
+<span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> re
+<span style="color:#f92672">import</span> pymysql
+<span style="color:#f92672">import</span> time
+
+<span style="color:#75715e"># 连接数据库及数据光标，为后面存储数据准备</span>
+conn <span style="color:#f92672">=</span> pymysql<span style="color:#f92672">.</span>connect(host <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">localhost</span><span style="color:#e6db74">&#39;</span>,user <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">root</span><span style="color:#e6db74">&#39;</span>,passwd <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xxxx</span><span style="color:#e6db74">&#39;</span>,db <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xxxx</span><span style="color:#e6db74">&#39;</span>,port <span style="color:#f92672">=</span> <span style="color:#ae81ff">3306</span>,charset <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">utf8</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 请输入自己的数据库密码与需要连接的数据库</span>
+cursor <span style="color:#f92672">=</span> conn<span style="color:#f92672">.</span>cursor()
+
+<span style="color:#75715e"># 定义爬取函数</span>
+headers <span style="color:#f92672">=</span> {User<span style="color:#f92672">-</span>Agent: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/xxxxxxx Safari/537.36</span><span style="color:#e6db74">&#39;</span>}
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_info</span>(url):
+    <span style="color:#66d9ef">try</span>:
+        res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url,headers <span style="color:#f92672">=</span> headers)
+        infos <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&lt;div class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">pl2</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">.*?title=(.*?)&gt;.*?&lt;p class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">pl</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;(.*?)/.*?&lt;span class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">rating_nums</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;(.*?)&lt;/span&gt;</span><span style="color:#e6db74">&#39;</span>,res<span style="color:#f92672">.</span>text,re<span style="color:#f92672">.</span>S)
+    <span style="color:#66d9ef">except</span>:
+        <span style="color:#66d9ef">pass</span>
+
+    <span style="color:#66d9ef">for</span> info <span style="color:#f92672">in</span> infos:
+        book_name <span style="color:#f92672">=</span> info[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>strip()
+        author <span style="color:#f92672">=</span> info[<span style="color:#ae81ff">1</span>]
+        score <span style="color:#f92672">=</span> info[<span style="color:#ae81ff">2</span>]
+        cursor<span style="color:#f92672">.</span>execute(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">insert into douban_book (book_name,author,score) values (</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">,</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">,</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>, (book_name,author,str(score))) <span style="color:#75715e"># 存储数据</span>
+
+<span style="color:#75715e"># 运行程序</span>
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">__main__</span><span style="color:#e6db74">&#34;</span>:
+    urls <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">https://book.douban.com/top250?start={}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(num) <span style="color:#66d9ef">for</span> num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">250</span>,<span style="color:#ae81ff">25</span>)]
+    <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> urls:
+        get_info(url)
+        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
+    conn<span style="color:#f92672">.</span>commit()
+</code></pre></div><p><img src="https://i.imgur.com/pgBdVfo.png" alt="存储结果"></p>
+<h3 id="heading1">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下怎么使用python获取豆瓣书籍top250的数据，并将其存放入MySQL数据之中。MySQL数据库作为关系型数据库中的优秀代表，其对数据的存放及提取都异常方便，因此很有必要掌握这种数据库的操作，并且掌握其与python的联动。以后小编获得的很多数据也将采用这些数据库方式进行存储，所以希望你们能够习惯这种存储方式。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/mysql" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">MySQL</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%88%AC%E8%99%AB" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">爬虫</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MongoDB数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/">热地图绘制——基于python获取的经纬度坐标</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

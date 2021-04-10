@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>高级python函数知多少？ | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="高级python函数知多少？" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-5
+
+写在前面
+上期文章中，小编和大家聊了一下pandas库的一些高级用法，说明了怎么使用pandas库快速去生成虚拟变量矩阵，然而从目前反馈的情况看来，大家似乎对此缺少兴趣。对于这一点小编有点意外，这里有必要说几句。正所谓万丈高楼平地起，熟练地掌握python中的各种基础知识以及相关的高级技巧，才能够让你真正地进行商务或者投资实践，所以请不要小看这些python知识。另外，小编也不可能每期文章都去讲解一下比较高深的话题，更多时候小编也只是一个python方面的学生而已，所以还请不要过于苛责小编。为了强调小编对于python知识的重视，本期文章小编将继续讲解一下python中几种高级函数，熟练掌握这几个函数绝对能够极大地方便你的实践。下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/" />
+<meta property="article:published_time" content="2018-08-09T21:45:40+00:00" />
+<meta property="article:modified_time" content="2018-08-09T21:45:40+00:00" />
+<meta itemprop="name" content="高级python函数知多少？">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-5
+
+写在前面
+上期文章中，小编和大家聊了一下pandas库的一些高级用法，说明了怎么使用pandas库快速去生成虚拟变量矩阵，然而从目前反馈的情况看来，大家似乎对此缺少兴趣。对于这一点小编有点意外，这里有必要说几句。正所谓万丈高楼平地起，熟练地掌握python中的各种基础知识以及相关的高级技巧，才能够让你真正地进行商务或者投资实践，所以请不要小看这些python知识。另外，小编也不可能每期文章都去讲解一下比较高深的话题，更多时候小编也只是一个python方面的学生而已，所以还请不要过于苛责小编。为了强调小编对于python知识的重视，本期文章小编将继续讲解一下python中几种高级函数，熟练掌握这几个函数绝对能够极大地方便你的实践。下面正式开始。">
+<meta itemprop="datePublished" content="2018-08-09T21:45:40&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-09T21:45:40&#43;00:00" />
+<meta itemprop="wordCount" content="263">
+
+
+
+<meta itemprop="keywords" content="python,函数," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="高级python函数知多少？"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-5
+
+写在前面
+上期文章中，小编和大家聊了一下pandas库的一些高级用法，说明了怎么使用pandas库快速去生成虚拟变量矩阵，然而从目前反馈的情况看来，大家似乎对此缺少兴趣。对于这一点小编有点意外，这里有必要说几句。正所谓万丈高楼平地起，熟练地掌握python中的各种基础知识以及相关的高级技巧，才能够让你真正地进行商务或者投资实践，所以请不要小看这些python知识。另外，小编也不可能每期文章都去讲解一下比较高深的话题，更多时候小编也只是一个python方面的学生而已，所以还请不要过于苛责小编。为了强调小编对于python知识的重视，本期文章小编将继续讲解一下python中几种高级函数，熟练掌握这几个函数绝对能够极大地方便你的实践。下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/&amp;text=%e9%ab%98%e7%ba%a7python%e5%87%bd%e6%95%b0%e7%9f%a5%e5%a4%9a%e5%b0%91%ef%bc%9f" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/&amp;title=%e9%ab%98%e7%ba%a7python%e5%87%bd%e6%95%b0%e7%9f%a5%e5%a4%9a%e5%b0%91%ef%bc%9f" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">高级python函数知多少？</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-08-09T21:45:40Z">August 9, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-5</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期文章中，小编和大家聊了一下pandas库的一些高级用法，说明了怎么使用pandas库快速去生成虚拟变量矩阵，然而从目前反馈的情况看来，大家似乎对此缺少兴趣。对于这一点小编有点意外，这里有必要说几句。正所谓万丈高楼平地起，熟练地掌握python中的各种基础知识以及相关的高级技巧，才能够让你真正地进行商务或者投资实践，所以请不要小看这些python知识。另外，小编也不可能每期文章都去讲解一下比较高深的话题，更多时候小编也只是一个python方面的学生而已，所以还请不要过于苛责小编。为了强调小编对于python知识的重视，本期文章小编将继续讲解一下python中几种高级函数，熟练掌握这几个函数绝对能够极大地方便你的实践。下面正式开始。</p>
+<h3 id="heading1">匿名函数</h3>
+<p>提到函数，小编在之前的文章中已有介绍，这里便不再多做说明。本期小编准备讲的是python中的四种高级函数：匿名函数、map函数、reduce函数以及filter函数。掌握了这四种函数，那么你就对python的便捷以及高效有了一个更加直观的认识。首先，先和大家聊一下匿名函数<code>lambda</code>。</p>
+<p>传统意义上的自定义函数常常是以关键字<code>def</code>开头，而后紧随函数名与函数主体，在引用时通过对函数名赋予相应的参数进而得到相应的值。和这种方式不同的是，lambda创建的同时直接返回一个函数而不是将这个函数赋给某个函数名，所以相对于正统的def函数定义，lambda就被称之为匿名函数。假设我要创建一个计算平方数的函数，如果采用def定义的话，那么我的函数形式应该是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">power</span>(x):
+    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>
+</code></pre></div><p>这样当我计算某个数（例如数字6）的平方时，我就需要将6输入到函数名称后面的参数中，即<code>power(6)</code>，这样便可以得到6的平方36。但是如果现在你采用lambda函数的话，那么你可以写成这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">f <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> x : x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>
+[In] f(<span style="color:#ae81ff">6</span>)
+[out] <span style="color:#ae81ff">36</span>
+</code></pre></div><p>通过这个简单的例子说明了相对于def函数，lambda函数具有两大特征：</p>
+<ol>
+<li>lambda是一个表达式，而不是一条语句；</li>
+<li>lambda的主体是一个单个的表达式，而不是一个代码块。</li>
+</ol>
+<p>这样说，可能会给你造成更多的困惑，简而言之，因为lambda本身的特殊性，使得它能够出现在很多def函数不便出现的地方，尤其是lambda函数常常被广泛运用于序列之中。举一个简单的列表例子予以说明。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 目的：计算2的平方、立方、四次方以及五次方，并组成列表</span>
+<span style="color:#75715e"># def函数的方法</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f1</span>(x): <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f2</span>(x): <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f3</span>(x): retrun x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f4</span>(x): <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>
+L <span style="color:#f92672">=</span> [f1,f2,f3,f4]
+[f(<span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> L] <span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> [<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">32</span>]
+
+<span style="color:#75715e"># lambda函数方法</span>
+[f(<span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> [<span style="color:#66d9ef">lambda</span> x : x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>,<span style="color:#66d9ef">lambda</span> x: x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>,<span style="color:#66d9ef">lambda</span> x: x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>,<span style="color:#66d9ef">lambda</span> x: x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>]]
+</code></pre></div><p>这就是lambda函数的优势所在，它简化了函数的定义，扩展了函数的用处。所以请习惯使用这个函数，并在平常的实践中加大使用它的频率，以期熟练掌握它。</p>
+<h3 id="map">map函数</h3>
+<p>初次看到map这个单词，也许你会在想这不是地图的意思吗，然而数学意义上，map的正确意义应该是映射，所以正如其名一样，这个函数的作用就是用来将某个对象映射到另一个对象之上，一般来说是将一个函数映射到一个序列之上，进而方便序列的运算。考虑一个问题，假如现在我们有一个列表[1,2,3,4,5]，你想计算列表中每个数的平方并将结果输出到一个新的列表，你会怎么做，下面小编给出几种解法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 列表解析的方法</span>
+[x<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]]
+<span style="color:#75715e"># 循环的方法</span>
+newlist <span style="color:#f92672">=</span> []
+<span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]:
+    newlist<span style="color:#f92672">.</span>append(x<span style="color:#f92672">*</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>)
+<span style="color:#66d9ef">return</span> newlist
+<span style="color:#75715e"># numpy列表方法</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+nparray <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>])
+nparray <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>
+<span style="color:#75715e"># map函数的方法</span>
+list(map(<span style="color:#66d9ef">lambda</span> x: x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>,[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]))
+</code></pre></div><p>单从这个例子中，很明显第一种方法最好，然而不要忘记列表解析是有很大的限制的，一般最后控制在两层循环，这就极大地限制了列表解析的使用，而且很多时候列表解析对某些算法无法实现，但是map函数就不同了，它完全可以映射任何类型的函数，所以掌握了map函数就等于掌握了快速进行列表生成的钥匙。</p>
+<h3 id="reduce">reduce函数</h3>
+<p>reduce函数的作用是将函数作用在一个序列上，进而对序列进行累计运算。这样说，可能不太好理解，还是用一个例子说话吧。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 求列表[1,2,3,4,5]的累积和</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(x,y):
+    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">+</span> y
+reduce(add,[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]) <span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">25</span>
+</code></pre></div><p>当然对于这个求和最方便的方法自然是sum([1,2,3,4,5])，然而小编这里只是演示reduce函数的用法，当你掌握了reduce，那么就可以进行一下更加高级的运算。例如，现在你有一个序列[1,2,3,4,5]，你想将其变成12345，你觉得你还能采用加和很快地完成吗（也许你会说，这个只需要采用五次加和和四次乘法就可以了，那如果我将序列扩展至100或者10000个数字时呢），这个时候使用reduce就可以很快完成。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fn</span>(x,y):
+    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">+</span> y
+reduce(fn,[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]) <span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">12345</span>
+</code></pre></div><p>所以不要觉得小编这里介绍的高级函数浪得虚名，你了解越大便会越爱这些。下面讲一下最后一个高级函数filter。</p>
+<h3 id="filter">filter函数</h3>
+<p>这个函数的作用就是名字的意思，就是筛选。这个函数也是具有两个参数，第一个参数一般为一个函数，也就是筛选规则，第二个参数一般为一个序列，然后依据筛选规则在序列中筛选出满足条件的元素组成新的序列。考虑一个序列[1,4,8,3,7,5,2]，假设你想取出其中的奇数，那么你可以采用filter函数很快解决。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_odd</span>(x):
+    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>
+list(filter(is_odd,[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">2</span>])) <span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">5</span>]
+</code></pre></div><p>好事成双，下面再举一个例子来完成对于filter函数的介绍。这个例子讲解了怎么使用filter函数去求解素数。</p>
+<p>计算素数的一种常用方法是埃氏筛法，它的算法过程表现为：首先，列出从2开始的所有自然数，构造出一个序列<code>2,3,4,5,6,7,8,9，……</code>，取序列中的第一个数2，它一定是素数，然后用2除整个序列，筛除所有的2的倍数，得到<code>3,5,7,9</code>，然后取出新序列中的第一个数3，并输出所有3的倍数，得到<code>5,7</code>，这样一直重复筛下去，便会得到所有素数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 定义一个生成无限数字序列的生成器函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_odd_iter</span>():
+    n <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">while</span> True:
+        n <span style="color:#f92672">=</span> n <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>
+        <span style="color:#66d9ef">yield</span> n
+
+<span style="color:#75715e"># 定义一个筛选函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_not_divisible</span>(n):
+    retrun <span style="color:#66d9ef">lambda</span> x : x <span style="color:#f92672">%</span> n <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>
+
+<span style="color:#75715e"># 定义素数生成器</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">prime</span>():
+    <span style="color:#66d9ef">yield</span> <span style="color:#ae81ff">2</span>
+    it <span style="color:#f92672">=</span> _odd_iter
+    <span style="color:#66d9ef">while</span> True:
+        n <span style="color:#f92672">=</span> next(it)
+        <span style="color:#66d9ef">yield</span> n
+        it <span style="color:#f92672">=</span> filter(_not_divisible(n),it)
+
+<span style="color:#75715e"># 生成72以内的所有素数</span>
+primes <span style="color:#f92672">=</span> []
+<span style="color:#66d9ef">for</span> n <span style="color:#f92672">in</span> prime():
+    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1000</span>:
+       primes<span style="color:#f92672">.</span>append(n)
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">break</span>
+primes
+</code></pre></div><p>[3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]，是不是比你自己去排列快了很多。好了，对于filter函数的介绍就到这里吧，请大家自行参照相关资料进一步熟悉。</p>
+<h3 id="heading2">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章和大家聊了一下python中使用率较高的四种高级函数：lambda,map,reduce,filter。初步了解了使用这些函数快速处理序列的优势所在，当然更加熟练的操作永远需要你们自己实践，祝你们好运！最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%87%BD%E6%95%B0" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">函数</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

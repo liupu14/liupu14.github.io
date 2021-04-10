@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BautifulSoup on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/bautifulsoup/</link>
+    <description>Recent content in BautifulSoup on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 14 Sep 2018 23:12:30 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/bautifulsoup/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>送上一碗鸡汤——BeautifulSoup网页解析介绍</title>
+      <link>https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Fri, 14 Sep 2018 23:12:30 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-10&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期讲述了正则表达式在网页解析中的用法，了解了怎么使用正则表达式去获取网页数据。然而正则表达式语法相对较难掌握以及正则表达式书写相对繁琐，所以就相继有了其它一些网页解析方式。本期就和大家讲一下其中的代表BeautifulSoup，可以说这种解析工具在网页解析中是使用最为方便的一种解析方式，其清晰便捷的语法规则真的如其名字所彰显的那样（美丽心灵一般不会作恶），下面正式开始对其的讲解。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R语言数据分析 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/r%E8%AF%AD%E8%A8%80%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</link>
+    <description>Recent content in R语言数据分析 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 16 Mar 2019 09:57:18 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/r%E8%AF%AD%E8%A8%80%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>你租贵了吗？——R语言与链家租房数据分析</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sat, 16 Mar 2019 09:57:18 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2019-01-30&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

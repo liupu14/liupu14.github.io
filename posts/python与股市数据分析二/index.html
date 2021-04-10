@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python与股市数据分析（二） | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python与股市数据分析（二）" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-7-1
+
+写在前面
+上期文章，小编和大家聊了一下怎么使用python去处理股市数据，主要讲述了怎么使用python去获取股市数据、对股市数据进行可视化操作以及绘制移动平均线。然而上期文章总的来说扮演的角色是工具，之所以进行股市可视化以及绘制移动平均线，最终的目的是为了投资决策，因此本期文章，小编就接着上期文章，和大家聊一下怎么通过移动平均线去进行投资决策，小编也将这种策略称之为移动平均交叉策略。当然，这一切的实现还是会依赖于python以及相关的库，这在下面的展开中会论及到，下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/" />
+<meta property="article:published_time" content="2018-07-04T23:07:36+00:00" />
+<meta property="article:modified_time" content="2018-07-04T23:07:36+00:00" />
+<meta itemprop="name" content="Python与股市数据分析（二）">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-7-1
+
+写在前面
+上期文章，小编和大家聊了一下怎么使用python去处理股市数据，主要讲述了怎么使用python去获取股市数据、对股市数据进行可视化操作以及绘制移动平均线。然而上期文章总的来说扮演的角色是工具，之所以进行股市可视化以及绘制移动平均线，最终的目的是为了投资决策，因此本期文章，小编就接着上期文章，和大家聊一下怎么通过移动平均线去进行投资决策，小编也将这种策略称之为移动平均交叉策略。当然，这一切的实现还是会依赖于python以及相关的库，这在下面的展开中会论及到，下面正式开始。">
+<meta itemprop="datePublished" content="2018-07-04T23:07:36&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-04T23:07:36&#43;00:00" />
+<meta itemprop="wordCount" content="434">
+
+
+
+<meta itemprop="keywords" content="python,投资分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python与股市数据分析（二）"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-7-1
+
+写在前面
+上期文章，小编和大家聊了一下怎么使用python去处理股市数据，主要讲述了怎么使用python去获取股市数据、对股市数据进行可视化操作以及绘制移动平均线。然而上期文章总的来说扮演的角色是工具，之所以进行股市可视化以及绘制移动平均线，最终的目的是为了投资决策，因此本期文章，小编就接着上期文章，和大家聊一下怎么通过移动平均线去进行投资决策，小编也将这种策略称之为移动平均交叉策略。当然，这一切的实现还是会依赖于python以及相关的库，这在下面的展开中会论及到，下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/&amp;text=Python%e4%b8%8e%e8%82%a1%e5%b8%82%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90%ef%bc%88%e4%ba%8c%ef%bc%89" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/&amp;title=Python%e4%b8%8e%e8%82%a1%e5%b8%82%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90%ef%bc%88%e4%ba%8c%ef%bc%89" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python与股市数据分析（二）</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-07-04T23:07:36Z">July 4, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-7-1</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期文章，小编和大家聊了一下怎么使用python去处理股市数据，主要讲述了怎么使用python去获取股市数据、对股市数据进行可视化操作以及绘制移动平均线。然而上期文章总的来说扮演的角色是工具，之所以进行股市可视化以及绘制移动平均线，最终的目的是为了投资决策，因此本期文章，小编就接着上期文章，和大家聊一下怎么通过移动平均线去进行投资决策，小编也将这种策略称之为移动平均交叉策略。当然，这一切的实现还是会依赖于python以及相关的库，这在下面的展开中会论及到，下面正式开始。</p>
+<h3 id="heading1">移动平均交叉策略</h3>
+<p>移动平均交叉策略属于技术分析流派中一种典型的交易策略，这种策略曾经也曾红极一时，及至现在也是多数教科书中常常谈及的交易策略。不过在展开这种策略的介绍之前，小编觉得有必要先对交易策略做一个粗略地介绍。</p>
+<p>所谓股市交易策略，就是指一套买卖股票的相关规则集合构成。一般来说，一个交易策略主要包括四部分：选股、择时、仓位管理与风险控制。小编这里大致地介绍一下这四个方面。</p>
+<ul>
+<li>选股 —— 选股主要包括两个环节，第一个环节是确定你的选股范围，在国内来说无非就是A股、中小板、新三板等板块；而在这一环节确定之后，下面就要开始第二个艺术与科学相结合的环节，确定你的股票池，即从你所着眼的股票范围内通过一系列的指标或者独特见解最终选定你拟定投资的股票。可以说选股是股票交易的首选环节，也是最为基本的环节，股票选择的好坏直接影响你后续的投资收益。</li>
+<li>择时 —— 择时包括买入时间的确定以及卖出时间的确定。择时环节直接影响你的收益。不过小编这里希望将买入时间与卖出时间转变为另外两个术语：建仓时间与平仓时间。之所以选择这两个术语，是因为你刚开始的股票策略并不总是多头操作，你完全可以在后市看熊的时候选择进行空头交易，也就是从交易所借入股票进行卖出操作，所以小编认为初始的时间使用建仓时间会更加准确。当然，目前在国内来说，卖空基本是不可行的，但是现在的不可行不代表为了的不可行，我们总是需要为未来做些准备嘛。</li>
+<li>仓位管理 —— 股票池中的各种股票买卖多少，对每种股票的资金投入怎样安排。一般来说，进行组合投资者，每种股票的投资权重应与股票的市值大小成正比，而进行单只股票操作者，资金投入量最好是自己自有资金的一部分，切勿借贷炒股。</li>
+<li>风险控制 —— 股票市场每天都在经历着大起大落，所以对于股票交易，你必须设定一定的风险水准，即撤出时机。人是一种神奇的动物，总是斩涨抱跌，对于一路走熊的股票总是不愿解套，这就犯了投资的大忌，股票交易必须要有果断的心态，在股价跌到自己的最低风险线之时及时平仓。</li>
+</ul>
+<p>上面这四个环节的每一个环节都完全可以变成一套书，所以小编这里也不准备对这些进行过度阐述，有兴趣的朋友自行阅读投资类书籍。既然已经初步了解了交易策略，那么接下来小编就和大家谈一下何为移动平均交叉策略。</p>
+<p>移动平均交叉策略正如其名所示，就是建立在移动平均线之上。这种策略的初衷是，股价的短期移动平均线和长期移动平均线的相对形态可以预示后市价格走向，当短期移动平均线处于长期移动平均线上方时，市场表现为牛市；而当短期移动平均线位于长期移动平均线下方时，市场处于熊市，因此正确的投资时间为：当短期移动平均线自下而上穿过长期移动平均线时进行股票买入；而当短期移动平均线自上而下穿过长期移动平均线时卖出股票。所以股票的所有买卖时机都是处于均线交叉的位置，所以这种策略被称之为移动平均线交叉策略。根据上面的交易策略构成四环节，这种策略在这四方面的主要特征表现为：</p>
+<ol>
+<li>选股。这种策略没有明确的股票偏好，你完全可以根据自己的经验和知识确定一些交易活跃的股票。小编这里选择谷歌股票作为分析基础。</li>
+<li>择时。交叉点就是买卖时机，自下而上穿过则买入，自上而下穿过则卖出。这里小编准备在短期移动平均线方面选择7天移动平均，而在长期移动平均线方面选择50天移动平均线。</li>
+<li>仓位管理。全仓购买谷歌股票。</li>
+<li>风险控制。股价跌出其基准的20%时强制平仓。</li>
+</ol>
+<p>在后文的分析中，小编将暂时不考虑风险控制这一环节，本文后面的量化分析主要针对前三点。既然已经有了相应的交易策略，为了能够证明策略的有效性，下面对这一策略进行一下回测，即用历史数据检验一下策略的效果。</p>
+<h3 id="heading2">移动平均交叉策略回测实践</h3>
+<p>首先，需要计算7天移动平均值和50天移动平均值的差值，从而确定移动平均线的相对位置，这里小编先用谷歌的股价数据进行实践，见如下代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关库</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">from</span> pandas_datareader <span style="color:#f92672">import</span> data <span style="color:#66d9ef">as</span> web
+<span style="color:#f92672">import</span> datetime
+
+<span style="color:#75715e"># 获取谷歌自2006年至今的股价数据</span>
+start <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>datetime(<span style="color:#ae81ff">2006</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)
+end <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>date<span style="color:#f92672">.</span>today()
+google <span style="color:#f92672">=</span> web<span style="color:#f92672">.</span>DataReader(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GOOG</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yahoo</span><span style="color:#e6db74">&#39;</span>,start,end)
+
+<span style="color:#75715e"># 构造7天移动平均值、50天移动平均值及其差值</span>
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">7d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>rolling(window <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>, center <span style="color:#f92672">=</span> False)<span style="color:#f92672">.</span>mean(), <span style="color:#ae81ff">2</span>)
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">50d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>rolling(window <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>, center <span style="color:#f92672">=</span> False)<span style="color:#f92672">.</span>mean(), <span style="color:#ae81ff">2</span>)
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">7d-50d</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">7d</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">-</span> google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">50d</span><span style="color:#e6db74">&#39;</span>]
+
+<span style="color:#75715e"># 查看一下数据</span>
+google<span style="color:#f92672">.</span>tail()
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBnBCQCHyZJtzYzDdaibLpkOld5ia16fsI6A5xDLchq6GzASQxUw7r84WQ/0?wx_fmt=png" alt="移动平均值差值">
+既然有了差值，那么下面就需要判断哪些交易日7天移动平均线在50天移动平均线之上，为此，小编使用numpy库中的where函数，将7天移动线在上的状态值定为1，之下的定为-1，否则赋值为0.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 创建状态变量值并查看一下表格状态</span>
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">7d-50d</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>)
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">7d-50d</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>])
+google<span style="color:#f92672">.</span>tail()
+
+<span style="color:#75715e"># 绘制状态图表</span>
+<span style="color:#f92672">import</span> matplotlib <span style="color:#f92672">as</span> mpl
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">%</span>matplotlib inline
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>]
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes.unicode_minus</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> False
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">figure.figsize</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> (<span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">9</span>)
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>plot(ylim <span style="color:#f92672">=</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>axhline(y <span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, color <span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">black</span><span style="color:#e6db74">&#34;</span>, lw <span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBcZ2KkpSKcbj99n76lG9kjRMiaAItmCetrvCewmOthiaSgr0SGMeOx3nw/0?wx_fmt=png" alt="状态表">
+<img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBH39330mqt44I2eBBcSG87xWUvmicpRVFpJr3BYh5SCibJde1Eic2WT0Hw/0?wx_fmt=png" alt="差值状态图">
+粗略地看了一下，发现多数交易日中，7天移动平均线在50天移动平均线之上，为了更加明确地看出到底是不是这种形态，稍微对状态值进行一下统计。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>value_counts()
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBjg4PmJcrpgG4MfA5TVMMlRwZKfCzTkB2h26HN2mbaVZCuTTMgibWSgQ/0?wx_fmt=png" alt="状态值统计">
+可以看出，在所有的交易日中有1838天处于牛市，而有1260天处于熊市，还有49天没有倾向性。而交易的时点发生在移动平均线交叉之时，所以小编这里需要再创建一个变量用来描述其所处的交易日是否是交易时点，姑且将这个变量命名为Signal吧。这个变量的计算规则为：
+$$Signal_t = sign(State_t - State_{t-1})$$
+其中的sign()函数为一个符号函数，最终使得$Signal_t \in (-1,0,1)$，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">Medium <span style="color:#f92672">=</span> google<span style="color:#f92672">.</span>ix[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>]
+google<span style="color:#f92672">.</span>ix[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sign(google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">-</span> google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>))
+google<span style="color:#f92672">.</span>ix[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> Medium
+google<span style="color:#f92672">.</span>tail() <span style="color:#75715e"># 显示表特征</span>
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>plot(ylim <span style="color:#f92672">=</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#75715e"># 绘图</span>
+google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>value_count() <span style="color:#75715e"># 统计买卖次数</span>
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBVicOrBdRe3eItCzqb1vfW2Yb1BmOFDWbkt0aPU1Z8hIvImevhJIayjw/0?wx_fmt=png" alt="交易信号表">
+<img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBKWzyrC133XibTvHnxjhPTop1HpILGpnUQNyicKAThkibicjZV0qFQoMG5A/0?wx_fmt=png" alt="交易信号图">
+<img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBbbCJbOtFIuvibibFm93F3f1kbW0U4E9ziaBvDsUpJpKeRK7sbibv1yzPEA/0?wx_fmt=png" alt="买卖次数统计">
+可以看出从2006年至今，共有45次买入机会，46次卖出机会，如果我们执行这一策略，那么在这12年的时间内共需交易46次。既然已经知道了买卖的时机，那么接下来小编就统计一下这些交易时点的股价情况，而后制作一个交易信息备忘表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">google<span style="color:#f92672">.</span>loc[google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]
+google<span style="color:#f92672">.</span>loc[google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]
+google_signals <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([
+        pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>: google<span style="color:#f92672">.</span>loc[google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>],
+                     <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>: google<span style="color:#f92672">.</span>loc[google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>],
+                     <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Buy</span><span style="color:#e6db74">&#34;</span>}),
+        pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>: google<span style="color:#f92672">.</span>loc[google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>],
+                     <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>: google<span style="color:#f92672">.</span>loc[google[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>],
+                     <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Sell</span><span style="color:#e6db74">&#34;</span>}),
+    ])
+google_signals<span style="color:#f92672">.</span>sort_index(inplace <span style="color:#f92672">=</span> True)
+google_signals<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">8</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBEySH8FdxGTRfalx0gnwSehpVZO1A0Yc1TAibZ8dibdE0O0QEibBiaxLibNg/0?wx_fmt=png" alt="交易信息备忘表">
+既然已经有了买卖时机，那么下面就要计算按照这种买卖时机，最终的盈利情况将是多少（注意，小编这里的都还只是以一股股票进行说明，后面会讲述全仓情况下的盈利情况），盈利的计算代码与统计表如下。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">google_profits <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>: google_signals<span style="color:#f92672">.</span>loc[(google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Buy</span><span style="color:#e6db74">&#34;</span>) <span style="color:#f92672">&amp;</span>
+                                  google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>],
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Profit</span><span style="color:#e6db74">&#34;</span>: pd<span style="color:#f92672">.</span>Series(google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">-</span> google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>))<span style="color:#f92672">.</span>loc[
+            google_signals<span style="color:#f92672">.</span>loc[(google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Buy</span><span style="color:#e6db74">&#34;</span>) <span style="color:#f92672">&amp;</span> (google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)]<span style="color:#f92672">.</span>index
+        ]<span style="color:#f92672">.</span>tolist(),
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Date</span><span style="color:#e6db74">&#34;</span>: google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>loc[
+            google_signals<span style="color:#f92672">.</span>loc[(google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Signal</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Buy</span><span style="color:#e6db74">&#34;</span>) <span style="color:#f92672">&amp;</span> (google_signals[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>shift(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)]<span style="color:#f92672">.</span>index
+        ]<span style="color:#f92672">.</span>index
+    })
+google_profits<span style="color:#f92672">.</span>tail()
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuB9CsI4bArnzoJESjJbSNLeJMqI99CoMEE3caWzoUeH6262IeicQ8sxgA/0?wx_fmt=png" alt="获利情况统计表">
+上面大致讲述了整个回测的相关流程，最后，将一切整合在一起，考虑在有100万现金的情况下全仓进行谷歌股票的买卖将会得到的盈利情况。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tradeperiods <span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Start</span><span style="color:#e6db74">&#34;</span>: google_profits<span style="color:#f92672">.</span>index,
+                            <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End</span><span style="color:#e6db74">&#34;</span>: google_profits[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Date</span><span style="color:#e6db74">&#34;</span>]})
+google_profits[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span>tradeperiods<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: min(google<span style="color:#f92672">.</span>loc[x[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Start</span><span style="color:#e6db74">&#34;</span>]:x[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End</span><span style="color:#e6db74">&#34;</span>], <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>]), axis <span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+cash <span style="color:#f92672">=</span><span style="color:#ae81ff">1000000</span>
+google_backtest <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Start Port. Value</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Port. Value</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Date</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Shares</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Share Price</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Trade Value</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Profit per Share</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Total Profit</span><span style="color:#e6db74">&#34;</span>: [],
+                         <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Stop-Loss Triggered</span><span style="color:#e6db74">&#34;</span>: []})
+port_value <span style="color:#f92672">=</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+batch <span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>
+stoploss <span style="color:#f92672">=</span><span style="color:#f92672">.</span><span style="color:#ae81ff">2</span>
+<span style="color:#66d9ef">for</span> index, row <span style="color:#f92672">in</span> google_profits<span style="color:#f92672">.</span>iterrows():
+    batches <span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>floor(cash <span style="color:#f92672">*</span> port_value) <span style="color:#f92672">/</span><span style="color:#f92672">/</span>np<span style="color:#f92672">.</span>ceil(batch <span style="color:#f92672">*</span> row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>]) 
+    trade_val <span style="color:#f92672">=</span>batches <span style="color:#f92672">*</span> batch <span style="color:#f92672">*</span> row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>] 
+    <span style="color:#66d9ef">if</span> row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Low</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">&lt;</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>stoploss) <span style="color:#f92672">*</span> row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>]:   
+        share_profit <span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>round((<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>stoploss) <span style="color:#f92672">*</span> row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>], <span style="color:#ae81ff">2</span>)
+        stop_trig <span style="color:#f92672">=</span> True
+    <span style="color:#66d9ef">else</span>:
+        share_profit <span style="color:#f92672">=</span>row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Profit</span><span style="color:#e6db74">&#34;</span>]
+        stop_trig <span style="color:#f92672">=</span>False
+    profit <span style="color:#f92672">=</span>share_profit <span style="color:#f92672">*</span> batches <span style="color:#f92672">*</span> batch 
+    google_backtest <span style="color:#f92672">=</span>google_backtest<span style="color:#f92672">.</span>append(pd<span style="color:#f92672">.</span>DataFrame({
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Start Port. Value</span><span style="color:#e6db74">&#34;</span>: cash,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Port. Value</span><span style="color:#e6db74">&#34;</span>: cash <span style="color:#f92672">+</span>profit,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Date</span><span style="color:#e6db74">&#34;</span>: row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Date</span><span style="color:#e6db74">&#34;</span>],
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Shares</span><span style="color:#e6db74">&#34;</span>: batch <span style="color:#f92672">*</span>batches,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Share Price</span><span style="color:#e6db74">&#34;</span>: row[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Price</span><span style="color:#e6db74">&#34;</span>],
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Trade Value</span><span style="color:#e6db74">&#34;</span>: trade_val,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Profit per Share</span><span style="color:#e6db74">&#34;</span>: share_profit,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Total Profit</span><span style="color:#e6db74">&#34;</span>: profit,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Stop-Loss Triggered</span><span style="color:#e6db74">&#34;</span>: stop_trig
+            }, index <span style="color:#f92672">=</span>[index]))
+    cash <span style="color:#f92672">=</span>max(<span style="color:#ae81ff">0</span>, cash <span style="color:#f92672">+</span>profit)
+ 
+google_backtest<span style="color:#f92672">.</span>tail()
+google_backtest[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Port. Value</span><span style="color:#e6db74">&#34;</span>]<span style="color:#f92672">.</span>plot()
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuB2LGFjeb6OW54x5qRUR100Asp20cfJrXI2rMlaUiaickVC09toB4Jareg/0?wx_fmt=png" alt="仓位盈利情况统计表">
+<img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuBEcgsJrcCUWhCorOAX57kRZnddd8XlR7X7vY2Kicmo6kuUibPef7qvHMQ/0?wx_fmt=png" alt="盈利情况图">
+小编的财产总额12年增加了12%。考虑到每次交易额只有总额的10%，所以十二年的资产总收益率约为120%，相对来说有点低了，这需要我们进一步调整相应的交易策略，不过这些小编不准备在本文讲了。最后，小编来简单地讲这一收益率与指数收益率进行一下比较，从而真正了解这种收益率的效果。</p>
+<h3 id="heading3">基准对比</h3>
+<p>既然上面获得了谷歌的盈利数据，那么为了判别这种收益情况到底如何，就有必要将其与基准收益率进行对比，而对于美国股市来说，SP500可能是一个比较好的参照对象，这里就以SP500的收益为基准来说明这种策略的优劣，见下面代码与对照图。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 获取SP500数据</span>
+spyder <span style="color:#f92672">=</span>web<span style="color:#f92672">.</span>DataReader(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">SPY</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">yahoo</span><span style="color:#e6db74">&#34;</span>, start, end)
+
+<span style="color:#75715e"># 构建投资收益表</span>
+batches <span style="color:#f92672">=</span><span style="color:#ae81ff">1000000</span><span style="color:#f92672">/</span><span style="color:#f92672">/</span>np<span style="color:#f92672">.</span>ceil(<span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>spyder<span style="color:#f92672">.</span>ix[<span style="color:#ae81ff">0</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>]) 
+trade_val <span style="color:#f92672">=</span>batches <span style="color:#f92672">*</span>batch <span style="color:#f92672">*</span>spyder<span style="color:#f92672">.</span>ix[<span style="color:#ae81ff">0</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>] 
+final_val <span style="color:#f92672">=</span>batches <span style="color:#f92672">*</span>batch <span style="color:#f92672">*</span>spyder<span style="color:#f92672">.</span>ix[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">+</span>(<span style="color:#ae81ff">1000000</span><span style="color:#f92672">-</span>trade_val) 
+
+<span style="color:#75715e"># 绘制对照图</span>
+ax_bench <span style="color:#f92672">=</span>(spyder[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">/</span>spyder<span style="color:#f92672">.</span>ix[<span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Close</span><span style="color:#e6db74">&#34;</span>])<span style="color:#f92672">.</span>plot(label <span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">SPY</span><span style="color:#e6db74">&#34;</span>)
+ax_bench <span style="color:#f92672">=</span>(google_backtest[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">End Port. Value</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">/</span><span style="color:#ae81ff">1000000</span>)<span style="color:#f92672">.</span>plot(ax <span style="color:#f92672">=</span>ax_bench, label <span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Google</span><span style="color:#e6db74">&#34;</span>)
+ax_bench<span style="color:#f92672">.</span>legend(loc <span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">best</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://mmbiz.qpic.cn/mmbiz_png/G4YWE3qMJ7VgJSFibicRaWxk9QGfd9VnuB8iabeQFOVfc4Rylho64WYuGSZEwcfqrwOmzUnDAibqtrF3wk38PK0pNA/0?wx_fmt=png" alt="基准盈利对比图">
+可见，这种移动平均策略相对来说收益率较低，只有在少数几个时期跑赢了大盘，其它时间段基本被SP500超越，因此，这种策略需要进一步修正，这一点不是本文的目的，本文的目的截止到这里已经介绍，更多的策略探讨会在以后给出。</p>
+<h3 id="heading4">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章和大家继续聊了一下怎么使用python去处理股市数据，这期主要在于探索移动平均策略的相应效果，最终的实践看来，这种策略盈利水平较低，需要进一步予以完善。后续系列的文章会对各种策略进行深层次探索。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%8A%95%E8%B5%84%E5%88%86%E6%9E%90" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">投资分析</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

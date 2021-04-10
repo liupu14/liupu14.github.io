@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>图表绘制 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/%E5%9B%BE%E8%A1%A8%E7%BB%98%E5%88%B6/</link>
+    <description>Recent content in 图表绘制 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 10 May 2018 20:45:18 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/%E5%9B%BE%E8%A1%A8%E7%BB%98%E5%88%B6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python绘图——matplotlib初探</title>
+      <link>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/</link>
+      <pubDate>Thu, 10 May 2018 20:45:18 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-7&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python+pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

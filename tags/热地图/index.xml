@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>热地图 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/%E7%83%AD%E5%9C%B0%E5%9B%BE/</link>
+    <description>Recent content in 热地图 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 24 Aug 2018 22:07:31 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/%E7%83%AD%E5%9C%B0%E5%9B%BE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>热地图绘制——基于python获取的经纬度坐标</title>
+      <link>https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/</link>
+      <pubDate>Fri, 24 Aug 2018 22:07:31 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-20&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;盼望着盼望着，周五到了，周末的时光又开始了。前几天有朋友给小编留言，请教怎么绘制热地图，关于这一点小编之前已经讲过怎么使用R语言或者Python去实现，但是鉴于很多朋友还是习惯图形化操作，因此本期讲一下怎么使用相应的专业绘图软件去绘制热地图。本期还是以各省的人口数据为例来讲解怎么绘制国内各省的人口分布情况，其中会讲到怎么使用python去获得各省省会城市的经纬度，然后以这些数据为基础，分别讲述怎么使用相应的绘图软件去绘制人口分布的热地图。下面正式开始！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>R语言绘图——R语言绘制热地图实战</title>
+      <link>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Sat, 05 May 2018 00:48:15 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-2&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上了两天班，又迎来了周末时光（那些假期为8天的朋友请自行消失），这周过的是真心累，不过想到又要和各位朋友见面了就不免有些兴奋，疲惫的身躯一下子就好了。上一期文章中，笔者讲述了怎么使用python构建决策树算法，通过那篇文章初步认识到了决策树的相关算法流程与核心构成，至于决策树的可视化小编会在适当的时候予以补充。这一期文章中，小编准备讲述一下怎么使用R语言绘制热力图。为什麼要将这个话题呢，这源自于小编最近的工作常态，最近小编频繁接触热力图的绘制，并且要不断地将其做成报告形式。作为一名偷懒爱好者，小编绝对不能忍受这种过于频繁的机械化操作，而且热力图的绘制对于很多桌面式软件来说还是存在一定的不便的。这些软件的劣势主要表现在两个方面：其一，需要人为录入经纬度信息（office系列，虽然office2016后增加了bing地图的支持，但那只是针对世界地图而已，如果你要绘制某区域地图，仍然需要录入经纬度信息）；其二，不便于程式化自动化操作(office，Arcgis，Tableau)。所以考虑到这些劣势，小编最终还是决定使用程序来解决这一问题。其实在用程序解决热力图中，python和R语言都可以实现，但是为什麼小编最终决定使用R语言来实现这一功能呢，那是因为R语言中的地图包以及ggplot2包真的太有诱惑力了。当然小编在以后的python绘图系列教程中也会介绍怎么使用python去绘制热力图，所以不用担心小编跑偏。说了这么多废话，下面让我们正式开始吧！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>商务图表绘制 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%9B%BE%E8%A1%A8%E7%BB%98%E5%88%B6/</link>
+    <description>Recent content in 商务图表绘制 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 17 May 2018 23:29:41 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%9B%BE%E8%A1%A8%E7%BB%98%E5%88%B6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python绘图——再探matplotlib</title>
+      <link>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/</link>
+      <pubDate>Thu, 17 May 2018 23:29:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-15&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

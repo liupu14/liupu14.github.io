@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python绘图——再探matplotlib | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python绘图——再探matplotlib" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-15
+
+写在前面
+明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/" />
+<meta property="article:published_time" content="2018-05-17T23:29:41+00:00" />
+<meta property="article:modified_time" content="2018-05-17T23:29:41+00:00" />
+<meta itemprop="name" content="Python绘图——再探matplotlib">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-15
+
+写在前面
+明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！">
+<meta itemprop="datePublished" content="2018-05-17T23:29:41&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-17T23:29:41&#43;00:00" />
+<meta itemprop="wordCount" content="271">
+
+
+
+<meta itemprop="keywords" content="python,matplotlib,商务图表绘制," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python绘图——再探matplotlib"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-15
+
+写在前面
+明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/&amp;text=Python%e7%bb%98%e5%9b%be%e2%80%94%e2%80%94%e5%86%8d%e6%8e%a2matplotlib" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/&amp;title=Python%e7%bb%98%e5%9b%be%e2%80%94%e2%80%94%e5%86%8d%e6%8e%a2matplotlib" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python绘图——再探matplotlib</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-17T23:29:41Z">May 17, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-15</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！</p>
+<h3 id="matplotlib">再探matplotlib与商务图表的绘制</h3>
+<p>这里还是以前期文章中讲到的六种常用图表为例来说明matplotlib库第二种绘图方式，在各种图表绘制之前，小编先进行一下共用性的代码设置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关的库</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> matplotlib <span style="color:#f92672">as</span> mpl
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">import</span> pandas_datareader.data <span style="color:#f92672">as</span> web
+
+<span style="color:#75715e"># 进行绘图风格以及绘图显示格式的设置</span>
+plt<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 使用seaborn图表风格</span>
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">=</span>[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>] <span style="color:#75715e">#用来正常显示中文标签</span>
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes.unicode_minus</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">=</span>False <span style="color:#75715e">#用来正常显示负号</span>
+</code></pre></div><p>上面代码的前一部分主要是导入了后文进行分析所需要的第三方库，当然最后一个库的导入并不是必须的，小编这里导入它是为了在后面分析中获取一些股市价量数据，诸位这一步并不是必须的。后部分主要是对图表的显示风格以及显示格式进行了设置，请注意最后两条语句是很有必要的（如果你的图表中包含中文和负号的话）。鉴于在前期的文章中已经对各种图进行了比较详细的介绍，后文的介绍将以代码和图表的形式进行展现，只在绘制第一个图的时候对第二种绘图方式予以介绍，后面如无必要不再过多予以文字说明，下面进行第一类图形折线图的绘制。</p>
+<h4 id="heading1">折线图的绘制</h4>
+<p>折线图包括传统的折线图，当然广义上也包含面积图，下面先介绍一般的折线图绘制方法，而后进行面积图绘制方法的介绍。</p>
+<ul>
+<li>折线图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0</span>,np<span style="color:#f92672">.</span>pi,<span style="color:#ae81ff">1000</span>)
+y1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(x)
+y2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>cos(x)
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure()
+ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>axes()
+ax<span style="color:#f92672">.</span>plot(x,y1,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sin(x)</span><span style="color:#e6db74">&#39;</span>)
+ax<span style="color:#f92672">.</span>plot(x,y2,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">cos(x)</span><span style="color:#e6db74">&#39;</span>)
+ax<span style="color:#f92672">.</span>legend()
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Value x</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$sin(x) &amp; cos(x)$</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">正弦和余弦图绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">正弦余弦图.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/BZM9Eud.png" alt="折线图绘制">
+这些命令中的多数代码前面的文章中已有说明，重点对其中的几条新的命令方式进行说明，即代码中的第4-5行，尤其是第五行代码。第四行代码用于创建了一个图表对象，而第五行代码则用于创造了一个绘图区，也就是通常所了解到的图表编辑区，一般来说，一个图表对象可以包含多个绘图区，至少有一个绘图区的图表对象才有意义。而其它命令则主要是将原来的<code>plt</code>方式换成了<code>ax</code>方式，所以相信这一部分你能很快掌握，同时最后一条命令用于将创建的图表保存在电脑上。下面进行面积图介绍。</p>
+<ul>
+<li>面积图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">5</span>)
+y1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">13</span>])
+y2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">10</span>])
+y3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">9</span>])
+labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">斐波那契数</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">偶数</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">奇数</span><span style="color:#e6db74">&#39;</span>]
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>stackplot(x,y1,y2,y3,labels<span style="color:#f92672">=</span>labels)
+ax<span style="color:#f92672">.</span>legend(loc<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+ax<span style="color:#f92672">.</span>set(title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">面积图</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">面积图绘制.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/VIfE1OJ.png" alt="面积图绘制"></p>
+<h4 id="heading2">散点图绘制</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">50</span>)
+y <span style="color:#f92672">=</span> x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> x <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>scatter(x,y)
+ax<span style="color:#f92672">.</span>set(xlabel <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Value x</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$y=x^2-2*x+1$</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">散点图绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">散点图.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/OEhJAUf.png" alt="散点图绘制"></p>
+<h4 id="heading3">直方图绘制</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">values <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000</span>)
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>hist(values,bins<span style="color:#f92672">=</span><span style="color:#ae81ff">30</span>)
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">values</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">percent</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">直方图绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">直方图绘制.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/tH4RyzM.png" alt="直方图绘制"></p>
+<h4 id="heading4">条形图绘制</h4>
+<p>条形图分为水平条形图和竖直条形图（又称之为柱状图），根据是否堆积又分为堆积条形图和非堆积条形图，下文小编先绘制非堆积的水平条形图和竖直条形图，而后再给出一个绘制堆积条形图的方法。</p>
+<ul>
+<li>非堆积水平条形图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">values <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">30</span>,<span style="color:#ae81ff">6</span>)
+labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">E</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#39;</span>]
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>barh(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>),values)
+ax<span style="color:#f92672">.</span>set_yticks(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>))
+ax<span style="color:#f92672">.</span>set_yticklabels(labels)
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">values</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">labels</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">水平条形图绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">水平条形图.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/qQ8UOLz.png" alt="非堆积水平条形图"></p>
+<ul>
+<li>非堆积竖直条形图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">values <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">30</span>,<span style="color:#ae81ff">6</span>)
+labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">E</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F</span><span style="color:#e6db74">&#39;</span>]
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>bar(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>),values)
+ax<span style="color:#f92672">.</span>set_xticks(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>))
+ax<span style="color:#f92672">.</span>set_xticklabels(labels)
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">labels</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">values</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">竖直条形图绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">竖直条形图.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/AxBVW10.png" alt="非堆积竖直条形图"></p>
+<ul>
+<li>堆积条形图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">values1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">4</span>)
+values2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">18</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">4</span>)
+values3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">21</span>,<span style="color:#ae81ff">30</span>,<span style="color:#ae81ff">4</span>)
+labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D</span><span style="color:#e6db74">&#39;</span>]
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>)
+ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>bar(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">0.2</span>,values1,width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>bar(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>),values2,width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>bar(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">0.2</span>,values3,width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set_xticks(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>))
+ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set_xticklabels(labels)
+ax[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lables</span><span style="color:#e6db74">&#39;</span>,ylabel <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">values</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>barh(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">0.2</span>,values1,height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>barh(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>),values2,height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>barh(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">0.2</span>,values3,height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set_yticks(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">4</span>))
+ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set_yticklabels(labels)
+ax[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">values</span><span style="color:#e6db74">&#39;</span>,ylabel <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">labels</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>suptitle(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">堆积条形图的绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">堆积条形图绘制.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/XpNmGgN.png" alt="堆积条形图绘制"></p>
+<h4 id="heading5">饼图绘制</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">values <span style="color:#f92672">=</span> [<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">32</span>]
+explode <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]
+labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">东</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">南</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">西</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">北</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">中</span><span style="color:#e6db74">&#39;</span>]
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>pie(values,explode<span style="color:#f92672">=</span>explode,labels<span style="color:#f92672">=</span>labels,autopct<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%1.1f</span><span style="color:#e6db74">%%</span><span style="color:#e6db74">&#39;</span>)
+ax<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">饼图的绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">饼图的绘制.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/HDHwWzQ.png" alt="饼图绘制"></p>
+<h4 id="heading6">箱线图绘制</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">values1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>
+values2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">101</span>
+values3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">102</span>
+values4 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">103</span>
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots()
+ax<span style="color:#f92672">.</span>boxplot((values1,values2,values3,values4),labels<span style="color:#f92672">=</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D</span><span style="color:#e6db74">&#39;</span>))
+ax<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">labels</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">values</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">箱线图绘制</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">箱线图绘制.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/6kcLQKf.png" alt="箱线图绘制">
+上面对常用的六种图表绘制方法再一次进行了说明，希望你们能够习惯这种绘图方式，小编个人觉得这种绘图语法真心好用，如果你初次接触matplotlib库，并且只想学习一种语法，那么小编还是推荐你学习这种语法，通过这种语法学习你能够逐渐了解各类图表的构造，从而可能创造出更加吸引人的图表。最后以一个综合例子结束本期。</p>
+<h3 id="heading7">一个综合示例</h3>
+<p>最后小编以一个综合的示例结束本期文章，在这个示例中小编使用苹果公司近五个月的股价数据进行相关图表的绘制，其中使用了pandas-datareader库来获取绘图中所需要的相关数据，这里小编就不对其进行过多介绍了。下面见代码与图表：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 获取苹果公司近五个月股价数据</span>
+df <span style="color:#f92672">=</span> web<span style="color:#f92672">.</span>DataReader(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yahoo</span><span style="color:#e6db74">&#39;</span>,start<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-01-01</span><span style="color:#e6db74">&#39;</span>,end<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2018-05-12</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 第一个参数是苹果在交易所代码，第二个参数是数据来源，后两个参数代表获取的开始于结束时间</span>
+fig,ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">9</span>))
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>plot(df<span style="color:#f92672">.</span>Open,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span>,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">开盘价</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>plot(df<span style="color:#f92672">.</span>High,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#39;</span>,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">最高价</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>plot(df<span style="color:#f92672">.</span>Low,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">最低价</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>plot(df<span style="color:#f92672">.</span>Close,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">k</span><span style="color:#e6db74">&#39;</span>,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">收盘价</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>legend()
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set(ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">价格</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">苹果价格数据</span><span style="color:#e6db74">&#39;</span>)
+
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>bar(df<span style="color:#f92672">.</span>index,df<span style="color:#f92672">.</span>Volume)
+ax1 <span style="color:#f92672">=</span> ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>twinx()
+ax1<span style="color:#f92672">.</span>plot(df<span style="color:#f92672">.</span>Close,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">g</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set(ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">成交量</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">苹果量价数据</span><span style="color:#e6db74">&#39;</span>)
+ax1<span style="color:#f92672">.</span>set(ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">收盘价</span><span style="color:#e6db74">&#39;</span>)
+
+ax[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>scatter(df<span style="color:#f92672">.</span>Volume<span style="color:#f92672">/</span><span style="color:#ae81ff">100000</span>,df<span style="color:#f92672">.</span>Close,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>scatter(df<span style="color:#f92672">.</span>Volume<span style="color:#f92672">/</span><span style="color:#ae81ff">100000</span>,df<span style="color:#f92672">.</span>Close,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+ax[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">成交量（十万）</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">收盘价</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">苹果量价关系</span><span style="color:#e6db74">&#39;</span>)
+
+ax[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>boxplot((df<span style="color:#f92672">.</span>Open,df<span style="color:#f92672">.</span>High,df<span style="color:#f92672">.</span>Low,df<span style="color:#f92672">.</span>Close,df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Adj Close</span><span style="color:#e6db74">&#39;</span>]),labels<span style="color:#f92672">=</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">开盘价</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">最高价</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">最低价</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">收盘价</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">调整价</span><span style="color:#e6db74">&#39;</span>))
+ax[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>set(xlabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">五价</span><span style="color:#e6db74">&#39;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">价格</span><span style="color:#e6db74">&#39;</span>,title<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">苹果相关价格箱线图</span><span style="color:#e6db74">&#39;</span>)
+
+plt<span style="color:#f92672">.</span>suptitle(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">苹果价量关系综合图表</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">综合示例.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/eBKzzMX.png" alt="苹果股价的一个综合示例"></p>
+<h3 id="heading8">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章主要介绍了matplotlib库绘制常用商务图表的第二种方式，因为本文是对前期文章的绘图补充，因此本文更多侧重在代码以及图表的呈现，文字说明相对较少。至于各位朋友在阅读过程中对于相关代码的困惑与不解可以直接Google，或者给小编留言，小编期待你们的来信与留言。至于下期文章，小编暂时给各位玩个捉迷藏吧，敬请期待。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/matplotlib" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">matplotlib</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%9B%BE%E8%A1%A8%E7%BB%98%E5%88%B6" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务图表绘制</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

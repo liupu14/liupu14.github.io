@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python商务实践 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/python%E5%95%86%E5%8A%A1%E5%AE%9E%E8%B7%B5/</link>
+    <description>Recent content in Python商务实践 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 May 2018 23:27:19 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/python%E5%95%86%E5%8A%A1%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python&#43;pandas快速实现Excel文件合并与数据处理</title>
+      <link>https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</link>
+      <pubDate>Mon, 07 May 2018 23:27:19 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-5&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周又开始了，各位准备好迎接接下来的机械化流程了吗？上期文章中，小编和大家讲述了怎么使用R语言去绘制热地图，其中重点使用了maptools包和ggplot2包，大致了解了使用R语言绘制中国人口分布热地图的大致流程。当然那篇文章只是对于ggplot2包的初次展示，后续的文章中，小编会进一步讲解这一笔者至今所接触到的最神级的绘图包。本期文章中，小编自然要转到Python方面的主题，本期将主要讲解怎么使用Python和pandas库去实现多个Excel表格文件的合并与添加，以及怎么使用Python去实现Excel表格文件的有效选取。这篇文章将是笔者先前文章的继续，当然后续笔者会继续推出此类文章。现在就正式进入正题！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

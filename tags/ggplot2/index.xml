@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ggplot2 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/ggplot2/</link>
+    <description>Recent content in ggplot2 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 16 Mar 2019 09:57:18 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>你租贵了吗？——R语言与链家租房数据分析</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sat, 16 Mar 2019 09:57:18 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2019-01-30&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ggplot2包介绍——深入图层语法</title>
+      <link>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Mon, 18 Jun 2018 22:00:37 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-11&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>从qplot快速入门ggplot2</title>
+      <link>https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/</link>
+      <pubDate>Tue, 29 May 2018 20:46:28 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-25&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;这两天小编有点事情要处理，所以文章没有及时更新，先对各位说声抱歉了。上期文章中，小编和大家介绍了xlsxwriter库的快速入门，对xlsxwriter操作Excel的基本过程有了一个基本了解，后续会进一步加大对于这个库的相关介绍。本期文章中，小编将和大家继续聊一下图形绘制那些事，所谓一图胜万表，所以小编会定期地介绍一下图表的绘制方法。本期文章中，小编将和大家聊一下小编目前为止所接触的最优秀的绘图库ggplot2，这个库目前运行在R语言中，不过在python中也已经存在了这个库的低级版本ggplot。所以了解这个库系列对于绘图实践可以说大有益处，小编会用一系列的文章将这个绘图包的语法介绍清楚，本期文章将作为这个系列的开篇之作，也可以算作是快速入门教程吧。现在就让我们进入这个神器一般的绘图包吧！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>R语言绘图——R语言绘制热地图实战</title>
+      <link>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Sat, 05 May 2018 00:48:15 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-2&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上了两天班，又迎来了周末时光（那些假期为8天的朋友请自行消失），这周过的是真心累，不过想到又要和各位朋友见面了就不免有些兴奋，疲惫的身躯一下子就好了。上一期文章中，笔者讲述了怎么使用python构建决策树算法，通过那篇文章初步认识到了决策树的相关算法流程与核心构成，至于决策树的可视化小编会在适当的时候予以补充。这一期文章中，小编准备讲述一下怎么使用R语言绘制热力图。为什麼要将这个话题呢，这源自于小编最近的工作常态，最近小编频繁接触热力图的绘制，并且要不断地将其做成报告形式。作为一名偷懒爱好者，小编绝对不能忍受这种过于频繁的机械化操作，而且热力图的绘制对于很多桌面式软件来说还是存在一定的不便的。这些软件的劣势主要表现在两个方面：其一，需要人为录入经纬度信息（office系列，虽然office2016后增加了bing地图的支持，但那只是针对世界地图而已，如果你要绘制某区域地图，仍然需要录入经纬度信息）；其二，不便于程式化自动化操作(office，Arcgis，Tableau)。所以考虑到这些劣势，小编最终还是决定使用程序来解决这一问题。其实在用程序解决热力图中，python和R语言都可以实现，但是为什麼小编最终决定使用R语言来实现这一功能呢，那是因为R语言中的地图包以及ggplot2包真的太有诱惑力了。当然小编在以后的python绘图系列教程中也会介绍怎么使用python去绘制热力图，所以不用担心小编跑偏。说了这么多废话，下面让我们正式开始吧！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

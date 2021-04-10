@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>送上一碗鸡汤——BeautifulSoup网页解析介绍 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="送上一碗鸡汤——BeautifulSoup网页解析介绍" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-10
+
+写在前面
+上期讲述了正则表达式在网页解析中的用法，了解了怎么使用正则表达式去获取网页数据。然而正则表达式语法相对较难掌握以及正则表达式书写相对繁琐，所以就相继有了其它一些网页解析方式。本期就和大家讲一下其中的代表BeautifulSoup，可以说这种解析工具在网页解析中是使用最为方便的一种解析方式，其清晰便捷的语法规则真的如其名字所彰显的那样（美丽心灵一般不会作恶），下面正式开始对其的讲解。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/" />
+<meta property="article:published_time" content="2018-09-14T23:12:30+00:00" />
+<meta property="article:modified_time" content="2018-09-14T23:12:30+00:00" />
+<meta itemprop="name" content="送上一碗鸡汤——BeautifulSoup网页解析介绍">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-10
+
+写在前面
+上期讲述了正则表达式在网页解析中的用法，了解了怎么使用正则表达式去获取网页数据。然而正则表达式语法相对较难掌握以及正则表达式书写相对繁琐，所以就相继有了其它一些网页解析方式。本期就和大家讲一下其中的代表BeautifulSoup，可以说这种解析工具在网页解析中是使用最为方便的一种解析方式，其清晰便捷的语法规则真的如其名字所彰显的那样（美丽心灵一般不会作恶），下面正式开始对其的讲解。">
+<meta itemprop="datePublished" content="2018-09-14T23:12:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-14T23:12:30&#43;00:00" />
+<meta itemprop="wordCount" content="308">
+
+
+
+<meta itemprop="keywords" content="python,BautifulSoup,爬虫," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="送上一碗鸡汤——BeautifulSoup网页解析介绍"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-10
+
+写在前面
+上期讲述了正则表达式在网页解析中的用法，了解了怎么使用正则表达式去获取网页数据。然而正则表达式语法相对较难掌握以及正则表达式书写相对繁琐，所以就相继有了其它一些网页解析方式。本期就和大家讲一下其中的代表BeautifulSoup，可以说这种解析工具在网页解析中是使用最为方便的一种解析方式，其清晰便捷的语法规则真的如其名字所彰显的那样（美丽心灵一般不会作恶），下面正式开始对其的讲解。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/&amp;text=%e9%80%81%e4%b8%8a%e4%b8%80%e7%a2%97%e9%b8%a1%e6%b1%a4%e2%80%94%e2%80%94BeautifulSoup%e7%bd%91%e9%a1%b5%e8%a7%a3%e6%9e%90%e4%bb%8b%e7%bb%8d" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/&amp;title=%e9%80%81%e4%b8%8a%e4%b8%80%e7%a2%97%e9%b8%a1%e6%b1%a4%e2%80%94%e2%80%94BeautifulSoup%e7%bd%91%e9%a1%b5%e8%a7%a3%e6%9e%90%e4%bb%8b%e7%bb%8d" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">送上一碗鸡汤——BeautifulSoup网页解析介绍</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-09-14T23:12:30Z">September 14, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-9-10</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期讲述了正则表达式在网页解析中的用法，了解了怎么使用正则表达式去获取网页数据。然而正则表达式语法相对较难掌握以及正则表达式书写相对繁琐，所以就相继有了其它一些网页解析方式。本期就和大家讲一下其中的代表BeautifulSoup，可以说这种解析工具在网页解析中是使用最为方便的一种解析方式，其清晰便捷的语法规则真的如其名字所彰显的那样（美丽心灵一般不会作恶），下面正式开始对其的讲解。</p>
+<h3 id="beautifulsoup">BeautifulSoup简介</h3>
+<p>BeautifulSoup是python中的一个网页解析库，通过它可以方便地从网页中提取数据，因为其简单便捷的用法，使其已经成为和lxml以及html6lib一样出色的python解析库，所以熟练掌握它可以显著提高你的网页解析效率。然而在使用它之前，请确保你已经正确安装了这个第三方库，如果你安装的是Anaconda，那么这个库已经默认安装，你也就不再需要做什麼安装准备了，如果你是直接安装的python，那么请通过pip命令正确去安装这个库，关于它的安装，小编在前期文章中已有介绍，这里就不再赘述。考虑到beautifulsoup的使用依赖于相应的解析器，小编这里建议大家也进行一下lxml库的安装。目前来说，在beautifulsoup中存在四种解析方式，如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">解析器</th>
+<th align="center">使用方法</th>
+<th align="center">优势</th>
+<th align="center">劣势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">python标准库</td>
+<td align="center">BeautifulSoup(text,&lsquo;html.parser&rsquo;)</td>
+<td align="center">python内置标准库，执行速度适中，文档容错能力强</td>
+<td align="center">较旧的python版本下容错能力差</td>
+</tr>
+<tr>
+<td align="center">lxml HTML解析库</td>
+<td align="center">BeautifulSoup(text,&lsquo;lxml&rsquo;)</td>
+<td align="center">速度快，文档容错能力强</td>
+<td align="center">需要安装C语言库</td>
+</tr>
+<tr>
+<td align="center">lxml XML解析库</td>
+<td align="center">BeautifulSoup(text,&lsquo;xml&rsquo;)</td>
+<td align="center">速度快，唯一支持XML的解析库</td>
+<td align="center">需要安装C语言库</td>
+</tr>
+<tr>
+<td align="center">html5lib</td>
+<td align="center">BeautifulSoup(text,&lsquo;html5lib&rsquo;)</td>
+<td align="center">具有最好的容错性</td>
+<td align="center">速度较慢</td>
+</tr>
+</tbody>
+</table>
+<p>所以通过对比可以发现，lxml解析方式存在一定的优势，因此小编建议在使用过程中采用这种解析方式。</p>
+<h3 id="heading1">基本用法</h3>
+<p>小编这里以小猪租房网页获取来说明beautifulsoup用法。以广州房源中某处房源网页来说明，可以直接输入https://gz.xiaozhu.com/fangzi/36146931503.html进入这处房源的详细信息页面，而后通过右键检查命令进入网页源码界面，这里小编以获取房源的名称为例来进行说明。
+<img src="https://i.imgur.com/eFkUv6y.png" alt="小猪租房网">
+可以看出房源的名称与所对应的HTML代码均在红线框中，如果要获得房源名称，则需要根据这一名称在网页代码中的位置进行提取。通过观察可以发现，房源名称位于h4标签之下，所以依据这个标志进行获取，见下面代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+<span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+url <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">https://gz.xiaozhu.com/fangzi/36146931503.html</span><span style="color:#e6db74">&#39;</span>
+res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">print</span>(bsobj<span style="color:#f92672">.</span>h4<span style="color:#f92672">.</span>string)
+</code></pre></div><p>这里主要从倒数第二行开始讲起。使用beautifulsoup解析网页首先需要进行初始化，也就是这里的倒数第二行，通过初始化将初始化后的家国保存在bsobj变量中，下面就可以使用beautifulsoup中的正确方法进行数据获取了。因为需要获得的数据位于h4标签下，并且整个网页中仅有一个h4标签，所以完全可以通过命令索引的方式进行数据提取。也就是通过使用bsobj.h4获取，这样便获取了名称信息。然而这种命令获得的数据包含了em标签，所以这里进一步通过string命令提取出其中的文字信息。所以通过beautifulsoup去提取网页信息就是两点：确定数据在网页代码中的位置；使用相应命令选择出这部分网页代码进而获得数据。第一点可以通过右键检查命令确定，下面讲述提取数据。</p>
+<h3 id="heading2">节点选择器</h3>
+<p>如果单个节点结构层次非常明显，则可以通过节点选择器来进行数据的获取，上文提到的选择方式就是节点选择器。小编这里首先给出一个网页代码例子，而后的操作全部基于这部分网页代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">html <span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;html&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;head&gt; </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;title&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    The Dormouse</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/title&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/head&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;body&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;p class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">title</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> name =</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">dromouse</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;b&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    The Dormouse</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/b&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/p&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;p class ＝</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">story</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Once upon a time there were three little sisters;and their names were</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;a href＝ </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">http://example.com/elsie</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> class= </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">sister</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> id ＝</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">linkl</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;!--Elsie--&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/a&gt; </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">,</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;a href＝</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">http://example.com/lacie</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> class =</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">sister</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> id =</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">link2</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Lacie</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/a&gt; </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    and</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;a href=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">http://example.com/tillie</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> class =</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">sister</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> id=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">link3</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Tillie</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/a&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">and they lived at the bottom of a well. </span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/p&gt;</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</code></pre></div><h4 id="heading3">选择元素</h4>
+<p>下面通过以上网页代码来说明节点选择器的用法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+soup <span style="color:#f92672">=</span> BeautifulSoup(html,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>title)
+<span style="color:#66d9ef">print</span>(type(soup<span style="color:#f92672">.</span>title))
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>string)
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>head)
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>p)
+
+<span style="color:#75715e"># 输出结果</span>
+<span style="color:#f92672">&lt;</span>title<span style="color:#f92672">&gt;</span>The Dormouse<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story&lt;/title&gt;</span>
+<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">bs4</span><span style="color:#f92672">.</span>element<span style="color:#f92672">.</span>Tag<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;</span>
+The Dormouse<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story</span>
+<span style="color:#f92672">&lt;</span>head<span style="color:#f92672">&gt;</span><span style="color:#f92672">&lt;</span>title<span style="color:#f92672">&gt;</span>The Dormouse<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story&lt;/title&gt;&lt;/head&gt;</span>
+<span style="color:#f92672">&lt;</span>p class<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">title</span><span style="color:#e6db74">&#34;</span> name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">dromouse</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">&gt;</span> <span style="color:#f92672">&lt;</span>b<span style="color:#f92672">&gt;</span> The Dormouse<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story&lt;/b&gt;&lt;/p&gt;</span>
+</code></pre></div><p>这里首先打印title节点的选择结果，输出结果正是title节点里面的文字内容。接下来，输出它的类型，是bs4.element.Tag类型，这是BeautifulSoup中一个重要的数据结构。经过选择器选择后，选择结果都是这种Tag类型。Tag具有一些属性，比如string属性，调用该属性，可以得到节点的文本内容，所以接下来的输出结果正是节点的文本内容。</p>
+<p>接下来，选择head节点，结果也是节点内部的所有内容。最后选择p节点。这次情况比较特殊，发现结果是第一个p节点的内容，后面几个p节点并没有选到。也就是说，当有多个节点时，这种选择方式只会选择到第一个匹配的节点，其他的后面节点都会忽略。</p>
+<h4 id="heading4">提取信息</h4>
+<p>上面演示了调用string属性来获取文本的值，那么如何获取节点属性的值呢？如何获取节点名呢？下面来统一梳理一下信息的提取方式。</p>
+<h5 id="1">（1）获取名称</h5>
+<p>可以利用name属性获取节点的名称。这里还是以上面的文本为例，选取title节点，然后调用name属性就可以得到节点名称：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>name)
+title
+</code></pre></div><h5 id="2">（2）获取属性</h5>
+<p>每个节点可能有多个属性，比如id和class等，选择这个节点元素后，可以调用attrs 获取所有属性：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>p<span style="color:#f92672">.</span>attrs)
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>p<span style="color:#f92672">.</span>attrs[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">name</span><span style="color:#e6db74">&#39;</span>])
+
+<span style="color:#75715e"># 输出结果</span>
+{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">title</span><span style="color:#e6db74">&#39;</span>],<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">name</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dromouse</span><span style="color:#e6db74">&#39;</span>}
+dromouse
+</code></pre></div><p>可以看到，attrs的返回结果是字典形式，它把选择的节点的所有属性和属性值组合成一个字典。接下来，如果要获取name属性，就相当于从字典中获取某个键值，只需要用中括号加属性名就可以了。比如，要获取name属性，就可以通过attrs[&lsquo;name&rsquo;]来得到。其实这样有点烦琐，还有一种更简单的获取方式：可以不用写attrs，直接在节点元素后面加中括号，传入属性名就可以获取属性值了。</p>
+<h5 id="3">（3）获取内容</h5>
+<p>可以利用string属性获取节点元素包含的文本内容，比如要获取第一个p节点的文本：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>p<span style="color:#f92672">.</span>string)
+<span style="color:#75715e"># 运行结果如下：</span>
+The Dormouse<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story</span>
+</code></pre></div><p>再次注意这里选择的p节点是第一个p节点，获取的文本也是第一个p节点里面的文本。</p>
+<h4 id="heading5">嵌套选择</h4>
+<p>在上面的例子中，每一个返回结果都是bs4.element.Tag类型，它同样可以继续调用节点进行下一步的选择。比如，获取了head节点元素，可以继续调用title来选取其内部的title节点元素：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>head<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>string)
+<span style="color:#75715e"># 输出结果</span>
+The Dormouse<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s story</span>
+</code></pre></div><p>关于节点选择器还有子节点、子孙节点、父节点、祖先节点等方面的知识，不过因为在实践中使用较少，这里就不再多讲了，下面讲一下方法选择器。</p>
+<h3 id="heading6">方法选择器</h3>
+<p>前面所讲的选择方法都是通过属性来选择的，这种方法非常快，但是如果进行比较复杂的选择的话，它就比较烦琐，不够灵活了。幸好，BeautifulSoup还提供了一些查询方法，比如find_all()和find()等，调用它们，然后传入相应的参数，就可以灵活查询了。</p>
+<h4 id="findall">find_all()函数</h4>
+<p>find_all，顾名思义，就是查询所有符合条件的元素。给它传入一些属性或文本，就可以得到符合条件的元素，它的功能十分强大。其使用方法为：</p>
+<!-- raw HTML omitted -->
+<h1 id="heading7">输出结果</h1>
+<p>[&lt;υ1 class=&quot;list&rdquo; id=&quot;list-1&quot;&gt;</p>
+<!-- raw HTML omitted -->
+<h1 id="heading8">运行结果如下：</h1>
+<p>[<!-- raw HTML omitted -->Foo<!-- raw HTML omitted -->,<!-- raw HTML omitted -->Bar<!-- raw HTML omitted -->,<!-- raw HTML omitted -->Jay<!-- raw HTML omitted -->]
+[&lt;li class ＝&quot;element&quot;&gt;Foo<!-- raw HTML omitted -->,&lt;li class ＝&quot;element&quot;&gt;Bar<!-- raw HTML omitted -->]</p>
+<pre><code>当然这些获得的数据均带有标签，你可以通过get_text()函数仅仅获得文本内容。
+##### 根据属性值选择
+```python
+print(soup.find_all(attrs ＝{'id':'list-1'}))
+print(soup.find_all(attrs ＝{'name':'elements'}))
+# 输出结果
+[&lt;ul class =&quot;list&quot; id=&quot;list-1&quot; name =&quot;elements&quot;&gt;
+&lt;li class=&quot;element&quot;&gt; Foo&lt;/li&gt;
+&lt;li class =&quot;element&quot;&gt; Bar&lt;/li&gt;
+&lt;li class =&quot;element&quot;&gt; Jay&lt;/li&gt;
+&lt;/ul&gt;]
+[&lt;ul class=&quot;list&quot; id=&quot;list-1&quot; name=&quot;elements&quot;&gt;
+&lt;li class =&quot;element&quot;&gt; Foo &lt;/li&gt;
+&lt;li class =&quot;element&quot;&gt; Bar &lt;/li&gt;
+&lt;li class =&quot;element&quot;&gt; Jay&lt;/li&gt;
+&lt;/ul&gt;]
+</code></pre><p>这里查询的时候传入的是attrs参数，参数的类型是字典类型。比如，要查询id为list-1的节点，可以传入attrs ＝{&lsquo;id&rsquo;:&lsquo;list-1&rsquo;}的查询条件，得到的结果是列表形式，包含的内容就是符合id为list-1的所有节点。在上面的例子中，符合条件的元素个数是l ，所以结果是长度为l的列表。</p>
+<h4 id="find">find()函数</h4>
+<p>除了find_all()方法，还有find()方法，只不过后者返回的是单个元素，也就是第一个匹配的元素，而前者返回的是所有匹配的元素组成的列表。至于用法，和find_all()函数相似，这里简单举个例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">html<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;div class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">panel</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;div class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">panel-heading</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;h4&gt;Hello&lt;/h4&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/div&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;div class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">panel-body</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;ul class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> id=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list-1</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;li class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">element</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;Foo&lt;/li&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;li class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">element</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;Bar&lt;/li&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;li class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">element</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;Jay&lt;/li&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/ul&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;ul class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list list-small</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> id=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list-2</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;li class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">element</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Foo&lt;/li&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;li class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">element</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> &gt;Bar&lt;/li&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/ul&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/div&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&lt;/div&gt;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+<span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+soup <span style="color:#f92672">=</span> BeautifulSoup(html,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>find(name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ul</span><span style="color:#e6db74">&#39;</span>))
+<span style="color:#66d9ef">print</span>(type(soup<span style="color:#f92672">.</span>find(name <span style="color:#960050;background-color:#1e0010">＝</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ul</span><span style="color:#e6db74">&#39;</span>)))
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>find(class_<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">list</span><span style="color:#e6db74">&#39;</span>))
+
+<span style="color:#75715e"># 运行结果如下：</span>
+<span style="color:#f92672">&lt;</span>ul class<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list</span><span style="color:#e6db74">&#34;</span> id<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list-1</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span>li <span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">=</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">element</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Foo&lt;/li&gt;</span>
+<span style="color:#f92672">&lt;</span>li <span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">=</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">element</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Bar&lt;/li&gt;</span>
+<span style="color:#f92672">&lt;</span>li <span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">=</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">element</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Jay&lt;/li&gt;</span>
+<span style="color:#f92672">&lt;</span><span style="color:#f92672">/</span>ul<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">bs4</span><span style="color:#f92672">.</span>element<span style="color:#f92672">.</span>Tag<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;</span>
+<span style="color:#f92672">&lt;</span>ul class<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list</span><span style="color:#e6db74">&#34;</span> id<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">list-1</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span>li <span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">=</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">element</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Foo&lt;/li&gt;</span>
+<span style="color:#f92672">&lt;</span>li <span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">=</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">element</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Bar&lt;/li&gt;</span>
+<span style="color:#f92672">&lt;</span>li <span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">=</span><span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">element</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt; Jay&lt;/li&gt;</span>
+<span style="color:#f92672">&lt;</span><span style="color:#f92672">/</span>ul<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>这里返回结果不再是列表形式，而是第一个匹配的节点元素，类型依然是Tag类型。</p>
+<p>另外，还有许多查询方法，其用法与前面介绍的find_all()、find()方法完全相同， 只不过查询范围不同，这里简单说明一下。</p>
+<ul>
+<li>find_parents()和find_parent():前者返回所有祖先节点，后者返回直接父节点。</li>
+<li>find_next_siblings()和find_next_ sibling():前者返回后面所有的兄弟节点，后者返回后面第一个兄弟节点。</li>
+<li>find_previous_siblings()和find_previous_sibling():前者返回前面所有的兄弟节点，后者返回前面第一个兄弟节点。</li>
+<li>find_all_next()和find_next():前者返回节点后所有符合条件的节点，后者返回第一个符合条件的节点。</li>
+<li>find_all_previous()和find_previous():前者返回节点后所有符合条件的节点，后者返回第一个符合条件的节点。</li>
+</ul>
+<p>除了这种选择方法，还有一种CSS选择方法，考虑到这种方法与后面介绍的解析工具方法类似，这里就不再多做介绍了，留待后文介绍。</p>
+<h3 id="heading9">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下BeautifulSoup解析库的用法，主要介绍了其中的两种选择方法，这为快速抓取奠定了基础。后续文章会继续介绍另外几种网页解析的工具，敬请期待。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/bautifulsoup" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">BautifulSoup</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%88%AC%E8%99%AB" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">爬虫</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E9%A3%8E%E9%9B%A8%E8%B7%AF%E6%AD%A3%E5%88%99%E7%9F%A5%E5%A4%9A%E5%B0%91/">爬虫风雨路，正则知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/">温故知新——python爬虫阶段总结</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MySQL数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MongoDB数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/">python生成随机漫步序列——醉鬼能回到家吗？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/">热地图绘制——基于python获取的经纬度坐标</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

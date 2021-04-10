@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>从qplot快速入门ggplot2 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="从qplot快速入门ggplot2" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-25
+
+写在前面
+这两天小编有点事情要处理，所以文章没有及时更新，先对各位说声抱歉了。上期文章中，小编和大家介绍了xlsxwriter库的快速入门，对xlsxwriter操作Excel的基本过程有了一个基本了解，后续会进一步加大对于这个库的相关介绍。本期文章中，小编将和大家继续聊一下图形绘制那些事，所谓一图胜万表，所以小编会定期地介绍一下图表的绘制方法。本期文章中，小编将和大家聊一下小编目前为止所接触的最优秀的绘图库ggplot2，这个库目前运行在R语言中，不过在python中也已经存在了这个库的低级版本ggplot。所以了解这个库系列对于绘图实践可以说大有益处，小编会用一系列的文章将这个绘图包的语法介绍清楚，本期文章将作为这个系列的开篇之作，也可以算作是快速入门教程吧。现在就让我们进入这个神器一般的绘图包吧！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/" />
+<meta property="article:published_time" content="2018-05-29T20:46:28+00:00" />
+<meta property="article:modified_time" content="2018-05-29T20:46:28+00:00" />
+<meta itemprop="name" content="从qplot快速入门ggplot2">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-25
+
+写在前面
+这两天小编有点事情要处理，所以文章没有及时更新，先对各位说声抱歉了。上期文章中，小编和大家介绍了xlsxwriter库的快速入门，对xlsxwriter操作Excel的基本过程有了一个基本了解，后续会进一步加大对于这个库的相关介绍。本期文章中，小编将和大家继续聊一下图形绘制那些事，所谓一图胜万表，所以小编会定期地介绍一下图表的绘制方法。本期文章中，小编将和大家聊一下小编目前为止所接触的最优秀的绘图库ggplot2，这个库目前运行在R语言中，不过在python中也已经存在了这个库的低级版本ggplot。所以了解这个库系列对于绘图实践可以说大有益处，小编会用一系列的文章将这个绘图包的语法介绍清楚，本期文章将作为这个系列的开篇之作，也可以算作是快速入门教程吧。现在就让我们进入这个神器一般的绘图包吧！">
+<meta itemprop="datePublished" content="2018-05-29T20:46:28&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-29T20:46:28&#43;00:00" />
+<meta itemprop="wordCount" content="420">
+
+
+
+<meta itemprop="keywords" content="R语言,ggplot2,商务图表," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="从qplot快速入门ggplot2"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-25
+
+写在前面
+这两天小编有点事情要处理，所以文章没有及时更新，先对各位说声抱歉了。上期文章中，小编和大家介绍了xlsxwriter库的快速入门，对xlsxwriter操作Excel的基本过程有了一个基本了解，后续会进一步加大对于这个库的相关介绍。本期文章中，小编将和大家继续聊一下图形绘制那些事，所谓一图胜万表，所以小编会定期地介绍一下图表的绘制方法。本期文章中，小编将和大家聊一下小编目前为止所接触的最优秀的绘图库ggplot2，这个库目前运行在R语言中，不过在python中也已经存在了这个库的低级版本ggplot。所以了解这个库系列对于绘图实践可以说大有益处，小编会用一系列的文章将这个绘图包的语法介绍清楚，本期文章将作为这个系列的开篇之作，也可以算作是快速入门教程吧。现在就让我们进入这个神器一般的绘图包吧！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/&amp;text=%e4%bb%8eqplot%e5%bf%ab%e9%80%9f%e5%85%a5%e9%97%a8ggplot2" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/&amp;title=%e4%bb%8eqplot%e5%bf%ab%e9%80%9f%e5%85%a5%e9%97%a8ggplot2" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">从qplot快速入门ggplot2</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-29T20:46:28Z">May 29, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-25</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>这两天小编有点事情要处理，所以文章没有及时更新，先对各位说声抱歉了。上期文章中，小编和大家介绍了xlsxwriter库的快速入门，对xlsxwriter操作Excel的基本过程有了一个基本了解，后续会进一步加大对于这个库的相关介绍。本期文章中，小编将和大家继续聊一下图形绘制那些事，所谓一图胜万表，所以小编会定期地介绍一下图表的绘制方法。本期文章中，小编将和大家聊一下小编目前为止所接触的最优秀的绘图库ggplot2，这个库目前运行在R语言中，不过在python中也已经存在了这个库的低级版本ggplot。所以了解这个库系列对于绘图实践可以说大有益处，小编会用一系列的文章将这个绘图包的语法介绍清楚，本期文章将作为这个系列的开篇之作，也可以算作是快速入门教程吧。现在就让我们进入这个神器一般的绘图包吧！</p>
+<h3 id="ggplot2">ggplot2简介</h3>
+<p>ggplot2是R语言中最优秀的绘图包（目前在python中也已经可以使用，不过python中使用的是ggplot），也可以说是目前最优秀的绘图工具之一，自然也是小编最喜欢和最常用的绘图工具。一直以来小编都想和大家好好聊一下这个包的一些事，然而总是没有规划好写作框架，以致于对这个库的介绍一直迟缓，现在终于有了一个比较明确的写作框架了，因此介绍这个包的时机终于来到。</p>
+<p>首先需要解决一个认知问题，什麼是ggplot2？如果看过小编文章的朋友此时应该知道对于这个术语需要进行拆词：ggplot2=gg+plot+2。其中的gg是《Grammer of Graphics》这本书的英文缩写（中文名称图形语法，强烈推荐细读一番，绝对能够提高你的整体图形掌握程度及绘图技巧）；plot是绘图的英文单词；2顾名思义就是第二代的意思了。所以ggplot2就是指基于图形语法的第二代绘图包。这个R语言绘图包是由Rstudio的首席科学家Hadley Wickham(哈德利·威克汉姆)创建，至今已在R语言世界获得了最为广泛的运用。之前的版本是ggplot，但后来哈德利大神觉得ggplot的语法命令不是很好，就重新创建了这个包的另一个版本ggplot2，所以ggplot2与ggplot具有不同的语法命令，如果你初次接触这个系列就直接从ggplot2开始吧。</p>
+<p>正如前文讲到的那样，因为ggplot2是基于图形语法这本书，因此ggplot2中的绘图是基于图层概念，这与其它绘图系统存在很大不同。其它绘图系统是直接出图，然后再对图形的不同部分进行格式调整，但是ggplot2绘图就是典型的堆积木，按照你的想法把各个要素添加到画布之上，这一点相信有过PS的朋友肯定很熟悉。所以ggplot2绘图的本质就是数据到图形属性的映射。这里有必要先和大家聊一下ggplot2绘图中的一些基本概念。</p>
+<ul>
+<li>最基础的部分就是需要可视化的数据集以及数据集中的变量到图形属性的映射；</li>
+<li>几何对象(geom)：代表你在图中实际看到的图形元素，如点、线、多边形等；</li>
+<li>统计变换(stats)：对数据进行的某种汇总。例如，将数据分组计数以创建直方图，或者将一个二维的关系用线性模型进行解释。统计变换是可选的，但通常比较有用；</li>
+<li>标度(scale)：将数据的取值映射到图形空间，例如用颜色。大小或形状来表示不同的取值；</li>
+<li>坐标系(coord)：常见的无非就是笛卡尔坐标系和极坐标系</li>
+<li>分面(facet):描述如何将数据分解成各个子集，以及如何对子集进行作图并联合进行展示。</li>
+</ul>
+<p>这些概念在后续文章中都会进行相关介绍，本文因为属于一篇先导文章，所以就不对这些概念进行系统介绍，而是简单地介绍这些概念的运用。本文将从qplot开始讲解ggplot2的用法，为了确保你能够正常使用qplot，请先打开R语言窗口或者打开Rstudio（小编强烈推荐使用Rstudio），然后在命令行窗口中输入以下命令进行ggplot2包的安装。</p>
+<pre><code>install.packages('ggplot2'，dependencies = TRUE)
+</code></pre><p>当然你也可以在python环境中通过使用<code>pip install ggplot</code>安装ggplot这个库，不过如果你真的想要使用ggplot系列的话，小编还是之前那句话，请在R语言中使用ggplot2，本文也是围绕ggplot2进行展开的，所以有些命令无法在python中实现。好了，现在让小编带领大家从qplot正式进入ggplot2的世界吧！</p>
+<h3 id="ggplot2qplot">ggplot2快速入门——qplot</h3>
+<p>qplot，从字面意思就可以很明白地看出其目的是快速作图（quick plot）。这将是大家接触到的第一个ggplot2命令，也将是一个最为懒惰的命令。如果你只是想通过ggplot2去进行一些基本图形的快速绘制，或者说你并不想深入地了解ggplot2的深层语法，那么你只需要掌握这个命令就可以了，或者说你只需要读完本文就OK了。</p>
+<h4 id="heading1">数据集与快速入门语法介绍</h4>
+<p>本期文章中，小编将主要使用ggplot2包中自带的数据集diamonds以及economics，后面为了作图清晰的目的也会在diamond数据集中随机抽出100个样本生成一个较小的数据集dsmall。因为这期文章中的作图多是基于diamonds数据集，下面看一下这个数据集的一些相关特征。</p>
+<pre><code>library(ggplot2)
+library(knitr)
+kable(head(diamonds))
+</code></pre><table>
+<thead>
+<tr>
+<th align="center">carat</th>
+<th align="center">cut</th>
+<th align="center">color</th>
+<th align="center">clarity</th>
+<th align="center">depth</th>
+<th align="center">table</th>
+<th align="center">price</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0.23</td>
+<td align="center">Ideal</td>
+<td align="center">E</td>
+<td align="center">SI2</td>
+<td align="center">61.5</td>
+<td align="center">55</td>
+<td align="center">326</td>
+<td align="center">3.95</td>
+<td align="center">3.98</td>
+<td align="center">2.43</td>
+</tr>
+<tr>
+<td align="center">0.21</td>
+<td align="center">Premium</td>
+<td align="center">E</td>
+<td align="center">SI1</td>
+<td align="center">59.8</td>
+<td align="center">61</td>
+<td align="center">326</td>
+<td align="center">3.89</td>
+<td align="center">3.84</td>
+<td align="center">2.31</td>
+</tr>
+<tr>
+<td align="center">0.23</td>
+<td align="center">Good</td>
+<td align="center">E</td>
+<td align="center">VS1</td>
+<td align="center">56.9</td>
+<td align="center">65</td>
+<td align="center">327</td>
+<td align="center">4.05</td>
+<td align="center">4.07</td>
+<td align="center">2.31</td>
+</tr>
+<tr>
+<td align="center">0.29</td>
+<td align="center">Premium</td>
+<td align="center">I</td>
+<td align="center">VS2</td>
+<td align="center">62.4</td>
+<td align="center">58</td>
+<td align="center">334</td>
+<td align="center">4.20</td>
+<td align="center">4.23</td>
+<td align="center">2.63</td>
+</tr>
+<tr>
+<td align="center">0.31</td>
+<td align="center">Good</td>
+<td align="center">J</td>
+<td align="center">SI2</td>
+<td align="center">63.3</td>
+<td align="center">58</td>
+<td align="center">335</td>
+<td align="center">4.34</td>
+<td align="center">4.35</td>
+<td align="center">2.75</td>
+</tr>
+<tr>
+<td align="center">0.24</td>
+<td align="center">Very Good</td>
+<td align="center">J</td>
+<td align="center">VVS2</td>
+<td align="center">62.8</td>
+<td align="center">57</td>
+<td align="center">336</td>
+<td align="center">3.94</td>
+<td align="center">3.96</td>
+<td align="center">2.48</td>
+</tr>
+</tbody>
+</table>
+<p>diamonds数据集中主要存放了5400颗钻石的价格与质量的信息，前四列主要是钻石的质量信息，后面六列除了price这一列之外的其余五列分别是钻石的物理指标。因为diamonds数据集中样本数量较多，因此在作图时很多时候会发生重叠现象，为了便利图形的清晰，这里在5400个样本总随机抽出100个构成一个小样本数据集。</p>
+<pre><code>set.seed(1314)
+dsmall &lt;- diamonds[sample(nrow(diamonnds),100),]
+</code></pre><p>第一条命令是为了设置一个随机种子，以便于每次生成的随机样本是一样的，最重要的是便于大家的操作结果和小编一样；第二行用于在原数据集中随机选取100个样本，这里涉及到的一些R语言命令都是基本的R语言知识，小编就不进行讲解了。现在已经有了相关数据，那就来小试一下牛刀吧。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(carat,price,data = diamonds)
+p2 &lt;- qplot(log(carat),log(price),data = diamonds)
+p3 &lt;- qplot(carat,price,data = dsmall)
+p4 &lt;- qplot(log(carat),log(price),data = dsmall)
+grid.arrange(p1,p2,p3,p4,nrow=2,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/Sd4I8w2.png" alt="qplot作图初探1">
+代码中的前两行主要用来导入相关的包（其中gridExtra包不是一定的，小编这里只是希望能够在一个画布上绘制多个图所以才导入了这个库，如果你没有这样的需求是可以不用导入这个包的）；中间的四行代码分别绘制了四个图形，前两个图形以diamonds数据集进行绘制，后两个图形以dsmall数据集进行绘制；最后一行代码是用来布置绘制的四个图形的，小编这里将其布置为2行2列，你可以通过设置<code>nrow</code>和<code>ncol</code>的值来自定义图形布局。</p>
+<p>而在绘图命令中，小编主要采用了qplot命令，小编这里绘制了钻石的重量carat和钻石的价格price之间的散点图，也就是qplot函数的前两个参数；第三个参数是采用的数据集，小编强烈建议要使用这个参数，这样不管是你自己还是别人都能很明白地知道你是基于什麼数据绘制图形的。在绘制原数据的散点图后，可以很明显地看出重量和价格之间存在着很大相关性，因此小编接着绘制了对数后的数据散点图，进一步验证了两者之间存在正相关。在其它绘图程序中，如果需要绘制重量和价格对数后数据的散点图，那么首先要建立两列对数数据列，而后再进行作图，但是在qplot中，这个是不需要的，仅仅需要对数据进行对数化就可以了，也就表现为代码中<code>log(carat)</code>和<code>log(price)</code>，这就是qplot的简便之处，也可以说是整个ggplot2的整体优势之一。在绘制了图形之后，需要对图形进行颜色、大小、形状以及其它图形的设置，这在qplot中异常简单，你仅仅需要对颜色、大小等图形属性指定所需要映射的的数据即可。小编这里分别对上面的图形进行一下颜色、大小、形状以及透明度的设置。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(carat,price,data = dsmall,colour = color)
+p2 &lt;- qplot(carat,price,data = dsmall,shape = cut)
+p3 &lt;- qplot(carat,price,data = dsmall,size = price)
+p4 &lt;- qplot(carat,price,data = diamonds,alpha=I(1/200))
+grid.arrange(p1,p2,p3,p4,nrow=2,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/bmeqPWy.png" alt="qplot初探02">
+第一个图中，小编将数据集中的color一列数据映射到图形的colour属性之上，因此绘制出的图形会根据color的类别分别标示以不同的颜色；第二个图形中，小编将cut数据映射到图形的形状属性上；第三个图形中小编将price数据映射到图形的大小属性之上，需要注意的是在对图形的大小进行映射时最好使用连续型数据；第四个图形是对推行进行透明度设置，其中值越小图形透明度越低。注意在对透明度进行设置时，小编使用了<code>I(1/200)</code>，这个常用将图形属性设置为唯一值，值得注意。上面通过一些图形以及绘图命令的介绍，初步了解了qplot作图的快速语法，下面就以一下常用图形来进一步实践一下qplot的绘图。注意，图形在ggplot2中也被称之为几何对象。</p>
+<h4 id="qplot">qplot与常用几何对象</h4>
+<p>完整的ggplot2命令在绘制图形时，是需要进行几何对象的声明的，如果你要绘制散点图、条形图、折线图等，你必须在命令中进行几何对象声明。但是刚刚在使用qplot进行绘图时，小编似乎没有使用这些声明命令，这个就是qplot之所以叫作快速作图的原因。因为在qplot中设置了默认几何对象，当你绘制两个变量之间的关系时，它默认绘制散点图；当你只有一个变量时，它默认绘制直方图。然而，为了完全掌控整个图形的绘制，小编建议在绘图时务必进行几何对象的声明，这在qplot中主要是通过<code>geom</code>这个参数进行实现。下面是一下常用的几何对象声明。</p>
+<ul>
+<li>geom = &lsquo;point'绘制散点图。这是绘制两个变量时qplot的默认几何对象</li>
+<li>geom = &lsquo;smooth'拟合一条平滑曲线。这种几何对象常常和散点图一起出现，用来探索数据的整体趋势。</li>
+<li>geom = &lsquo;boxplot'绘制箱线图。</li>
+<li>geom = &lsquo;line'绘制折线图。常常用于绘制时间序列数据</li>
+<li>geom = &lsquo;path'绘制路径图。描绘图形的具体走向与走势，较少使用。</li>
+<li>geom = &lsquo;histogram'绘制直方图。</li>
+<li>geom = &lsquo;density'绘制密度曲线，</li>
+<li>geom = &lsquo;bar'绘制条形图。</li>
+<li>geom = &lsquo;pie'绘制饼图。小编能不使用就不使用的类型。</li>
+</ul>
+<p>这些几何对象只是小编最常用的，qplot中几何对象远不止这些，但是谁又需要掌握全部的图形呢，毕竟很多也用不到。</p>
+<h5 id="heading2">散点图和平滑曲线</h5>
+<p>在绘制散点图时，尤其是数据点较多的散点图时如果加上一条拟合曲线，那么就可以很方便地看出整个数据的趋势，从而便于分析，下面就绘制一些这类图形进行说明吧。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(carat,price,data = dsmall,geom = c('point','smooth'))
+p2 &lt;- qplot(carat,price,data = diamonds,geom = c('point','smooth'))
+p3 &lt;- qplot(carat,price,data = dsmall,geom = c('point','smooth'),span=0.2)
+p4 &lt;- qplot(carat,price,data = dsmall,geom = c('point','smooth'),span=1)
+grid.arrange(p1,p2,p3,p4,nrow=2,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/DzY8Hat.png" alt="散点图与平滑线">
+绘图代码中前两行代码分别绘制了diamonds和dsmall数据集的散点图与拟合曲线，可以看出重量和价格之间存在相关性；后两行代码通过设置<code>span</code>的值来定义拟合曲线的平滑程度，值的大小在0-1之间，值越大越平滑。</p>
+<p>在使用qplot绘制拟合曲线时，默认采用的方法是局部回归（loess）默认采用的模型是线性模型（lm），对于这些默认值你完全可以自己设置，这依赖于你的计量水平，小编这里就不再对讲，不然就成计量课了。</p>
+<h5 id="heading3">箱线图和扰动点图</h5>
+<p>当一个数据集中包含一个分类变量和一个或多个连续变量，如果你想考察连续变量如何所分类变量改变，那么箱线图和扰动点图就派上用场了。箱线图一般又被称之为五分位图，源自于其使用五个数值对数据进行概括，而扰动点图则是将数据点全部显示，因此当数据点较多时，重叠便不可避免，因此对于扰动点图设置透明度是很有必要的。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(color,price/carat,data = diamonds,geom = 'jitter')
+p2 &lt;- qplot(color,price/carat,data = diamonds,geom = 'boxplot')
+p3 &lt;- qplot(color,price/carat,data = diamonds,geom = 'jitter',alpha = I(1/50))
+p4 &lt;- qplot(color,price/carat,data = diamonds,geom = 'jitter',alpha = I(1/200))
+grid.arrange(p1,p2,p3,p4,nrow=2,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/tlzwEHZ.png" alt="箱线图和扰动点图">
+上述图形绘制中因为并不存在新的命令以及参数，所以就不再多做说明。</p>
+<h5 id="heading4">直方图和密度曲线图</h5>
+<p>直方图与密度曲线图主要用来展示单个变量的分布情况，一般不太容易进行组别之间的对比，虽然可以通过堆积绘制重叠的形态绘制对个组别之间的直方图，但是这样处理的图形存在着很大的不便，因此，小编主要讲解单个变量的直方图与密度曲线图绘制。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(carat,data = diamonds,geom = 'histogram',binwidth = 0.2,xlim = c(0,3))
+p2 &lt;- qplot(carat,data = diamonds,geom = 'histogram',binwidth = 0.05,xlim = c(0,3))
+p3 &lt;- qplot(carat,data = diamonds,geom = 'density',adjust = 0.2,xlim = c(0,3))
+p4 &lt;- qplot(carat,data = diamonds,geom = 'density',adjust = 0.05,xlim = c(0,3))
+grid.arrange(p1,p2,p3,p4,nrow=2,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/U6vy9Ma.png" alt="直方图与密度曲线图">
+直方图中主要通过binwidth来设置组距，当组距较大时，图形能反映数据的总体特征，当组距较小时，则能显示出更多的细节；而密度曲线图的汇总中则是通过adjust来控制曲线的平滑程度，值越大越平滑，取值在0-1之间。</p>
+<h5 id="heading5">条形图</h5>
+<p>条形图有点类似于直方图，仅仅需要将几何对象进行改变即可。这里就不再多说。</p>
+<pre><code>library(ggplot2)
+qplot(color,data = diamonds,geom = 'bar')
+</code></pre><p><img src="https://i.imgur.com/F0t0wy8.png" alt="条形图"></p>
+<h5 id="heading6">折线图和路径图</h5>
+<p>折线图常用来绘制时间序列数据，从而揭示数据的趋势特征；而路径图则完全是按照数据的出现顺序依次连接，这种图形相对于折线图运用较少。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(date,unemploy/pop,data = economics,geom = 'line')
+p2 &lt;- qplot(date,uempmed,data = economics,geom = 'line')
+year = function(x) as.POSIXlt(x)$year + 1990
+p3 &lt;- qplot(unemploy/pop,uempmed,data = economics,geom = c('point','path'))
+p4 &lt;- qplot(unemploy/pop,uempmed,data = economics,geom = c('point','path'),colour = year(date))
+grid.arrange(p1,p2,p3,p4,nrow=2,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/uh2NDV4.png" alt="折线图和路径图"></p>
+<h5 id="heading7">分面图绘制</h5>
+<p>上面大致聊了一下常用的一些图形绘制，下面讲一下ggplot2中另外一个高级操作：分面。它将数据集按照类别分成若干子集，然后基于每一个子集绘制图形，最后将所有这些子集图展示在一个图形矩阵中，从而便利各组数据间比较。这里初步看一下利用分面绘制的图形，更多详细介绍见后续文章。</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+p1 &lt;- qplot(carat,data = diamonds,facets = color ~.,geom = 'histogram' ,binwidth=0.1,xlim = c(0,3))
+p2 &lt;- qplot(carat,..density..,data = diamonds,facets = color ~.,geom = 'histogram' ,binwidth=0.1,xlim = c(0,3))
+grid.arrange(p1,p2,nrow=1,ncol=2)
+</code></pre><p><img src="https://i.imgur.com/Co9cvLq.png" alt="分面图形绘制"></p>
+<h4 id="qplot1">qplot函数中的其它参数</h4>
+<p>上文对各类常用图形的绘制进行了介绍，然而只是对图形绘制进行了说明，未对图形的标题、坐标轴的格式进行介绍，下面对这些进行一下说明。</p>
+<ul>
+<li>xlim,ylim：设置x轴和y轴的显示区间，取值为一个长度为2的向量</li>
+<li>log：用于设置对数坐标轴，如果设x轴为对数坐标轴只需加上log='x&rsquo;；如果设y轴为对数坐标只需加上log='y&rsquo;；如果设置双坐标轴则用log='xy&rsquo;</li>
+<li>main：用于设置图标标题</li>
+<li>xlab,ylab：用于设置x轴和y轴的坐标轴标题
+下面用一个例子进行说明。</li>
+</ul>
+<pre><code>library(ggplot2)
+qplot(carat,price,data = diamonds,xlab = 'Price($)',ylab = 'Weight(carats)',xlim = c(0,2),main = '钻石重量与价格关系图')
+</code></pre><p><img src="https://i.imgur.com/KINQurb.png" alt="钻石重量与价格关系图"></p>
+<h3 id="heading8">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章介绍了ggplot2的快速绘图函数qplot，了解了qplot在作图时的快捷便利。本期文章可以作为ggplot2系列文章的先导文章，也可以算作是ggplot2的快速入门。如果你只是想通过ggplot2快速绘制一般图表，而对于内中语法以及个性复合化图表绘制缺少要求，那么本期本文不啻是你的首选。关于ggplot2的更多文章将在后续依次展开，下期文章小编将继续和大家聊一下xlsxwriter库的一些语法，敬请期待。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/r%E8%AF%AD%E8%A8%80" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">R语言</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/ggplot2" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">ggplot2</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%9B%BE%E8%A1%A8" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务图表</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/">R语言绘图——R语言绘制热地图实战</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

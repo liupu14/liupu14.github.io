@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>xlwt on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/xlwt/</link>
+    <description>Recent content in xlwt on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 15 May 2018 23:41:25 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/xlwt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用python库进行Excel读写</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/</link>
+      <pubDate>Tue, 15 May 2018 23:41:25 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-13&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

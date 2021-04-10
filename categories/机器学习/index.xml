@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>机器学习 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 机器学习 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 21 Sep 2018 22:17:08 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>机器学习算法功效评估</title>
+      <link>https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%8A%9F%E6%95%88%E8%AF%84%E4%BC%B0/</link>
+      <pubDate>Fri, 21 Sep 2018 22:17:08 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%8A%9F%E6%95%88%E8%AF%84%E4%BC%B0/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-17&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;讲了这么多期爬虫，是时候换换口味了（是时候表演真正的技术了）。因为在先前的文章中，小编介绍了一些机器学习方面的算法，然而对于任何算法来说，如果没有一个比较好的评估标准，那就相当于脱了裤子跳海——瞎扯淡呗！你总不能指望通过你的臆想和主观臆断来评价一个模型吧，还好大神们已经为我们确定好了一些评价算法优劣的标准，所以，这期文章就来谈一下算法的评价标准这个话题。下面开始吧！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>机器学习系列——决策树</title>
+      <link>https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/</link>
+      <pubDate>Wed, 02 May 2018 22:42:07 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-4-26&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;刚刚过完了人头季，各位没有被堵吧？本来准备在周末更新本文的，但是假期之时偶感不适，因而使得本文的更新有所推迟，还请各位谅解。上期，小编和各位讲解了怎么使用pandas库去进行Excel中的筛选和编辑功能，初步认识了pandas库的相应能力。这一期文章中，笔者将践行之前所作出的承诺，和各位讲一下机器学习中的另外一种经典算法：决策树。闲言就不多说了，直接进入主题吧。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

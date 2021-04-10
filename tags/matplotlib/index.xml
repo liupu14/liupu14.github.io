@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>matplotlib on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/matplotlib/</link>
+    <description>Recent content in matplotlib on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 17 May 2018 23:29:41 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/matplotlib/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python绘图——再探matplotlib</title>
+      <link>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/</link>
+      <pubDate>Thu, 17 May 2018 23:29:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-15&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用matplotlib给妈妈绘制一副心形图</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/</link>
+      <pubDate>Sun, 13 May 2018 16:51:23 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-10&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;今天是一年一度的母亲节（请记住这个时间，每年五月的第二个星期日），在这里小编要向所有伟大母亲送上祝福，祝愿全天下的母亲都能够健康、快乐、长寿！本来小编这一期是准备写另一个主题的，不过考虑到今天是母亲节，小编必须将那一篇文章进行推迟，因为在小编看来任何事情都没有家人重要，至此伟大的母亲节之时，小编想谈一下母亲节那些事情，也想表达一下小编对于自己那位平凡而又伟大、慈祥温柔的母亲的爱与思念！所以本期文章更多的是一篇情怀类文章，当然小编也会在写作中使用python中的一些工具绘制一些图形，下面进入主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python绘图——matplotlib初探</title>
+      <link>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/</link>
+      <pubDate>Thu, 10 May 2018 20:45:18 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-7&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python+pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

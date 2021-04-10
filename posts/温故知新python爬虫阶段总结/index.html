@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>温故知新——python爬虫阶段总结 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="温故知新——python爬虫阶段总结" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-31
+
+写在前面
+前几期文章中，小编先后和大家讲述了四篇关于python爬取的文章，分别涉及到的主题是分页面以及跨页面网页数据的爬取、爬取数据怎么存储的Excel以及相关的数据库系统之中，通过四期文章的介绍，大致可以了了python爬虫的基本原理及步骤。所谓温故而知新，因此本期小编准备对那几期文章及python爬虫做一个总结，从而使大家更加深刻地认识到python爬虫。闲话不多说，下面正式进入主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/" />
+<meta property="article:published_time" content="2018-09-03T22:02:52+00:00" />
+<meta property="article:modified_time" content="2018-09-03T22:02:52+00:00" />
+<meta itemprop="name" content="温故知新——python爬虫阶段总结">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-31
+
+写在前面
+前几期文章中，小编先后和大家讲述了四篇关于python爬取的文章，分别涉及到的主题是分页面以及跨页面网页数据的爬取、爬取数据怎么存储的Excel以及相关的数据库系统之中，通过四期文章的介绍，大致可以了了python爬虫的基本原理及步骤。所谓温故而知新，因此本期小编准备对那几期文章及python爬虫做一个总结，从而使大家更加深刻地认识到python爬虫。闲话不多说，下面正式进入主题。">
+<meta itemprop="datePublished" content="2018-09-03T22:02:52&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-03T22:02:52&#43;00:00" />
+<meta itemprop="wordCount" content="199">
+
+
+
+<meta itemprop="keywords" content="python,爬虫," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="温故知新——python爬虫阶段总结"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-31
+
+写在前面
+前几期文章中，小编先后和大家讲述了四篇关于python爬取的文章，分别涉及到的主题是分页面以及跨页面网页数据的爬取、爬取数据怎么存储的Excel以及相关的数据库系统之中，通过四期文章的介绍，大致可以了了python爬虫的基本原理及步骤。所谓温故而知新，因此本期小编准备对那几期文章及python爬虫做一个总结，从而使大家更加深刻地认识到python爬虫。闲话不多说，下面正式进入主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/&amp;text=%e6%b8%a9%e6%95%85%e7%9f%a5%e6%96%b0%e2%80%94%e2%80%94python%e7%88%ac%e8%99%ab%e9%98%b6%e6%ae%b5%e6%80%bb%e7%bb%93" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/&amp;title=%e6%b8%a9%e6%95%85%e7%9f%a5%e6%96%b0%e2%80%94%e2%80%94python%e7%88%ac%e8%99%ab%e9%98%b6%e6%ae%b5%e6%80%bb%e7%bb%93" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">温故知新——python爬虫阶段总结</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-09-03T22:02:52Z">September 3, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-31</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>前几期文章中，小编先后和大家讲述了四篇关于python爬取的文章，分别涉及到的主题是分页面以及跨页面网页数据的爬取、爬取数据怎么存储的Excel以及相关的数据库系统之中，通过四期文章的介绍，大致可以了了python爬虫的基本原理及步骤。所谓温故而知新，因此本期小编准备对那几期文章及python爬虫做一个总结，从而使大家更加深刻地认识到python爬虫。闲话不多说，下面正式进入主题。</p>
+<h3 id="heading1">爬取需求分析</h3>
+<p>一个比较完备的python爬虫最少具备四大步骤：爬取内容的需求分析；获取网页；解析网页；获取并存储数据。下面，首先对爬取的需求分析这一块做一个简要介绍。所谓需求分析，基本是要确定两大环节：爬取网页的类型以及需要获取的网页数据。在现在流行的网页构造中，对于网页类型的划分主要分成了两大类：多页面网页以及跨页面网页（如果按照网页的反应形式来划分也可以分成静态网页与动态网页，目前小编介绍的网页数据爬取主要针对于静态网页，对于动态网页的爬取会在后面介绍）。多页面网页与跨页面网页的主要不同点就在于网页进入方式的不同。多页面网页在进入网页中主要是通过URL中的页面数字进行确定，前期关于酷狗音乐top500的爬取就属于这种类型，其中每页网页上有23首歌曲信息，通过变更URL中的页面数字从而进入到不同的网页，例如第一页页面的URL地址为http://www.kugou.com/yy/rank/home/1-8888.html?from=rank，而第二页的URL地址为http://www.kugou.com/yy/rank/home/2-8888.html?from=rank，可以看出页面的跳转仅仅需要变更8888前面的数字即可。而跨页面网页的跳转则是通过超链接实现的，例如在爬取链家数据的时候，通过点击房源名称进而进入到房源的详细信息页面。所以在爬取之前，你首先需要确定你所需要爬取的网页到底属于什麼类型的网页，只有确定了这一点，你才能合理地编写你的爬虫函数。</p>
+<p>而关于爬取需求分析的第二点就是确定你需要获取的数据。千万不要忽视这一点，在爬取之前把自己需要获取的数据进行条理化可以使你的爬虫思路相对清晰，同时也能够使你的程序更加具有逻辑性。一般来说，在爬取数据时，尽量不要爬取太多，要重点爬取，真正地爬取那些重要的数据，就像如果你要做一个关于著名电影的时间和地区分布的分析时，那么你的需求数据应该着重在电影名称、上映时间以及发行地方面，而对其它的诸如导演、演员、评价等方面的数据则可以排除掉。只有做到爬取与实用结合，你的爬取数据才不会过于冗余与凌乱，很多朋友在刚开始爬虫时恨不得将网页上面的数据都爬取下来，这之后就造成了数据的极度负载与冗余，严重影响了爬取效率与分析。因此在爬取数据之前，一定要好好地对需求进行一番分析，而后再进行高效爬取。</p>
+<h3 id="heading2">获取网页</h3>
+<p>在对自己的网页爬取需求做出分析之后，下面就要正式开始进入爬取。这就需要你首先获得网页，在在以前来说是相对困难的，不过现在因为一些高校库的存在，这一步变得极其简单。受困于python2和python3之争，python中对于网页获取的库也存在集中形式，python2中主要是使用urllib2这个内置的库进行，而python3在整合了相应的网页获取库，进而内置了urllib这个网页获取库，所以现在在网上看到的很多爬取案例基本是以这两种库为主的。考虑到这两种库在获得网页方面的复杂性，requests库应运而生。所以现在如果你要获取网页的话，小编强烈建议你直接使用requests库。不过requests库属于一个第三方库，因此在使用之前请确保你安装了这个库，如果你使用的是Anaconda的话，那么这个库默认已经安装了，否则你可以使用以下命令进行安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install requests
+</code></pre></div><p>在安装完成之后，通过导入库就可以正常使用了。一般最常用的两个requests库中的函数是get()和post()，两个函数的参数存在些许差别，post()用来处理需要进行登录的网页，而get()函数则用来获取最基本的非登录网页，这种网页也是最为常见的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+url <span style="color:#f92672">=</span> xxxxx
+headers <span style="color:#f92672">=</span> xxxxxx
+res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url,headers <span style="color:#f92672">=</span> headers)
+</code></pre></div><p>通过以上命令就可以获得网页数据，那么接下来就是解析网页数据了。</p>
+<h3 id="heading3">网页解析</h3>
+<p>在爬取中，最重要的环节就是网页解析了，因为如果你不会正确的网页解析的话，你基本得不到你需要的任何数据，因此，网页解析一直就是成为一个好的爬虫工作者的难点。期初的时候，对于网页解析，最基本的方法就是使用正则表达式，不过正则表达式对于很多人来说应该是一大难关，因此后续就相继开发出了lxml和BeautifulSoup这些优秀的网页解析库。因此在本部分就大致和大家介绍一下这三种解析工具的用法，至于这三种工具的详细用法大家可以参考专业书籍，这里简单地用一个例子用来说明一下这三种解析工具的用法及其性能对比。小编以糗事百科上面搞笑段子的抓取为例进行介绍：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> re
+<span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+<span style="color:#f92672">from</span> lxml <span style="color:#f92672">import</span> etree
+<span style="color:#f92672">import</span> time
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">re_spider</span>(url):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+    ids <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&lt;h2&gt;(.*?)&lt;/h2&gt;</span><span style="color:#e6db74">&#39;</span>,res<span style="color:#f92672">.</span>text,re<span style="color:#f92672">.</span>S)
+    contents <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&lt;div class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">content</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;.*?&lt;span&gt;(.*?)&lt;/span&gt;</span><span style="color:#e6db74">&#39;</span>,res<span style="color:#f92672">.</span>text,re<span style="color:#f92672">.</span>S)
+    laughs <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&lt;span class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">stats-vote</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;&lt;i class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">number</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;(</span><span style="color:#e6db74">\</span><span style="color:#e6db74">d+)&lt;/i&gt;</span><span style="color:#e6db74">&#39;</span>,res<span style="color:#f92672">.</span>text,re<span style="color:#f92672">.</span>S)
+    comments <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&lt;i class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">number</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;(</span><span style="color:#e6db74">\</span><span style="color:#e6db74">d+)&lt;/i&gt; 评论</span><span style="color:#e6db74">&#39;</span>,res<span style="color:#f92672">.</span>text,re<span style="color:#f92672">.</span>S)
+    <span style="color:#66d9ef">for</span> id,content,laugh,comment <span style="color:#f92672">in</span> zip(ids,contents,laughs,comments):
+        info <span style="color:#f92672">=</span> {
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">id</span><span style="color:#e6db74">&#39;</span>:id,
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">content</span><span style="color:#e6db74">&#39;</span>:content,
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">laugh</span><span style="color:#e6db74">&#39;</span>:laugh,
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">comment</span><span style="color:#e6db74">&#39;</span>:comment
+        }
+        <span style="color:#66d9ef">return</span> info
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bs_spider</span>(url):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+    bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+    ids <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a &gt; h2</span><span style="color:#e6db74">&#39;</span>)
+    contents <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div &gt; span</span><span style="color:#e6db74">&#39;</span>)
+    laughs <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">span.stats-vote &gt; i</span><span style="color:#e6db74">&#39;</span>)
+    comments <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">i.number</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">for</span> id,content,laugh,comment <span style="color:#f92672">in</span> zip(ids,contents,laughs,comments):
+        info <span style="color:#f92672">=</span> {
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">id</span><span style="color:#e6db74">&#39;</span>:id<span style="color:#f92672">.</span>get_text(),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">content</span><span style="color:#e6db74">&#39;</span>:content<span style="color:#f92672">.</span>get_text(),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">laugh</span><span style="color:#e6db74">&#39;</span>:laugh<span style="color:#f92672">.</span>get_text(),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">comment</span><span style="color:#e6db74">&#39;</span>:comment<span style="color:#f92672">.</span>get_text()
+        }
+        <span style="color:#66d9ef">return</span> info
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">lxml_spider</span>(url):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+    selector <span style="color:#f92672">=</span> etree<span style="color:#f92672">.</span>HTML(res<span style="color:#f92672">.</span>text)
+    url_infos <span style="color:#f92672">=</span> selector<span style="color:#f92672">.</span>xpath(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">//div[@class=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">article block untagged mb15</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">]</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">try</span>:
+        <span style="color:#66d9ef">for</span> url_info <span style="color:#f92672">in</span> url_infos:
+            id <span style="color:#f92672">=</span> url_info<span style="color:#f92672">.</span>xpath(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div[1]/a[2]/h2/text()</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+            content <span style="color:#f92672">=</span> url_info<span style="color:#f92672">.</span>xpath(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a[1]/div/span/text()</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+            laugh <span style="color:#f92672">=</span> url_info<span style="color:#f92672">.</span>xpath(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div[2]/span[1]/i/text()</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+            comment <span style="color:#f92672">=</span> url_info<span style="color:#f92672">.</span>xpath(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div[2]/span[2]/a/i/text()</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+            info <span style="color:#f92672">=</span> {
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">id</span><span style="color:#e6db74">&#39;</span>:id<span style="color:#f92672">.</span>get_text(),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">content</span><span style="color:#e6db74">&#39;</span>:content<span style="color:#f92672">.</span>get_text(),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">laugh</span><span style="color:#e6db74">&#39;</span>:laugh<span style="color:#f92672">.</span>get_text(),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">comment</span><span style="color:#e6db74">&#39;</span>:comment<span style="color:#f92672">.</span>get_text()
+            }
+            <span style="color:#66d9ef">return</span> info
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">IndexError</span>:
+        <span style="color:#66d9ef">pass</span>
+
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">__main__</span><span style="color:#e6db74">&#39;</span>:
+    urls <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">http://www.qiushibaike.com/text/page/{}/</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(str(ii)) <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">36</span>)]
+    <span style="color:#66d9ef">for</span> name,spider <span style="color:#f92672">in</span> [(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">re</span><span style="color:#e6db74">&#39;</span>,re_spider),(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bs</span><span style="color:#e6db74">&#39;</span>,bs_spider),(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>,lxml_spider)]:
+        start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+        <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> urls:
+            spider(url)
+        end <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+        <span style="color:#66d9ef">print</span>(name,end <span style="color:#f92672">-</span> start)
+</code></pre></div><p><img src="https://i.imgur.com/EKesrNg.png" alt="爬虫性能对比">
+可以看出相对于BeautifulSoup，正则表达式和lxml库的效率更快，其实严格意义上来说，最快的方式是正则表达式，这里之所以运行统计的时间中正则表达式的时间多于lxml，是因为在正式爬取之前会先载入其它语句而这些载入时间被算进了正则表达式中，因此显得时间稍微长了一些。好了，对于网页解析的那内容就介绍到这里了，下面介绍最后一部分，存储的选择。</p>
+<h3 id="heading4">爬取数据的存储</h3>
+<p>在先前文章介绍中，小编分别介绍了怎么将爬取到的数据存储到Excel中，以及存储到相应的数据库系统中（主要介绍了MongoDB和MySQL）。在现实工作中，掌握了这三种存储方式基本上已经完全足够，因为数据库可以用来存储容量较大的数据，而Excel可以直接被用来分析。所以在考虑爬取数据的存储时，小编的建议是：当你的爬取量较少，而且爬取的数据是用于即时分析以及非连续型分析时，可以考虑使用Excel存储数据；当你爬取的数据量较大，而且短文本以及数值类型的数据占大多时，考虑MySQL数据库；至于其它情况则可以考虑MongoDB数据库。当然，如果你只考虑存储的效率，那么你应该永远选择使用数据库去存储数据，因为使用数据库存储数据的效率将远远高于使用Excel存储数据的效率。关于怎么使用这三种工具存储数据，相信小编在前期的文章红已经明白介绍了，所以这里就不再多加说明，愿诸君多实践之。</p>
+<h3 id="heading5">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家总结了一下python爬取数据时的一些步骤及相关工具，进一步让大家熟悉了python爬虫的原理与步骤。在后期的文章中，小编将接在带领大家认识一下python中的动态爬虫等内容，敬请期待。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%88%AC%E8%99%AB" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">爬虫</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MySQL数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MongoDB数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/">热地图绘制——基于python获取的经纬度坐标</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

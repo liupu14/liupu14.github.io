@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python&#43;pandas快速实现Excel文件合并与数据处理 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python&#43;pandas快速实现Excel文件合并与数据处理" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-5
+
+写在前面
+新的一周又开始了，各位准备好迎接接下来的机械化流程了吗？上期文章中，小编和大家讲述了怎么使用R语言去绘制热地图，其中重点使用了maptools包和ggplot2包，大致了解了使用R语言绘制中国人口分布热地图的大致流程。当然那篇文章只是对于ggplot2包的初次展示，后续的文章中，小编会进一步讲解这一笔者至今所接触到的最神级的绘图包。本期文章中，小编自然要转到Python方面的主题，本期将主要讲解怎么使用Python和pandas库去实现多个Excel表格文件的合并与添加，以及怎么使用Python去实现Excel表格文件的有效选取。这篇文章将是笔者先前文章的继续，当然后续笔者会继续推出此类文章。现在就正式进入正题！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" />
+<meta property="article:published_time" content="2018-05-07T23:27:19+00:00" />
+<meta property="article:modified_time" content="2018-05-07T23:27:19+00:00" />
+<meta itemprop="name" content="Python&#43;pandas快速实现Excel文件合并与数据处理">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-5
+
+写在前面
+新的一周又开始了，各位准备好迎接接下来的机械化流程了吗？上期文章中，小编和大家讲述了怎么使用R语言去绘制热地图，其中重点使用了maptools包和ggplot2包，大致了解了使用R语言绘制中国人口分布热地图的大致流程。当然那篇文章只是对于ggplot2包的初次展示，后续的文章中，小编会进一步讲解这一笔者至今所接触到的最神级的绘图包。本期文章中，小编自然要转到Python方面的主题，本期将主要讲解怎么使用Python和pandas库去实现多个Excel表格文件的合并与添加，以及怎么使用Python去实现Excel表格文件的有效选取。这篇文章将是笔者先前文章的继续，当然后续笔者会继续推出此类文章。现在就正式进入正题！">
+<meta itemprop="datePublished" content="2018-05-07T23:27:19&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-07T23:27:19&#43;00:00" />
+<meta itemprop="wordCount" content="389">
+
+
+
+<meta itemprop="keywords" content="python,pandas,商务办公," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python&#43;pandas快速实现Excel文件合并与数据处理"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-5
+
+写在前面
+新的一周又开始了，各位准备好迎接接下来的机械化流程了吗？上期文章中，小编和大家讲述了怎么使用R语言去绘制热地图，其中重点使用了maptools包和ggplot2包，大致了解了使用R语言绘制中国人口分布热地图的大致流程。当然那篇文章只是对于ggplot2包的初次展示，后续的文章中，小编会进一步讲解这一笔者至今所接触到的最神级的绘图包。本期文章中，小编自然要转到Python方面的主题，本期将主要讲解怎么使用Python和pandas库去实现多个Excel表格文件的合并与添加，以及怎么使用Python去实现Excel表格文件的有效选取。这篇文章将是笔者先前文章的继续，当然后续笔者会继续推出此类文章。现在就正式进入正题！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/&amp;text=Python&#43;pandas%e5%bf%ab%e9%80%9f%e5%ae%9e%e7%8e%b0Excel%e6%96%87%e4%bb%b6%e5%90%88%e5%b9%b6%e4%b8%8e%e6%95%b0%e6%8d%ae%e5%a4%84%e7%90%86" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/&amp;title=Python&#43;pandas%e5%bf%ab%e9%80%9f%e5%ae%9e%e7%8e%b0Excel%e6%96%87%e4%bb%b6%e5%90%88%e5%b9%b6%e4%b8%8e%e6%95%b0%e6%8d%ae%e5%a4%84%e7%90%86" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python&#43;pandas快速实现Excel文件合并与数据处理</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-07T23:27:19Z">May 7, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-5</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>新的一周又开始了，各位准备好迎接接下来的机械化流程了吗？上期文章中，小编和大家讲述了怎么使用R语言去绘制热地图，其中重点使用了maptools包和ggplot2包，大致了解了使用R语言绘制中国人口分布热地图的大致流程。当然那篇文章只是对于ggplot2包的初次展示，后续的文章中，小编会进一步讲解这一笔者至今所接触到的最神级的绘图包。本期文章中，小编自然要转到Python方面的主题，本期将主要讲解怎么使用Python和pandas库去实现多个Excel表格文件的合并与添加，以及怎么使用Python去实现Excel表格文件的有效选取。这篇文章将是笔者先前文章的继续，当然后续笔者会继续推出此类文章。现在就正式进入正题！</p>
+<h3 id="excel">第一讲：Excel文件的合并</h3>
+<p>相信常常使用Excel文件的朋友都有过这样的经历，同类型的多份Excel工作簿或者多个Excel工作表需要合并在一起，遇到这种问题，我们一般都会习惯采用三步：其一，新建一个工作表，然后不断地复制目标工作表中的各种数据，然后粘贴到工作表中；其二，使用vlookup函数将目标数据表中的列合并到新的工作表中；其三，对新建成的数据表进行数据清洗与清洁（说到底就是将调整列的数据格式、调整数据表中的NAN值）。是不是熟悉的味道呀，如果你经常遇到这种问题，然后你每次都要重复上面的操作步骤，那我想你最终会衍生出两种心态：第一，你完全习惯了这种操作方式，并且已经不愿意去改变了；第二，你想采用更加高效的方式，去改变这种机械化的操作了。那么，小编在这里就要告诉你，本文正是要解决你这一困惑的。</p>
+<p>当然这种高效的方式不止一种，如果你对Excel中VBA比较熟悉的话，那么你完全可以使用VBA函数实现这一过程，不过我再想，即使你会VBA，估计你也不愿意使用这种方法去实现多个Excel文件的合并，因为使用这种VBA函数的话，真的很痛苦，小编正是被这种VBA方法折磨的一群人。所以这里小编要向各位朋友介绍的是如何使用Python以及pandas库去实现这种Excel文件的合并、清洗与分析。在进行这些之前，请确保你的pandas库的版本要高于0.15，可以使用以下命令进行检查。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+pd<span style="color:#f92672">.</span>__version__
+</code></pre></div><p>如果你的版本没有达到要求，你只需要重新安装一下pandas库或者升级一下pandas库即可，笔者这里告诉你如何去进行python中库的升级。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install <span style="color:#f92672">-</span><span style="color:#f92672">-</span>upgrade pandas<span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span><span style="color:#ae81ff">0.15</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+</code></pre></div><p>你在后面的操作中，所需要的就仅仅是一个Python环境外加一个达到版本要求（一般来说，如果你是最近才进行anaconda的话，你的版本绝对是达到要求的）的pandas库。为了让大家更加熟悉这种操作流程，笔者这里提供一些Excel表格供大家实践之用，大家请自行下载：</p>
+<ul>
+<li><a href="https://liupu14.github.io/download/sales-01-2014.xlsx">一月销售数据</a></li>
+<li><a href="https://liupu14.github.io/download/sales-02-2014.xlsx">二月销售数据</a></li>
+<li><a href="https://liupu14.github.io/download/sales-03-2014.xlsx">三月销售数据</a></li>
+<li><a href="https://liupu14.github.io/download/customer_status.xlsx">客户等级数据</a></li>
+</ul>
+<p>下载好了之后请将其存放在同一个文件夹中。这里声明一下，这些数据都是一些过期数据，也是小编以前用来实验的一些数据，这些数据纯属实践学习之中，任何基于此种数据使用不当造成的损失可不要找小编呀。下面开始进行实践！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 将当前目录设置为你的Excel文件所在的文件夹，当然你也可以不设置，只是</span>
+<span style="color:#75715e"># 这样你后面输入文件时需要输入绝对路径，相对繁琐，所以还是设置一下吧</span>
+cd C:<span style="color:#f92672">/</span>Users<span style="color:#f92672">/</span>Gauss<span style="color:#f92672">/</span>Desktop<span style="color:#f92672">/</span>Excel合并操作数据表<span style="color:#f92672">/</span>
+<span style="color:#75715e"># 导入相应的库</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+</code></pre></div><p>这些命令都是前期准备工作（这里需要说明的一点这些操作都是在juyter notebook中进行的，所以请确保你是在在其中实践），然后在命令红中输入一下命令，检查文件夹中的文件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> ls
+customer<span style="color:#f92672">-</span>status<span style="color:#f92672">.</span>xlsx
+sales<span style="color:#f92672">-</span><span style="color:#ae81ff">01</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx
+sales<span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx
+sales<span style="color:#f92672">-</span><span style="color:#ae81ff">03</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx 
+</code></pre></div><p>因为你已经定位到了你下载文件的文件夹，所以里面只有四个Excel文件，正如上面所显示的那样。然而很多时候你的文件夹中可能存在多份文件，你只想找出文件名开头是以sales字符串开始的excel文件，那么此时你就需要采用以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> ls sales<span style="color:#f92672">*</span><span style="color:#f92672">.</span>xlsx      <span style="color:#75715e"># *代表通配符，可以匹配各种形式的字符任意次数，对此有兴趣的朋友可以参考一下正则表达式，笔者这里不多赘述</span>
+sales<span style="color:#f92672">-</span><span style="color:#ae81ff">01</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx
+sales<span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx
+sales<span style="color:#f92672">-</span><span style="color:#ae81ff">03</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx
+</code></pre></div><p>虽然使用<code>ls</code>命令可以查看文件夹中文件，但是这个命令存在一个劣势，即它只是显示了文件，而没有把文件合理地组织在一起，从而使得对于文件的循环操作存在一定的困难，正是因为这个缺陷，所以python中存在一个更加高效的文件操作库<code>glob</code>，这个歌库是python自带的，所以不需要额外安装，下面尝试一下这个库。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> glob
+glob<span style="color:#f92672">.</span>glob(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sales*.xlsx</span><span style="color:#e6db74">&#39;</span>)
+[sales<span style="color:#f92672">-</span><span style="color:#ae81ff">01</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx,sales<span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx,sales<span style="color:#f92672">-</span><span style="color:#ae81ff">03</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2014.</span>xlsx]
+</code></pre></div><p>现在我相信你应该明白了这个库的优势了吧，它的返回结果是一个列表，这对于循环操作文件提供了极大地便利。既然我们已经准备好了文件以及相关的操作库，那么下面就开始合并文件吧。不过在这之前，我们先简单地了解一些三个sales文件（这里声明一下，这并不是必须的，笔者只是想通过这样做让你们确认最后合并的成功），你完全可以直接打开Excel文件进行查看，当然笔者这里采用pandas进行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sales01 <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sales-01-2014.xlsx</span><span style="color:#e6db74">&#39;</span>)
+sales02 <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sales-02-2014.xlsx</span><span style="color:#e6db74">&#39;</span>)
+sales03 <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sales-03-2014.xlsx</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">print</span>(sales01<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">+</span>sales02<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">+</span>sales03<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>])
+</code></pre></div><p>前三行代码读入了三个月的销售数据，最后一行代码统计出这三份Excel表格共有384行记录，请记住这个数字，在等下我们合并文件之后用来确定是否进行了正确合并。下面我们正式开始合并三份销售数据表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sales_all <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
+<span style="color:#66d9ef">for</span> file <span style="color:#f92672">in</span> glob<span style="color:#f92672">.</span>glob(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sales*.xlsx</span><span style="color:#e6db74">&#39;</span>):
+    df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(file)
+    sales_all <span style="color:#f92672">=</span> sales_all<span style="color:#f92672">.</span>append(df,ingore_index <span style="color:#f92672">=</span> True)
+</code></pre></div><p>代码中的第一行，小编先建立了一个空的数据框sales_all以便存放三份文件中的数据（我希望各位也能学会这种习惯，最好不要直接修改原文件）；后面三行编写了一个循环体去依次将三份文件中数据存入sales_all中。注意到小编这里使用的<code>append</code>这个合并命令，当然你也可以使用<code>concat</code>，下面我们来统计一下合并后的文件的记录数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> sales_all<span style="color:#f92672">.</span>shape
+(<span style="color:#ae81ff">384</span>,<span style="color:#ae81ff">7</span>)
+</code></pre></div><p>看来我们正确地合并了文件，输出的元组中的第一个数字代表行数，第二个数字代表列数，所以我们合并后的数据集共有384行七列（注意在Excel文件中是385行，因为Excel文件将标题行也作为一行，但是python默认是不将行统计进行数的），这里可以看一下合并后的数据的前几行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> sales_all<span style="color:#f92672">.</span>head()
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">account number</th>
+<th align="center">name</th>
+<th align="center">sku</th>
+<th align="center">quantity</th>
+<th align="center">unit price</th>
+<th align="center">ext price</th>
+<th align="center">date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">740150</td>
+<td align="center">Barton LLC</td>
+<td align="center">B1-20000</td>
+<td align="center">39</td>
+<td align="center">86.69</td>
+<td align="center">3380.91</td>
+<td align="center">2014-01-01 07:21:51</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">714466</td>
+<td align="center">Trantow-Barrows</td>
+<td align="center">S2-77896</td>
+<td align="center">-1</td>
+<td align="center">63.16</td>
+<td align="center">-63.16</td>
+<td align="center">2014-01-01 10:00:47</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">218895</td>
+<td align="center">Kulas Inc</td>
+<td align="center">B1-69924</td>
+<td align="center">23</td>
+<td align="center">90.70</td>
+<td align="center">2086.10</td>
+<td align="center">2014-01-01 13:24:58</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">307599</td>
+<td align="center">Kassulke, Ondricka and Metz</td>
+<td align="center">S1-65481</td>
+<td align="center">41</td>
+<td align="center">21.05</td>
+<td align="center">863.05</td>
+<td align="center">2014-01-01 15:05:22</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">412290</td>
+<td align="center">Jerde-Hilpert</td>
+<td align="center">S2-34077</td>
+<td align="center">6</td>
+<td align="center">83.21</td>
+<td align="center">499.26</td>
+<td align="center">2014-01-01 23:26:55</td>
+</tr>
+</tbody>
+</table>
+<p>虽然不是必须的，但是对于最后一列我们最好还是将其转换为日期格式，这在python中很容易实现，直接输入一下命令即可：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sales_all[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">date</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_datetime(sales_all[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">date</span><span style="color:#e6db74">&#39;</span>])
+</code></pre></div><p>输出效果表和上面一样，这里就不再展示，只是将原来的格式改变成了日期类型。</p>
+<p>上面主要讲述了怎样将多个Excel文件合并成一个Excel文件，但是在现实中，我们可能更多的时候需要去根据原数据表中的某列值去相应地扩充原数据表的特征列，这在Excel中主要通过vlookup函数进行实现，下面我们将刚刚建成的sales_all数据表中增加一列等级列，以展示每一个客户的等级。等级数据已经在上文的下载出给出了，这里我们将其读入进来，并稍稍地看一些相关的数据特征。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">status <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">customer-status.xlsx</span><span style="color:#e6db74">&#39;</span>)
+status<span style="color:#f92672">.</span>head()
+</code></pre></div><p>| | account number | name | status |
+|:&ndash;:|
+|0|740150| Barton LLC| gold|
+|1|714466| Trantow-Barrows| silver|
+|2|218895| Kulas Inc| bronze|
+|3|307599| Kassulke, Ondricka and Metz| bronze| 
+|4|412290| Jerde-Hilpert| bronze|</p>
+<p>可以看出客户的等级主要分成了金银铜三等，既然拥有了这一等级数据，下面就是要将其与sales_all数据进行连接，从而将sales_all数据表中的客户进行等级划分。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">final_sales_data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>merge(sales_all,status,how<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">left</span><span style="color:#e6db74">&#39;</span>)
+final_sales_data<span style="color:#f92672">.</span>head()
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">account number</th>
+<th align="center">name</th>
+<th align="center">sku</th>
+<th align="center">quantity</th>
+<th align="center">unit price</th>
+<th align="center">ext price</th>
+<th align="center">date</th>
+<th align="center">status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">740150</td>
+<td align="center">Barton LLC</td>
+<td align="center">B1-20000</td>
+<td align="center">39</td>
+<td align="center">86.69</td>
+<td align="center">3380.91</td>
+<td align="center">2014-01-01 07:21:51</td>
+<td align="center">gold</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">714466</td>
+<td align="center">Trantow-Barrows</td>
+<td align="center">S2-77896</td>
+<td align="center">-1</td>
+<td align="center">63.16</td>
+<td align="center">-63.16</td>
+<td align="center">2014-01-01 10:00:47</td>
+<td align="center">silver</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">218895</td>
+<td align="center">Kulas Inc</td>
+<td align="center">B1-69924</td>
+<td align="center">23</td>
+<td align="center">90.70</td>
+<td align="center">2086.10</td>
+<td align="center">2014-01-01 13:24:58</td>
+<td align="center">bronze</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">307599</td>
+<td align="center">Kassulke, Ondricka and Metz</td>
+<td align="center">S1-65481</td>
+<td align="center">41</td>
+<td align="center">21.05</td>
+<td align="center">863.05</td>
+<td align="center">2014-01-01 15:05:22</td>
+<td align="center">bronze</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">412290</td>
+<td align="center">Jerde-Hilpert</td>
+<td align="center">S2-34077</td>
+<td align="center">6</td>
+<td align="center">83.21</td>
+<td align="center">499.26</td>
+<td align="center">2014-01-01 23:26:55</td>
+<td align="center">bronze</td>
+</tr>
+</tbody>
+</table>
+<p>这样你便将等级数据表和原数据表合并在了一起，恭喜你完成了一个阶段性的成果。至此，小编完成了对Excel文件的行合并以及列扩充的相关介绍。在完成数据合并之后，你接着需要进行的是对于数据的清洗，从而获得整洁的数据以便进行分析。</p>
+<h3 id="pandas">第二讲：pandas完成数据清洗</h3>
+<p>上面虽然完成了对于数据表的合并连接，但是现实中因为数据的质量问题，往往会存在着数据记录重复、数据缺失以及异常值的情况。因为异常值的定义各有不同，通常的标准是三西格玛标准，所以这里不对其进行介绍，有需要的朋友可以留言给我。这里主要讲述重复值的剔除以及缺失数据的处理。</p>
+<p>所谓重复值就是这那些行记录完全一致的数据，对这些数据，从数据角度看来，它们是无效数据，因此是必须要从数据集中进行剔除的，通过运行一下命令便可以将这些数据进行剔除。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fianl_sales_data<span style="color:#f92672">.</span>drop<span style="color:#f92672">.</span>duplicates(inplace <span style="color:#f92672">=</span> True)
+</code></pre></div><p>这样便剔除了数据表中的重复值，因为本数据集并不存在重复值，所以这里这条命令实际上并没有剔除任何值，命令中的参数<code>inplace=True</code>是指对原数据进行修改，而不是生成重新生成一个数据表副本。当然你也可以根据数据表中的某几列重复来剔除数据，这只需要你在上面的函数中增加一个<code>subset</code>参数即可，见下面：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">final_sales_data<span style="color:#f92672">.</span>drop<span style="color:#f92672">.</span>duplicates(subset<span style="color:#f92672">=</span>final_sales_data[[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">account number</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">name</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sku</span><span style="color:#e6db74">&#39;</span>]],inplace<span style="color:#f92672">=</span>True)
+</code></pre></div><p>这条命令会会剔除数据表中account number,name以及sku完全相同的记录，但是这里千万不要运行这条命令，小编这里只是举一个例子，如果你真的运行了这条命令，那么你就失去了很多有效的数据，所以可千万不要删除了！！！</p>
+<p>完成了重复值处理，下面接着进行缺失值的处理吧，我们现在命令行中运行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>unique()
+array([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">gold</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">silver</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bronze</span><span style="color:#e6db74">&#39;</span>, nan], dtype<span style="color:#f92672">=</span>object)
+</code></pre></div><p>可以看出在客户的等级一列中存在着一些缺失值nan，这些值的存在在很多时候会严重地影响分析，所以任何数据分析之前都需要对这些缺失值进行妥善处理，因为这里的缺失值主要存在于等级列，而我们知道一般对于客户的分类中，如果你没有等级也就是最低等级，所以这里可以将这些缺失的等级全部定位青铜级，使用以下命令即可完成。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>fillna(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bronze</span><span style="color:#e6db74">&#39;</span>,inplace<span style="color:#f92672">=</span>True)
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>unique()
+array([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">gold</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">silver</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bronze</span><span style="color:#e6db74">&#39;</span>], dtype<span style="color:#f92672">=</span>object)
+</code></pre></div><p>现在你的等级一列不再存在缺失值了，但是另外一个问题又再一次引起了主要，即等级列的数据类型竟然是<code>object</code>，这与我们的认知存在一定偏差，对于这种具有明确等级的数据，一般我们都是将其定义为类别格式，所以下面运行以下命令将其改正过来。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>astype(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">category</span><span style="color:#e6db74">&#39;</span>)
+final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>cat<span style="color:#f92672">.</span>set_categories([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">gold</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">silver</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bronze</span><span style="color:#e6db74">&#39;</span>],inplace<span style="color:#f92672">=</span>True)
+</code></pre></div><p>第一条命令将等级列设置为了类别格式，而第二条命令则将这种类别予以了等级排序，其中<code>gold&gt;silver&gt;bronze</code>，这与我们的观念相符。接着运行一下以下命令去查看一下数据表中的各列是否都具有的合适的数据格式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data<span style="color:#f92672">.</span>dtypes
+account number             int64
+name                      object
+sku                       object
+quantity                   int64
+unit price               float64
+ext price                float64
+date              datetime64[ns]
+status                    object
+dtype: object
+<span style="color:#75715e"># 修改account number,name以及sku列的数据格式</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">account number</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">account number</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>astype(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">string</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">name</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">name</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>astype(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">string</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sku</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sku</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>astype(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">string</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>OK!截止到这里已经完成了对于数据表的初步清洗，下面开始对这些相对整洁的数据进行数据分析，从而去发现一些有趣的现象。</p>
+<h3 id="pandas1">第三讲：pandas与数据分析</h3>
+<p>数据分析，这个是一个比较综合的分析体系，如果指望这篇文章讲述清楚，那是完全不可能的，这里只是稍稍地讲解几点，后续文章中会进一步进行完善。上文对<code>status</code>列完成了分类，那么如果你想知道等级下的人员分布情况，只需一条命令便可进行解决：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> final_sales_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>describe()
+count        <span style="color:#ae81ff">384</span>
+unique         <span style="color:#ae81ff">3</span>
+top       bronze
+freq         <span style="color:#ae81ff">172</span>
+Name: status, dtype: object
+</code></pre></div><p>现在如果你想统计每种等级客户的成交量、单位价格以及总价的均值情况，那么你也仅仅只需要一条命令即可：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">final_sales_data<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>])[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">quantity</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">unit price</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ext price</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>mean()
+</code></pre></div><p>||quantity| unit price| ext price|
+|:&ndash;:|:&ndash;:|		
+|gold| 24.375000| 53.723889| 1351.944583|
+|silver| 22.842857| 57.272714| 1320.032214|
+|bronze |25.616279 |57.371163 |1472.965930|</p>
+<p>当然你不会满足与只了解均值，你可能还想了解总额以及标准差等，那么不好意思，我还是一条语句：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">final_sales_data<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">status</span><span style="color:#e6db74">&#39;</span>])[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">quantity</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">unit price</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ext price</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>agg([np<span style="color:#f92672">.</span>sum,np<span style="color:#f92672">.</span>mean,np<span style="color:#f92672">.</span>std])
+</code></pre></div><p><img src="https://i.imgur.com/UagqYgT.png" alt="汇总数据">
+是不是很方便，在Excel中可能需要你做蛮久的工作，在python中，最多也就是这么一条语句就可以了，对于数据分析的更多内容，这里就不再进行讲述了，详情见后续文章。</p>
+<h3 id="heading1">后记</h3>
+<p>本文写到这里就告一段落了，通过本期文章，了解到了python+pandas如何去快速有效地对Excel文件进行合并、清洗与分析，了解到了这种搭配的高效，当然这里的介绍只是冰山一角，更多内容留待后续。下一期文章中，笔者将对matplotib库绘图进行初步介绍，让大家再一次震撼于python的能力，敬请期待！最后，再一次感谢你们的支持，你们的支持是小编不断前行的动力。</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/pandas" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">pandas</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务办公</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

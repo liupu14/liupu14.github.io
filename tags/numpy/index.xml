@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>numpy on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/numpy/</link>
+    <description>Recent content in numpy on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 07 Sep 2018 22:12:41 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/numpy/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>python生成随机漫步序列——醉鬼能回到家吗？</title>
+      <link>https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/</link>
+      <pubDate>Fri, 07 Sep 2018 22:12:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-3&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;最近小编又重温了一下《随机漫步的傻瓜》这本书，再次被纳西姆的智慧所征服，不过本文小编可不准备讲这些读后感，而是准备着重讲一下随机漫步这个词汇。因为随机漫步这个词汇可以说现在已经广泛地被用于文理，这个词汇期初起源于科学杂志上面的一篇论文，用来介绍一个醉鬼行走的路线路径，而后这一次被引入数学、金融、哲学思想方面，更是诞生了想随机分析这些学科。因此，本文准备介绍一些怎么使用python来生成随机游走序列以及绘制相应的路径图，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python商务绘图 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/python%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE/</link>
+    <description>Recent content in python商务绘图 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 17 Aug 2018 22:51:07 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/python%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Rython与散点图绘制</title>
+      <link>https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/</link>
+      <pubDate>Fri, 17 Aug 2018 22:51:07 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-13&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>值得细细品味的七种python可视化工具</title>
+      <link>https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Thu, 21 Jun 2018 23:29:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-18&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周已经结束尾声，一句字总结本周：累！不过写作一事总是不能放下，小编将一如既往地和大家一起前行。上期文章中，小编和大家谈了ggplot2的图层语法，相对来说比较枯燥（理论的东西一直以来都比较枯燥，即使小编也无法避免此类情形），然而那期文章却对ggplot2的基本图层语法进行了俯瞰式介绍，为实战绘图打下了基础。本来准备在这期文章中给大家谈一下机器学习中的朴素贝叶斯算法，但是考虑到这篇文章也主要表现为理论与程序，所以为了不使各位出现审美疲劳，最重要的是为了不使各位陷入枯燥之所，暂时打算将这篇机器学习的文章放在周末进行介绍，本期文章小编准备讲一个比较欢快的主题，顺便也让劳累的小编放松一下。这期文章，小编将和大家聊一下python中的七种数据可视化工具，以便为各位的绘图实践提供更多可能性。废话不再多说，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python绘图——再探matplotlib</title>
+      <link>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/</link>
+      <pubDate>Thu, 17 May 2018 23:29:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-15&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;明天又开始周末了，想想都有点开心呀！上期文章中小编介绍了python中存在的三个用于操作Excel文件的第三方库，并将pandas和xlsxwriter的组合作为小编今后操作Excel文件的核心，关于更加具体的内容会在后续文章中进行详细介绍。本期文章是来完成上周的承诺，用来讲述matplotlib库绘制图表的另外一种方法，即以对象操作为核心的绘图方式，还是那句话，小编对于matplotlib的绘制方法没有明显偏好，小编只是深深地喜欢matplotlib库，所以它的绘图方式小编自然都比较喜欢。接下来进入主题吧！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

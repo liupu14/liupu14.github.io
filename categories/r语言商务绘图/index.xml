@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R语言商务绘图 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/r%E8%AF%AD%E8%A8%80%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE/</link>
+    <description>Recent content in R语言商务绘图 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 18 Jun 2018 22:00:37 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/r%E8%AF%AD%E8%A8%80%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ggplot2包介绍——深入图层语法</title>
+      <link>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Mon, 18 Jun 2018 22:00:37 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-11&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

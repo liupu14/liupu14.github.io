@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/r/</link>
+    <description>Recent content in R on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 16 Mar 2019 09:57:18 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>你租贵了吗？——R语言与链家租房数据分析</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sat, 16 Mar 2019 09:57:18 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2019-01-30&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rython与散点图绘制</title>
+      <link>https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/</link>
+      <pubDate>Fri, 17 Aug 2018 22:51:07 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-13&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ggplot2包介绍——深入图层语法</title>
+      <link>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Mon, 18 Jun 2018 22:00:37 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-11&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>R语言与Python绘制K线图</title>
+      <link>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/</link>
+      <pubDate>Thu, 07 Jun 2018 23:08:55 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践&lt;br&gt;
+任何问题和建议，请在博客评论区或公众号留言&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期文章中，小编和大家聊了一下怎么使用python去绘制你的微信好友的省份分布的热地图，进而了解了python操作微信以及python在绘制热地图方面的相关知识。而在本期文章中，小编将接着讲述一些绘图的一些事情，不过本期文章将讲一下怎么去绘制K线图，炒股的朋友对此不应该陌生。在当今时代，纯粹依靠死工资基本无法实现财务自由，你如果真的想追求自由，那么就必须多投资理财多一些了解。现今国内的投资品种相对缺乏，因此股票在一定程度上成为一个高频的投资的对象。而对于股票的操作，你所不能忽视的一点就是K线图，就好比医生必须要懂得识别X光片以及病例图（不要和我扯中医不需要，中医知识把这种看图过程内化了，即心中有图；而西医则是外化了这种看图过程，当然现如今的中医院也是普遍流行拍片看图了，因为他们现在似乎总是诊断不出任何病症，这里绝无抹黑中医的企图，只是小编的切身体验），所以一位优秀的股票投资者就离不开对于K线图的掌握，&lt;strong&gt;对于K线图毫无概念的股票投资者就是典型的脱光衣服跳海——虾扯蛋呗&lt;/strong&gt;！所以本期小编准备和大家聊一下怎么去绘制K线图。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

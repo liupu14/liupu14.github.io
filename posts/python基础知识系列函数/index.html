@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python基础知识系列——函数 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python基础知识系列——函数" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-20
+
+写在前面
+各位大大，晚上好！又到了新的一期文章更新之时，希望你仍陪在小编身旁。上期文章中，小编讲述了怎么使用pdvega库绘制常用的商务办公图，了解到了怎么使用简便的python予以生成快捷的商务图表。当然鉴于后期会对此类绘图进行进一步说明，因此小编只是着重讲解了这里绘图函数的基本用法，小编会在后期的文章中不断完善这些函数的进一步说明。说完了上期文章，我们的视线该转移到本期文章之中了，在本期文章中，小编将继续Python基础知识的讲解，着重聊聊Python函数的一二事。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/" />
+<meta property="article:published_time" content="2018-04-23T22:53:14+00:00" />
+<meta property="article:modified_time" content="2018-04-23T22:53:14+00:00" />
+<meta itemprop="name" content="Python基础知识系列——函数">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-20
+
+写在前面
+各位大大，晚上好！又到了新的一期文章更新之时，希望你仍陪在小编身旁。上期文章中，小编讲述了怎么使用pdvega库绘制常用的商务办公图，了解到了怎么使用简便的python予以生成快捷的商务图表。当然鉴于后期会对此类绘图进行进一步说明，因此小编只是着重讲解了这里绘图函数的基本用法，小编会在后期的文章中不断完善这些函数的进一步说明。说完了上期文章，我们的视线该转移到本期文章之中了，在本期文章中，小编将继续Python基础知识的讲解，着重聊聊Python函数的一二事。">
+<meta itemprop="datePublished" content="2018-04-23T22:53:14&#43;00:00" />
+<meta itemprop="dateModified" content="2018-04-23T22:53:14&#43;00:00" />
+<meta itemprop="wordCount" content="245">
+
+
+
+<meta itemprop="keywords" content="python,函数," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python基础知识系列——函数"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-20
+
+写在前面
+各位大大，晚上好！又到了新的一期文章更新之时，希望你仍陪在小编身旁。上期文章中，小编讲述了怎么使用pdvega库绘制常用的商务办公图，了解到了怎么使用简便的python予以生成快捷的商务图表。当然鉴于后期会对此类绘图进行进一步说明，因此小编只是着重讲解了这里绘图函数的基本用法，小编会在后期的文章中不断完善这些函数的进一步说明。说完了上期文章，我们的视线该转移到本期文章之中了，在本期文章中，小编将继续Python基础知识的讲解，着重聊聊Python函数的一二事。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/&amp;text=Python%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e5%87%bd%e6%95%b0" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/&amp;title=Python%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e5%87%bd%e6%95%b0" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python基础知识系列——函数</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-04-23T22:53:14Z">April 23, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-4-20</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>各位大大，晚上好！又到了新的一期文章更新之时，希望你仍陪在小编身旁。上期文章中，小编讲述了怎么使用pdvega库绘制常用的商务办公图，了解到了怎么使用简便的python予以生成快捷的商务图表。当然鉴于后期会对此类绘图进行进一步说明，因此小编只是着重讲解了这里绘图函数的基本用法，小编会在后期的文章中不断完善这些函数的进一步说明。说完了上期文章，我们的视线该转移到本期文章之中了，在本期文章中，小编将继续Python基础知识的讲解，着重聊聊Python函数的一二事。</p>
+<h3 id="python">第一讲：Python函数简介</h3>
+<p>函数，相信这个概念各位已经根深蒂固了吧，从小学到现在，我们对此接触了太多，多到我们有时甚至都会害怕此类概念了。有些人一直认为函数很神秘，似乎它就是一个巨大的黑箱子，每当你输入一些东西进去，它便相应地输出一些东西给你。不过对函数深入了解之后，你会发现，它原来就是一些算法构成，原来是如此的可爱。所谓python函数无非就是将这些算法过程描述成一条条的语句，然后封装在一个程序体。所以不要觉得python函数神秘，你只需要把它当作一种可以重复进行使用的语句即可。
+既然同样是Python中的语句，那么为什麼一定要引入函数概念呢？函数到底存在什麼样的优势？小编暂时不直接回答这个问题，小编先来举一个例子。大家应该都还记得著名的斐波那契数列吧（除了第一个和第二个数之外的任何数都是其前两个数字之和），例如一个位数为10的斐波那契数列为<code>[0 1 1 2 3 5 8 13 21 34]</code>，现在假设你想用Python来生成一个长度为10的斐波那契数列，你可能会这么做：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fab <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+<span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+    fab<span style="color:#f92672">.</span>append(fab[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]<span style="color:#f92672">+</span>fab[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</code></pre></div><p>这样你就生成了一个长度为10的斐波那契数列<code>[0,1,1,2,3,5,8,13,21,34]</code>，现在假设你突然间发现原来那你需要的是一个长度为15的斐波那契数列，这时你会怎么做，如果依据传统的方法，你应该会这么做：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fibs <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+<span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">13</span>):
+    fibs<span style="color:#f92672">.</span>append(fibs[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]<span style="color:#f92672">+</span>fibs[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</code></pre></div><p>通过以上代码，你就得到了一个长度为15的斐波那契数列，然后你突然间又想得到一个长度为100的斐波那契数列，那么你会怎么做，再一次重复上面的程序并把循环次数增加至98吗？我想聪明的你肯定不会再这么做了，你会想是否存在这样一套体系，一旦你输入长度，那么它便能输出一个此种长度的斐波那契数列，一旦你如此想了，那么你就正在走入程序的殿堂，没错，实现以上步骤仅仅需要一个函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fib</span>(num):
+    fibs <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+    <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(num<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>):
+        fibs<span style="color:#f92672">.</span>append(fibs[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]<span style="color:#f92672">+</span>fibs[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+    <span style="color:#66d9ef">return</span> fibs
+</code></pre></div><p>上面定义了一个fibs函数，通过输入相应的参数值num便可以得到相应长度的斐波那契数列，所以你不再需要再不断重复编写循环语句来实现斐波那契数列的生成了。下面你可以检验一下，通过在命令行中输入<code>fibs(10)</code>，那么你很容易地就得到了一个长度为10的斐波那契数列。现在，相信不需要小编再解释为什麼要引入函数这个对象了吧，函数的引入就是为了处理不断需要进行重复的事情。至于深层的解释，还是原来那句话，Python学习手册绝对是你的不二选择。
+通过以上函数的引入，不难发现，python中的函数就是以<code>def</code>关键字开头的一系列语句构成，具体的形式如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">funcation_name</span>(parameter):
+    expression<span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+</code></pre></div><p>一个函数就是由关键字+一个函数名+函数主体构成，其中，函数的参数不是必须的，但是如果可能的话尽量能够予以指定。所以，Python中的函数是不是比较简单呀，当然为了能够使使用的人能够很方便地知道我们所编写函数的作用，最后是在编写函数的同时加入函数文档，从而便于别人理解。这里还是以斐波那契序列函数为了来进行说明：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fib</span>(num):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74"> 本函数用来生成指定长度的斐波那契数列，其中的参数num就是你希望生成的</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        序列长度，使用时直接在命令行中输入fib(num)即可。</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+    num <span style="color:#f92672">=</span> int(input(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">请输入你需要生成的斐波那契数列长度： </span><span style="color:#e6db74">&#34;</span>))
+    fibs <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+    <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(num<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>):
+        fibs<span style="color:#f92672">.</span>append(fibs[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]<span style="color:#f92672">+</span>fibs[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+    <span style="color:#66d9ef">return</span> fibs
+</code></pre></div><p>所谓的函数文档就是那些位于<code>&quot;&quot;&quot; &quot;&quot;&quot;</code>之间的语句，如果想了解此函数的作用，只需要在命令行中输入<code>fibs.__doc__</code>即可。既然了解了函数的相关内容，下面让我们更加深入一步吧。</p>
+<h3 id="python1">第二讲：Python函数参数</h3>
+<p>刚刚介绍函数的时候，位于函数名后面括号中的内容就是函数参数，但是函数的参数可不仅仅是那么简单的，python中函数的参数主要有四种，你可能最经常用的就是前两种函数参数，下面一一进行介绍。</p>
+<ul>
+<li>位置参数</li>
+</ul>
+<p>这里先说明一下函数中参数引用形式，位于函数名后面的参数也被称之为形式参数，为此赋值时，所赋的值就是实际参数，函数进行计算就是依赖于实际参数。所以位置参数就是指参数的引用就是一句形参的位置进行赋值。例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 定义一个加法函数，通过输入两个值进行求和</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(x,y):
+    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">+</span> y
+<span style="color:#75715e"># 函数引用</span>
+<span style="color:#66d9ef">print</span>(add(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>))
+</code></pre></div><p>上面所介绍的求和函数add中的参数x和y就是刚刚所说到的形式参数，而add(1,2)中的1,2就是函数add的实际参数。这里之所以说这种参数是位置参数，是因为实际参数的引用顺序和形参的位置顺序一一对应，即1被赋值给了x，而2被赋值给了y。所以，很通俗的称之为位置参数（position parameter）。</p>
+<ul>
+<li>默认参数</li>
+</ul>
+<p>上面介绍了位置参数的概念，现在试想一下，如果在进行参数引用时，你少些了一个参数值，即在引用函数add时，你输入的方式是add(2)，那么此时你肯定会被python告知参数引用错误，因此无法进行计算。但是，人不可能一直都能完整输入，为了解决这种不全的参数引用，默认参数就登上了历史舞台。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 定义一个函数add，用来对输入值进行求和</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(x,y<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>):
+    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">+</span> y
+<span style="color:#75715e"># 引用函数</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(add(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>))
+<span style="color:#ae81ff">3</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(add(<span style="color:#ae81ff">1</span>))
+<span style="color:#ae81ff">3</span>
+</code></pre></div><p>看到了吧，这种参数定义在你缺少参数值时，会把参数值按照顺序赋给未被指定默认值的参数，而默认参数则使用其默认值，从而避免了参数引用不全时形成的窘迫。当然，一定要记得一点，默认参数值只有在默认参数未被赋值时才使用，而一旦默认参数被指定了实际参数值，那么默认参数值就采用新赋予的实际参数值。</p>
+<ul>
+<li>可变参数</li>
+</ul>
+<p>上面介绍了参数输入少时的情形，自然也存在你输入的函数值超过了形参个数的情况，那么这种情况又该如何解决呢？Python不会真的令你陷入这种尴尬境地，它通过引用了一种可变参数就解决了这种问题。所谓可变参数就是在参数中被写在*号后面的形参。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 定义一个具有可变参数的求和函数add</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(x,y,<span style="color:#f92672">*</span>lst):
+    <span style="color:#66d9ef">return</span> x<span style="color:#f92672">+</span>y<span style="color:#f92672">+</span>sum(lst)
+<span style="color:#75715e"># 引用函数</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> add(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>)
+<span style="color:#ae81ff">10</span>
+</code></pre></div><p>引用中1被赋值给了x，2被赋值给了y，而3和4则被统一赋给了lst，并组成了一个元组，所以最终的计算结果为10.</p>
+<ul>
+<li>可变关键字参数</li>
+</ul>
+<p>上面三种函数参数可能就是你最常用的函数形式了，不过在进行登录名等的输入时，可变关键字参数就成为了一种你喜欢的参数形式。所谓可变关键字参数，相信你在这个名称中就能获知一二，可变关键字参数就是可变参数+关键字参数，所以它的引用方式就有点类似与这两种参数的综合。可变关键字参数就是指位于**号后的参数形式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 定义一个具有可变关键字参数的输出函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fn</span>(<span style="color:#f92672">*</span><span style="color:#f92672">*</span>parameters):
+    <span style="color:#66d9ef">print</span>(parameters)
+<span style="color:#75715e"># 引用函数</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> fn(x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,y <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>:<span style="color:#ae81ff">2</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>:<span style="color:#ae81ff">2</span>}
+</code></pre></div><p>现在可以看出这种参数的典型特征了吧。这种参数具有三种特征：第一，输入的参数值并不是惟一的，输入的值都能被当作其参数；第二，必须要为其参数进行命名；第三，这种参数的输出形式是一种字典形式。关于可变关键字参数的更多内容请自行搜索。这里既然介绍了这四种参数形式，那么明白这四种参数的引用顺序就很有意义。位置参数和默认参数没有明确的顺序之分，可变参数必须位于这两种参数之后，而可变关键字参数必须位于最后。</p>
+<h3 id="python2">第三讲：Python中的递归函数</h3>
+<p>上面对于函数的基本内容进行了介绍，下面笔者进行一点高级的话题，即函数中的航空母舰递归函数。递归函数的明确定义至今没有达成一致，不过你完全可以理解为递归函数就是自身调用自身的过程。不过递归函数必须要包含两大部分，不然就容易陷入无限递归的死循环。这两个条件就是：</p>
+<ul>
+<li>基线条件（针对最小的问题）：满足这种条件时函数将直接返回一个值</li>
+<li>递归条件：包含一个或多个调用，这些调用旨在解决问题的一部分。</li>
+</ul>
+<p>所以使用递归就是要确定你的基准问题，而后予以条件引用即可。本部分以两个例子来予以说明：阶乘和幂，以及二分法。</p>
+<h4 id="heading1">阶乘和幂</h4>
+<p>相信阶乘大家都有接触过，就是计算n*(n-1)*……*1的积，如果在python中计算这种阶乘，你会选择怎么解决？很多人第一想法就是使用循环，假设你要计算某个数的阶乘，那么你可能就会使用以下的循环：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">factor</span>(n):
+    n <span style="color:#f92672">=</span> int(input(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">请输入你想计算的数的阶乘：</span><span style="color:#e6db74">&#34;</span>))
+    product <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">while</span> n <span style="color:#f92672">&gt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>:
+        product <span style="color:#f92672">*</span><span style="color:#f92672">=</span> n
+        n <span style="color:#f92672">-</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">return</span> product
+</code></pre></div><p>通过以上函数，如果你想计算5的阶乘，你只需要在命令行中输入<code>factor(5)</code>便会得到相应的输出值为120。不过不知各位可否还记得笔者先前的告诫，在程序中，如果存在能够不适用循环的时候就尽量不要使用循环，刚好对于阶乘的计算，存在着一种更加变量的方法，那就是递归，通过递归函数可以更加可观以及更加快捷地计算出阶乘。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">factor</span>(n):
+    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">return</span> n <span style="color:#f92672">*</span> factor(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</code></pre></div><p>是不是比循环语句更加直观，当然计算速度也是比循环快很多（前提是你要计算的阶乘书较大，如果你只是计算5的阶乘，两者基本没区别，不过你应该不会用程序去计算5的阶乘吧，毕竟120这个数太容易得到了）。除了阶乘，再给大家看一下幂计算的例子。幂的概念我希望此刻大家还记得，这里就不再介绍怎么使用循环去实现幂计算了，仅仅介绍怎么使用递归进行幂计算。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 使用递归函数进行幂的计算，其中x为底数，n为指数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Power</span>(x,n):
+    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span> Power(x,n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</code></pre></div><p>有兴趣的朋友可以自己尝试编写一下相关的循环程序，然后比较一下两者的计算时间，相信从此你会爱上递归。</p>
+<h4 id="heading2">二分查找</h4>
+<p>不知道各位有没有玩过猜数游戏（如果没有玩过的话建议看一下综艺节目，这个游戏常常常在综艺中出现过，比如某马桶卫视），规则很简单，主持人指定一个范围的数，然后让你猜测这个数字是多少。你会怎么猜这个数字，如果你告诉我你将从小到大一个个猜或者从大到小一个个猜，那小编真的要佩服你的勇气和坚持了。其实这种游戏最快捷的猜测方式就是先猜中间数，以后依据大小在猜一半的一半，比如主持人指定了一个100以内的数字，那么你应该最先猜50，如果大了，那就猜25，如果还大，那就猜13，如果还大，那就猜7，如果还大，那就猜4，如果还大，那就猜2，如果还大，只有1了。所以最多需要七次你肯定可以猜出这个100以内的数字是多少，一般来说，给定任意一个数字n，如果让你猜1-n之间的某个数，你采用这种方式都可以在log2(n)步之后猜出（记住这里的计算计算向上取正）。那么我们应该在python中怎么实现这种猜数游戏呢，没错，的确可以用循环，但是笔者不准备使用循环，有兴趣的朋友可以可以自己编写，这里笔者还是准备使用递归函数进行这一算法的实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">search</span>(seq,num,lower,upper):
+    lower <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    upper <span style="color:#f92672">=</span> len(seq) <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">if</span> lower <span style="color:#f92672">==</span> upper:
+        <span style="color:#66d9ef">assert</span> num <span style="color:#f92672">=</span> seq[upper]
+        <span style="color:#66d9ef">return</span> upper
+    <span style="color:#66d9ef">else</span>:
+        middle <span style="color:#f92672">=</span> (lower <span style="color:#f92672">+</span> upper)<span style="color:#f92672">/</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>
+        <span style="color:#66d9ef">if</span> num <span style="color:#f92672">&gt;</span> seq[middle]:
+            <span style="color:#66d9ef">return</span> search(seq,num,middle<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,upper)
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#66d9ef">return</span> search(seq,num,lower,middle)
+</code></pre></div><p>一旦你没有输入错误，那么你通过输入一个数列，便可以很快计算出你能够在第几次猜出对方指定的数。例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> seq <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>,<span style="color:#ae81ff">10</span>]
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> search(seq,<span style="color:#ae81ff">3</span>)
+<span style="color:#ae81ff">2</span>
+</code></pre></div><p>不错，只需要两次你就能够猜到这个结果，现在是不是被递归的简单任性征服了，那就赶快掌握递归吧，说实话，一旦掌握了递归，你真的具有了一定程度的装X能力，和别人吹水也会觉得高大上了。</p>
+<h3 id="heading3">后记</h3>
+<p>本期文章对于函数的介绍就讲到这里，总览本期文章，笔者先后介绍了函数的基本概念和创建、函数的参数形式以及函数中的绝对王者递归函数，总体说来对函数有了一个概括式介绍。当然，对于函数中的作用域、函数中的lambda函数以及其它的一些函数高级话题，本文没有进行讲解，这属于本文的缺憾，但是只有夹杂一些缺憾才能造就成美的艺术，所以笔者对此虽有遗憾但也不至失望，有需要的朋友可以联系笔者，或者可以参考相关的python手册。下一期文章中，笔者将和大家讲一下机器学习系列中的另外一种高频引用算法——决策树，敬请期待。最后再一次感谢你们的支持，你们的支持使我奋力前行！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%87%BD%E6%95%B0" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">函数</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

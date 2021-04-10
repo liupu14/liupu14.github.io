@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python基础知识系列——条件语句和循环语句 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python基础知识系列——条件语句和循环语句" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+任何问题与讨论，请在文末评论处或公众号留言
+最近更新时间 2018-4-14
+
+写在前面
+各位大大，晚上好！又到了新的一期文章更新之时，希望你还在。上一期文章中，小编已经介绍过了这一期文章中，小编将重点接受一下Python之中的语句，尤其是对条件语句以及循环语句进行介绍（其实任何编程语言都具有条件语句以及循环语句，无非是各种语言所采用的关键字不同罢了）。如果说前面几期的文章所介绍的都是食材的话，那么这一期文章内容所涉及到的知识绝对可以称得上是食谱。通过了解Python中的各种语句，你就可以顺风顺水地操作这些Python对象。好了，小编话不多说，下面正式进入本期主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/" />
+<meta property="article:published_time" content="2018-04-17T18:07:39+00:00" />
+<meta property="article:modified_time" content="2018-04-17T18:07:39+00:00" />
+<meta itemprop="name" content="Python基础知识系列——条件语句和循环语句">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+任何问题与讨论，请在文末评论处或公众号留言
+最近更新时间 2018-4-14
+
+写在前面
+各位大大，晚上好！又到了新的一期文章更新之时，希望你还在。上一期文章中，小编已经介绍过了这一期文章中，小编将重点接受一下Python之中的语句，尤其是对条件语句以及循环语句进行介绍（其实任何编程语言都具有条件语句以及循环语句，无非是各种语言所采用的关键字不同罢了）。如果说前面几期的文章所介绍的都是食材的话，那么这一期文章内容所涉及到的知识绝对可以称得上是食谱。通过了解Python中的各种语句，你就可以顺风顺水地操作这些Python对象。好了，小编话不多说，下面正式进入本期主题。">
+<meta itemprop="datePublished" content="2018-04-17T18:07:39&#43;00:00" />
+<meta itemprop="dateModified" content="2018-04-17T18:07:39&#43;00:00" />
+<meta itemprop="wordCount" content="436">
+
+
+
+<meta itemprop="keywords" content="python,语句," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python基础知识系列——条件语句和循环语句"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+任何问题与讨论，请在文末评论处或公众号留言
+最近更新时间 2018-4-14
+
+写在前面
+各位大大，晚上好！又到了新的一期文章更新之时，希望你还在。上一期文章中，小编已经介绍过了这一期文章中，小编将重点接受一下Python之中的语句，尤其是对条件语句以及循环语句进行介绍（其实任何编程语言都具有条件语句以及循环语句，无非是各种语言所采用的关键字不同罢了）。如果说前面几期的文章所介绍的都是食材的话，那么这一期文章内容所涉及到的知识绝对可以称得上是食谱。通过了解Python中的各种语句，你就可以顺风顺水地操作这些Python对象。好了，小编话不多说，下面正式进入本期主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/&amp;text=Python%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e6%9d%a1%e4%bb%b6%e8%af%ad%e5%8f%a5%e5%92%8c%e5%be%aa%e7%8e%af%e8%af%ad%e5%8f%a5" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/&amp;title=Python%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e6%9d%a1%e4%bb%b6%e8%af%ad%e5%8f%a5%e5%92%8c%e5%be%aa%e7%8e%af%e8%af%ad%e5%8f%a5" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python基础知识系列——条件语句和循环语句</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-04-17T18:07:39Z">April 17, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+任何问题与讨论，请在文末评论处或公众号留言
+最近更新时间 <code>2018-4-14</code></p>
+</blockquote>
+<h2 id="heading">写在前面</h2>
+<p>各位大大，晚上好！又到了新的一期文章更新之时，希望你还在。上一期文章中，小编已经介绍过了这一期文章中，小编将重点接受一下Python之中的语句，尤其是对条件语句以及循环语句进行介绍（其实任何编程语言都具有条件语句以及循环语句，无非是各种语言所采用的关键字不同罢了）。如果说前面几期的文章所介绍的都是食材的话，那么这一期文章内容所涉及到的知识绝对可以称得上是食谱。通过了解Python中的各种语句，你就可以顺风顺水地操作这些Python对象。好了，小编话不多说，下面正式进入本期主题。</p>
+<h3 id="python">第一话：Python语句简介</h3>
+<h4 id="11-printimport">1.1 print和import</h4>
+<p>在前面几期文章中，笔者用的最大的两条语句可能就是这两条了（确切地说，自从引入Python3以来，print严格意义上已经不再属于语句，而是属于函数的范畴了，不过这里为了兼顾Python2的朋友，同时考虑到print函数应用的广泛性，这里便将其纳入到这里进行介绍了）。所以介绍语句，笔者一直觉得如果不先对这两条语句进行介绍的话，那么就愧对这两条语句的神辅助了。</p>
+<ul>
+<li>print同时打印多条语句</li>
+</ul>
+<p>正如其函数名称的释义一样，print函数用来打印一个表达式，这个表达式一般表现为字符串形式。最简单的形式就是<code>print('hello world')</code>，你问我为什麼这条语句是最简单的语句，因为任何编程语言中的第一条语句都是输出‘hello world’。当然，如果print语句仅仅只能打印这种单条语句的话，笔者这里就不会将其放在这里再一次着重讲解了。print语句完全可以很方便地打印多条语句：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> pre <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mr.</span><span style="color:#e6db74">&#39;</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> greeting <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Hello,</span><span style="color:#e6db74">&#39;</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(greeting,pre,name)
+Hello,Mr<span style="color:#f92672">.</span>Gauss
+</code></pre></div><p>使用print语句打印多条语句仅仅需要将各个语句用“，”号隔开就可以了，所以没有什麼太困难的地方不是嘛。除了这种用法之外，print语句还经常会采用以下三种用法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Hello</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">,</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">World</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 使用+号用来连接字符串</span>
+Hello,World
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">I</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bless</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">you</span><span style="color:#e6db74">&#39;</span>,sep<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e">#使用sep来指定连接各个字符串的字符</span>
+I_bless_you
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Hello,</span><span style="color:#e6db74">&#39;</span>,end<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 使用end指定print换行方式</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">World</span><span style="color:#e6db74">&#39;</span>)
+Hello,World
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Hello</span><span style="color:#e6db74">&#39;</span>,end<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">World</span><span style="color:#e6db74">&#39;</span>)
+Hello
+World
+</code></pre></div><p>相信这几个例子可以很明确地让你了解到了这几种方式,下面笔者介绍import。</p>
+<ul>
+<li>import导入Python库</li>
+</ul>
+<p>import语句用来导入Python中的库，这个语句绝对是你最为常用的语句之一，Python正是库组成，所以你总是需要导入使用它们不是。这里介绍几种常用的导入方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy    <span style="color:#75715e"># 简单地导入numpy库，使用时需要numpy.method</span>
+<span style="color:#f92672">import</span> numpy<span style="color:#f92672">,</span>pandas<span style="color:#f92672">,</span>matplotlib <span style="color:#75715e"># 同时导入多个库</span>
+<span style="color:#f92672">from</span> numpy <span style="color:#f92672">import</span> random <span style="color:#75715e"># 从numpy中导入random函数（推荐使用）</span>
+<span style="color:#f92672">from</span> numpy <span style="color:#f92672">import</span> <span style="color:#f92672">*</span> <span style="color:#75715e"># 从numpy中导入所有函数（最不推荐使用）</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np <span style="color:#75715e"># 导入numpy便将其简称为np（推荐使用）</span>
+</code></pre></div><p>不过这里要提醒一点，在Python中同一个库只能导入一次，在导入之后如果对原库进行了修改想再次导入，使用<code>import</code>语句是无用的，存在两种方式解决这种问题：第一种方式是关闭Python程序，重新启动再使用<code>import</code>语句导入；第二种方式是使用<code>reload</code>语句，这里先把介绍这一语句。</p>
+<h4 id="12-">1.2 赋值语句</h4>
+<p>赋值语句是除了最简单的Python程序之外必须要接触到的语句，但是很多初次学习赋值语句的朋友似乎并不能完全掌握其中的集中魔法方法。</p>
+<ul>
+<li>序列解包（我喜欢称之为序列配对赋值）</li>
+</ul>
+<p>所谓序列解包，就是同时对于采用多个值对多个变量进行赋值，因为存在着这种一一对应的赋值方式，所以我常常喜欢称之为配对赋值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x,y,z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(x,y,z)
+<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>
+</code></pre></div><p>现在你应该也了解到了我将其称之为配对赋值的原因了吧，当然这种赋值方式的限制之处在于变量数量与值的数量一定要相等，否则Python便会报错。不过，这并不是完全不可以修改的，Python流行的原因之一就是它永远不会把自己困死于某一条语句之中。解决这种问题只需要引入*号就可以了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> a,b,<span style="color:#f92672">*</span>rest <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(a,b)
+<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> rest
+[<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>]
+</code></pre></div><p>这就是<em>号的用法，它会将多余的值全部赋给带</em>号的变量，当然这些多余的值会被归结成为一个列表，即使只有一个值，它也会被整理成为列表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> a,b,<span style="color:#f92672">*</span>c <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(a,b)
+<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> c
+[<span style="color:#ae81ff">3</span>]
+</code></pre></div><ul>
+<li>链式赋值</li>
+</ul>
+<p>链式赋值是一种快捷的赋值方式，它可以同时将一个值赋给多个变量，极大地减少了代码的编写工作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(x,y)
+<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">3</span>
+</code></pre></div><p>这种赋值方式会将多个变量只想同一个对象，所以各变量完全相同。</p>
+<ul>
+<li>增强赋值</li>
+</ul>
+<p>现在如果你有变量<code>x=1</code>，如果你想让x增加1，你会选择怎么做？相信很多朋友会选择使用这样的语法<code>x = x + 1</code>，但是Python中存在着一种更加便利的方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#75715e"># 同类型的语法还有-=,*=,/=,%=</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">print</span>(x)
+<span style="color:#ae81ff">2</span>
+</code></pre></div><p>对于Python语句的简介就介绍到这里，下面开始讲解Python语句中的两大王者：条件语句和循环语句。</p>
+<h3 id="heading1">第二话：条件语句</h3>
+<p>先前笔者所讲解的语句也被称之为顺序语句，即按照先后顺序一条语句一条语句的逐步执行，但是在很多时候我们需要我们的程序能够在满足了一定条件之后才能够执行，这就使得必须要学会使用Python中的条件语句。</p>
+<h4 id="21-">2.1 基本条件语句</h4>
+<p>Python中基本条件语句主要包含三大子句：if语句、else语句以及elif语句，下面对其进行介绍。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">if</span> condition1:
+    expression1
+<span style="color:#66d9ef">elif</span> condition2:
+    expression2
+<span style="color:#66d9ef">else</span>:
+    expression3
+</code></pre></div><p>当满足条件1时执行表达式1；当满足条件2时执行表达式2；一旦条件都不满足则选择执行表达式3。这就是条件语句的基本逻辑，基于条件选择执行步骤。举个例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">name <span style="color:#f92672">=</span> input(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">请输入你的中文名字：</span><span style="color:#e6db74">&#39;</span>)
+name_length <span style="color:#f92672">=</span> len(name) <span style="color:#75715e"># 计算你名字的长度</span>
+<span style="color:#66d9ef">if</span> name_length <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">恭喜你，你有一个典型的中文名字</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">elif</span> name_length <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">看来你的名字很可能考虑到了你爸爸和你妈妈的姓呀</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">else</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">你确定你这么长的名字是中文名字，笔者严重质疑你来自岛国</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><h4 id="22-">2.2 条件语句的嵌套</h4>
+<p>一旦你掌握了条件语句，那么你就不能只是单纯地满足一层条件语句，须知一个复杂的系统总是包含无数次的嵌套的，所以你必须要对嵌套的条件语句进行了解（不过笔者这里友情提示一些，能够不用嵌套的时候还是尽量不要用嵌套，嵌套执行真的很慢）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">cardNum <span style="color:#f92672">=</span> input(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">请输入你的身份证号码：</span><span style="color:#e6db74">&#39;</span>)
+cardNum_length <span style="color:#f92672">=</span> len(cardNum) <span style="color:#75715e"># 计算身份证号码长度</span>
+sex_judgement <span style="color:#f92672">=</span> int(cardNum[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]) <span style="color:#75715e"># 获取身份证号码的第17位数字</span>
+<span style="color:#66d9ef">if</span> cardNum_length <span style="color:#f92672">==</span> <span style="color:#ae81ff">18</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">看来你输入了一个正确的身份证号码</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">if</span> sex_judgement <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">你好，帅哥！</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">elif</span> sex_judgement <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">你好，美女</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">你可能输入了一个假的身份证号码</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">else</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">请确保你输入了一个正确的身份证号码</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这里的程序通过利用身份证号码的第十七位数字来判断你的性别，如果第十七位数字为奇数，那么你的性别便是男；否则则为女。程序内层为判断主程序，程序外层用来确保你输入一个正确的身份证号码。</p>
+<h4 id="23-">2.3 常用的判断运算符</h4>
+<p>因为使用条件语句基于判断结果，因此学会常用的一些判断运算符便至关重要，最常用的两种运算符系统为关系运算符和逻辑运算符。</p>
+<ul>
+<li>比较运算符</li>
+</ul>
+<p>在条件语句中可能最基本的运算符就是比较运算符了，它们用来执行比较进而获得布尔值（也就是TRUE和FALSE），下表给出了这些运算符的总结：</p>
+<table>
+<thead>
+<tr>
+<th align="center">表达式</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">x == y</td>
+<td align="center">x等于y</td>
+</tr>
+<tr>
+<td align="center">x &lt; y</td>
+<td align="center">x小于y</td>
+</tr>
+<tr>
+<td align="center">x &gt; y</td>
+<td align="center">x大于y</td>
+</tr>
+<tr>
+<td align="center">x &lt;= y</td>
+<td align="center">x小于等于y</td>
+</tr>
+<tr>
+<td align="center">x &gt;= y</td>
+<td align="center">x大于等于y</td>
+</tr>
+<tr>
+<td align="center">x != y</td>
+<td align="center">x不等于y</td>
+</tr>
+<tr>
+<td align="center">x is y</td>
+<td align="center">x和y是同一个对象</td>
+</tr>
+<tr>
+<td align="center">x is not y</td>
+<td align="center">x和y不是一个对象</td>
+</tr>
+<tr>
+<td align="center">x in y</td>
+<td align="center">x是y中的元素</td>
+</tr>
+<tr>
+<td align="center">x not in y</td>
+<td align="center">x不是y中的元素</td>
+</tr>
+</tbody>
+</table>
+<p>这里需要重点说明一下的是<code>==</code>和<code>is</code>运算符。<code>==</code>运算符用来判断两个变量是否相等，侧重在判断两个变量的值是否相等；而<code>is</code>运算符用来判断两个变量是否相同，除了判断值相等外，还会判断两个变量内存位置等是否相同。见下例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> y <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x <span style="color:#f92672">==</span> y
+True
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> x <span style="color:#f92672">is</span> y
+False
+</code></pre></div><p>看到了嘛，可以说<code>is</code>是<code>==</code>的限制形式，这一点需要你在使用过程中进一步了解。对于Python中条件语句的介绍就导致这里吧，更多细节可以参见Python学习手册。</p>
+<h3 id="heading2">第三话：循环语句</h3>
+<p>上一话介绍了条件语句，下面开始进行循环语句的介绍。循环语句的存在可以说是程序语言流行的原因之一了，因为循环可以多次执行某条语句，极大地简化了同类型工作的重复处理。而在Python中，主要存在两种循环语句：while语句和for语句。</p>
+<h4 id="31-whilefor">3.1 while语句和for语句</h4>
+<ul>
+<li>while语句</li>
+</ul>
+<p>while语句的基本用法为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">while</span> condition:
+    expression
+    exit condition
+</code></pre></div><p>一旦条件为真，就一直执行表达式。使用while的情形在于你并不能很明确到底需要执行多少次循环，但是一定要确保你的while循环中存在着退出条件，不然程序会陷入无限期的循环之中（一旦如此，请使用<code>ctrl+c</code>来退出进程）。下面给出一个例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 打印出100以内的所有正整数</span>
+num <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+<span style="color:#66d9ef">while</span> num <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>:
+    <span style="color:#66d9ef">print</span>(num,end <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+    num <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> 
+</code></pre></div><p>这是一个最简单while应用，用于输出100以内的正整数</p>
+<ul>
+<li>for语句</li>
+</ul>
+<p>while循环语句一般用在不知道要循环多少次的时候，而for语句适用于你有明确的循环目标或者你有一个确定的迭代对象时，一般建议能够用for语句的时候尽量不要使用while语句，相对于while语句，for语句更加可读以及执行较快。这里直接给出一个for语句的例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>:
+    <span style="color:#66d9ef">print</span>(num,end<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这个例子也是用来输出100以内的正整数的，可以看出for循环是建立在具有明确的可迭代对象的基础之上的，关于迭代的话题，请参考<code>Python学习手册</code>。</p>
+<h4 id="32-zipenumerate">3.2 zip函数和enumerate函数</h4>
+<p>在for循环语句中，如果你想更加高效地使用for语句，并且尽可能少地使用嵌套的for语句，那么你就不能不掌握一些zip函数和enumerate函数方面的一些知识。这里笔者直接上例子，聪慧的你们应该很容易从这些例子中看出这两个函数的用法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># zip函数用法示例</span>
+name <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Newton</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Levy</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Linus</span><span style="color:#e6db74">&#39;</span>]
+contributor <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Math</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Physical</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Math</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Linux</span><span style="color:#e6db74">&#39;</span>]
+<span style="color:#66d9ef">for</span> name,contributor <span style="color:#f92672">in</span> zip(name,contributor):
+    <span style="color:#66d9ef">print</span>(name,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">contributor</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">is</span><span style="color:#e6db74">&#39;</span>,contributor)
+<span style="color:#75715e"># zip的用法就是将不同列表的同一个位置元素组成元素对，也就是常说的笛卡尔乘积</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> list(zip(name,contributor))
+[(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Math</span><span style="color:#e6db74">&#39;</span>),(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Nemton</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Physical</span><span style="color:#e6db74">&#39;</span>),(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Levy</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Math</span><span style="color:#e6db74">&#39;</span>),(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Linus</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Linux</span><span style="color:#e6db74">&#39;</span>)]
+<span style="color:#75715e">#---------------------------------------------#</span>
+<span style="color:#75715e"># enumerate函数示例</span>
+Name <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Newton</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Levy</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Linus</span><span style="color:#e6db74">&#39;</span>]
+<span style="color:#66d9ef">for</span> Index,name <span style="color:#f92672">in</span> enumerate(Name):
+    <span style="color:#66d9ef">if</span> name <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Newton</span><span style="color:#e6db74">&#39;</span>:
+    Name[Index] <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Peter</span><span style="color:#e6db74">&#39;</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> Name
+[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Peter</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Levy</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Linus</span><span style="color:#e6db74">&#39;</span>]
+<span style="color:#75715e"># enumerate函数就是将一个列表分解成为一个索引位置与元素的配对列表。</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> list(enumerate([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Levy</span><span style="color:#e6db74">&#39;</span>]))
+[(<span style="color:#ae81ff">0</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Gauss</span><span style="color:#e6db74">&#39;</span>),(<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Levy</span><span style="color:#e6db74">&#39;</span>)]
+</code></pre></div><h4 id="33-break">3.3 break语句</h4>
+<p>在循环过程中，你总会在某些时候想退出循环，Python这方面有两种语句：break以及continue语句。break语句常常用于直接退出循环体，不再进行循环，而continue语句则用于退出当前循环并转入下一次循环。鉴于实际运用中更多会使用break语句，所以这里重点介绍一下break语句。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> math <span style="color:#f92672">import</span> sqrt
+<span style="color:#66d9ef">for</span> num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">99</span>,<span style="color:#ae81ff">0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>):
+    root <span style="color:#f92672">=</span> sqrt(num)
+    <span style="color:#66d9ef">if</span> root <span style="color:#f92672">==</span> int(root):
+        <span style="color:#66d9ef">print</span>(num)
+        <span style="color:#66d9ef">break</span>
+</code></pre></div><p>一旦你运行这个程序，那么只会打印出81，而后退出循环。</p>
+<h4 id="34-">3.4 列表解析（列表推导）</h4>
+<p>列表解析，有些地方也将其称之为列表推导，是一种在列表内部使用循环进而实现再生列表的方法，因为其语法的简单以及执行速度较快受到了广大男性同胞的热爱。先让大家有一个直观印象吧。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> [x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>)]
+[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">9</span>,<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">36</span>,<span style="color:#ae81ff">49</span>,<span style="color:#ae81ff">64</span>,<span style="color:#ae81ff">81</span>]
+</code></pre></div><p>不知道聪明的小空空们是否已经看出这一方法的特征了，没错，这种方法的典型特征就是在列表前面指明元素生出的表达式，而后在后面指定生成元素的选取范围。并且这种方法不仅仅适用于单层循环，而且还可以用于多层循环，还可以适用于条件语句，不行的话可以在自己的python环境下运行以下这些命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> [(x,y) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>) <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>)]
+[(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>),(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>),(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>),(<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">3</span>)]
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> [x <span style="color:#f92672">*</span><span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>) <span style="color:#66d9ef">if</span> x <span style="color:#f92672">%</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>]
+[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">9</span>,<span style="color:#ae81ff">81</span>]
+</code></pre></div><p>看到这一方法的强大指出了吧，所以希望你们真的要掌握这种方法，一旦熟悉了这种方法，你们的数据处理效率绝对可以大幅提升。关于for循环语句的介绍就讲到这里吧，更多的细节以及精彩可以参考<a href="https://www.amazon.cn/dp/B004TUJ7A6/ref=redir_mobile_desktop/459-4678423-6859510?_encoding=UTF8&amp;%2AVersion%2A=1&amp;%2Aentries%2A=0">Python学习手册</a></p>
+<h3 id="heading3">后记</h3>
+<p>本期文章介绍了Python中的语句，尤其是对Python中的条件选择语句和循环语句进行了介绍，通过这一期文章的学习，我相信大家能够合理地利用前几期文章中所介绍到的各种对象了。Python中的语句对象绝不仅仅只有本期文章所介绍的这么少，笔者在本期文章中讲到的主要是Python中最为常用的集中语句，更多的语句与细节，各位可以进一步参考相关文献。在下一期文章中，笔者将转变一下风格，介绍一篇关于Python绘图系列方面的文章，但是下一期文章并不准备直接讲解matplotlib库，对于这一Python绘图库的介绍，笔者将在完成了Python基础知识系列之后进行展开，因为这一绘图库的介绍将会分为多期，所以笔者准备在介绍的时候能够不中断。好了，本期文章就介绍到这里了，再一次感谢诸位朋友对于小编的关注与支持。文末附带小编的微信公众号二维码，希望大家多多支持，你们的支持是小编写作的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E8%AF%AD%E5%8F%A5" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">语句</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

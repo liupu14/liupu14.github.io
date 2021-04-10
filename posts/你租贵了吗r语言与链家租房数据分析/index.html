@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>你租贵了吗？——R语言与链家租房数据分析 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="你租贵了吗？——R语言与链家租房数据分析" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2019-01-30
+
+写在前面
+开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" />
+<meta property="article:published_time" content="2019-03-16T09:57:18+00:00" />
+<meta property="article:modified_time" content="2019-03-16T09:57:18+00:00" />
+<meta itemprop="name" content="你租贵了吗？——R语言与链家租房数据分析">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2019-01-30
+
+写在前面
+开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！">
+<meta itemprop="datePublished" content="2019-03-16T09:57:18&#43;00:00" />
+<meta itemprop="dateModified" content="2019-03-16T09:57:18&#43;00:00" />
+<meta itemprop="wordCount" content="197">
+
+
+
+<meta itemprop="keywords" content="R,ggplot2,数据分析,爬虫," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="你租贵了吗？——R语言与链家租房数据分析"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2019-01-30
+
+写在前面
+开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/&amp;text=%e4%bd%a0%e7%a7%9f%e8%b4%b5%e4%ba%86%e5%90%97%ef%bc%9f%e2%80%94%e2%80%94R%e8%af%ad%e8%a8%80%e4%b8%8e%e9%93%be%e5%ae%b6%e7%a7%9f%e6%88%bf%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E4%BD%A0%E7%A7%9F%E8%B4%B5%E4%BA%86%E5%90%97r%E8%AF%AD%E8%A8%80%E4%B8%8E%E9%93%BE%E5%AE%B6%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/&amp;title=%e4%bd%a0%e7%a7%9f%e8%b4%b5%e4%ba%86%e5%90%97%ef%bc%9f%e2%80%94%e2%80%94R%e8%af%ad%e8%a8%80%e4%b8%8e%e9%93%be%e5%ae%b6%e7%a7%9f%e6%88%bf%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">你租贵了吗？——R语言与链家租房数据分析</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2019-03-16T09:57:18Z">March 16, 2019</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2019-01-30</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>开年后的广州很疯狂呀，买房人群又一次暴涨，难道是下一次高潮又来了吗（想想而已，短期内房价的飞涨已经不可能了）？不过虽然飞涨不可能，但是伴随着这么高的买房人群房价总是需要上涨一番的，这就引起了我等租房人群的喜悦。想想买房人多了，租房人就相对减少了，那么根据供需法则，房租是不是应该降了呀？本着好奇的心情，小编就想大致了解一下目前租房市场的大致房租水平，当然了目前也属于租房高峰期，所以借此文也希望能够给想要租房的朋友一个直观的认识，让你明白你在租房的过程中是否真的租到了价位比较合适的房源了。关于租房的信息，目前存在着多种平台，但是小编个人还是比较喜欢链家的，因为其它几个平台真的存在着很多虚价房（这里绝无抹黑其它平台的意思，只是在强调一个事实而已），所以小编准备以链家网上的租房信息来说明目前广州市的房租态势。考虑到花都、从化、增城以及南沙这些郊区中的郊区租房人群较少（去那边玩小编会很开心，如果让小编去那边住，小编只能呵呵了），所以小编将紧紧以其它七个区域（天河区、越秀区、荔湾区、海珠区、白云区、番禺区、黄浦区）的租房数据进行说明，下面正式进入！</p>
+<h3 id="heading1">获取数据</h3>
+<p>巧妇难为无米之炊，在进行分析之前，我们必须先获得相应的房租数据，这里前面已经说了，小编准备爬取链家网上广州市七个区的租房数据，每个区爬取3000条数据，合计21000条数据，至于爬虫的知识，小编已经在前期的文章中进行了介绍，这里就不再多说，忘记的朋友可以去前期的文章中回顾一下。不过本期小编将使用R语言来进行数据的获取，正如小编在前面说到过的，小编是以python和R语言作为自己的数据分析工具的，所以不可能只讲述python的爬取，也会掺杂一下R语言的数据爬取过程，考虑到爬虫过程都一致，知识具体实现函数不同，小编这里就不再说明原理了，直接给出爬取所使用的代码。在爬取的过程中，小编会分别获得房源的名称、区域、房源实用信息（这里面包含了房源的户型、面积等，所以小编称之为实用信息）、户型与面积（拆分自房源实用信息）、价格以及具体的网页链接，下面上代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 加载相应的包</span>
+library(xml2)
+library(rvest)
+library(tidyverse)
+
+House_info <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> data<span style="color:#f92672">.</span>frame()  <span style="color:#75715e"># 创建一个空数据框用于存放爬取到的数据</span>
+Distrincts <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> c(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tianhe</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">yuexiu</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">liwan</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">haizhu</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">panyu</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">baiyun</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">huangpugz</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#75715e"># 开始爬取</span>
+<span style="color:#66d9ef">for</span>(Distrinct <span style="color:#f92672">in</span> Distrincts){
+  <span style="color:#66d9ef">for</span>(i <span style="color:#f92672">in</span> <span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">100</span>){
+    web <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> read_html(paste(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">https://gz.lianjia.com/zufang/</span><span style="color:#e6db74">&#39;</span>,Distrinct,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">/pg</span><span style="color:#e6db74">&#39;</span>,i,sep<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>),encoding <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">UTF-8</span><span style="color:#e6db74">&#39;</span>)
+    Title <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> web<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_nodes(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">.twoline</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_text()
+    Title <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> gsub(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>,Title)
+    Info <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> web<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_nodes(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">.content__list--item--des</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_text()
+    Info <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> gsub(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>,Info)
+    Price <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> web<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_nodes(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">.content__list--item-price</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_text()
+    Price <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> gsub(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>,Price)
+    Area <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> substr(Info,regexpr(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">d+㎡</span><span style="color:#e6db74">&#39;</span>,Info),regexpr(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">㎡</span><span style="color:#e6db74">&#39;</span>,Info))
+    Type <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> substr(Info,regexpr(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">d+室</span><span style="color:#e6db74">&#39;</span>,Info),regexpr(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">室</span><span style="color:#e6db74">&#39;</span>,Info))
+    Link <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> web<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_nodes(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">.twoline</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_nodes(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span>html_attr(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">href</span><span style="color:#e6db74">&#39;</span>)
+    Link <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> paste(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">https://gz.lianjia.com</span><span style="color:#e6db74">&#39;</span>,Link,sep<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>)
+    House <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> data<span style="color:#f92672">.</span>frame(Title,Info,Price,Area,Type,Link)
+    House_info <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> rbind(House_info,House)
+  }
+}
+House_info<span style="color:#960050;background-color:#1e0010">$</span>Distrinct <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> rep(c(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">天河区</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">越秀区</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">荔湾区</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">海珠区</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">番禺区</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">白云区</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">黄浦区</span><span style="color:#e6db74">&#39;</span>),each<span style="color:#f92672">=</span><span style="color:#ae81ff">3000</span>)
+<span style="color:#75715e"># 将爬取结果导出为CSV文件，记得换成自己的文件路径</span>
+write<span style="color:#f92672">.</span>csv(House_info,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C://Users/Gauss/Desktop/Rent.csv</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这里小编假定大家具有一定的R语言知识，如果你实在没有就直接运行小编的程序吧，最终的爬取结果如下。
+<img src="https://i.imgur.com/JyiCneZ.png" alt="R语言爬取结果">
+第一列是房源的名称、第二列是房源的实用信息、第三列是房源的价格、第四列是房源的面积、第五列是房源的户型、第六列是房源的网页链接、最后一列是房源的所在区域。既然已经获得了数据，那么下面就要数据进行清洗规整而后分析了。</p>
+<h3 id="heading2">房租数据清洗与规整</h3>
+<p>上面已经获得了相应的房源数据，但是拿到数据之后的第一件事情就是认真观察数据，做好数据清洗规整工作。链家网还是比较友好的，从小编抓取的数据来看，基本不存在缺失值，这在一定程度上省却了很多时间。不过观察后发现，对于原始数据至少要做两方面的调整：第一，对于户型中不明确的进行排除；第二，对价格列进行调整，将其转换成数字以便于数值计算。那下面围绕这两点展开。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">House_info <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> group_by(Type) <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> summarise(n())
+</code></pre></div><p><img src="https://i.imgur.com/qzXuIvm.png" alt="户型汇总">
+可以看出通过以上程序得出了原始数据中户型的汇总情况，明显可以看出我们只需要保留1-5室即可，其它户型的房源实在太少，基本没有分析的必要，使用以下程序来仅仅获得1-5室的房源。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">House_info <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> filter(House_info,Type <span style="color:#f92672">%</span><span style="color:#f92672">in</span><span style="color:#f92672">%</span> c(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">1室</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">2室</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">3室</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">4室</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">5室</span><span style="color:#e6db74">&#39;</span>))
+</code></pre></div><p>这样就完成了对于户型的处理，那么下面就要开始对价格一列进行调整了，价格一列的调整涉及到两个问题：仅保留数值以及对诸如1000-2000这样格式的数据进行调整，小编这里的原则是对这种数据直接取均值，下面程序继续。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">AdjPrice <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> gsub(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">元/月</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>,House_info<span style="color:#960050;background-color:#1e0010">$</span>Price) <span style="color:#75715e"># 仅保留数值</span>
+<span style="color:#75715e"># 创建一个函数用来处理诸如1000-2000这样的数据</span>
+split_string <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> function(x){
+  price <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> strsplit(x,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>)[[<span style="color:#ae81ff">1</span>]]
+  price <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> mean(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(price))
+}
+<span style="color:#75715e"># 获得处理后的结果</span>
+AdjPrice <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> sapply(House_info,split_string,USE<span style="color:#f92672">.</span>NAMES <span style="color:#f92672">=</span> FALSE)
+<span style="color:#75715e"># 在原始数据中增加一列用来保存处理后的价格数据</span>
+House_info<span style="color:#960050;background-color:#1e0010">$</span>AdjPrice <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> AdjPrice
+<span style="color:#75715e"># 观察一下数据吧</span>
+view(House_info)
+</code></pre></div><p><img src="https://i.imgur.com/wfEYLfp.png" alt="调整后数据">
+数据已经清洗规整完，下面开始进入可视化。</p>
+<h3 id="heading3">数据可视化</h3>
+<p>下面小编将主要以程序配图的方式完成下面的介绍，不懂的地方欢迎留言。首先，我们来看一下整个广州市房源的户型分布信息。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ggplot(House_info) <span style="color:#f92672">+</span> 
+    geom_bar(aes(x<span style="color:#f92672">=</span>Type)) <span style="color:#f92672">+</span> 
+    labs(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">户型</span><span style="color:#e6db74">&#34;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">房源数量</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/IorUWUz.png" alt="广州市租房房源户型分布">
+可以看出，1-3室在租房中占主导，其中1室数量最多。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ggplot(House_info) <span style="color:#f92672">+</span> 
+    geom_bar(aes(x<span style="color:#f92672">=</span>Type)) <span style="color:#f92672">+</span> 
+    labs(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">户型</span><span style="color:#e6db74">&#34;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">房源数量</span><span style="color:#e6db74">&#34;</span>) <span style="color:#f92672">+</span>
+    facet_wrap(<span style="color:#f92672">~</span>Distrinct,nrow <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+</code></pre></div><p><img src="https://i.imgur.com/ISDVJ26.png" alt="">
+可以看出番禺区与越秀区各户型分布情况与广州市整体情况不一致：番禺区是3室户型超过2室（土地多了就是好呀，随随便便就是三房）；越秀区是2室占比最多（寸土寸金，一个人估计住不起呀）。接下来看看各区域的房租价格。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">PriceData <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> House_info <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+             group_by(Distrinct) <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+             summarise(MeanPrice <span style="color:#f92672">=</span> mean(AdjPrice))
+ggplot(PriceData,aes(x<span style="color:#f92672">=</span>Distrinct,y<span style="color:#f92672">=</span><span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(MeanPrice)))<span style="color:#f92672">+</span>
+    geom_bar(stat<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">identity</span><span style="color:#e6db74">&#34;</span>) <span style="color:#f92672">+</span> 
+    labs(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">区域</span><span style="color:#e6db74">&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">价格</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/u5U8A1w.png" alt="各区域租房价格">
+你没有看错，小编所在的区域价格的确很高，其次一点的是越秀区，天河区房租均价在5600左右，而越秀区房租则接近5000元，房租水平最低的是黄浦区，均价2396元。然后我们看一下各户型的均值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">House_info <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+        group_by(Type) <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+        summarise(MeanPrice <span style="color:#f92672">=</span> mean(AdjPrice)) <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+        ggplot(aes(x<span style="color:#f92672">=</span>Type,y<span style="color:#f92672">=</span><span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(MeanPrice))) <span style="color:#f92672">+</span> 
+            geom_bar(stat <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">identity</span><span style="color:#e6db74">&#39;</span>) <span style="color:#f92672">+</span> 
+            labs(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">户型</span><span style="color:#e6db74">&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">价格</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/FMat6YQ.png" alt="各户型房租水平">
+这里就不用解释了吧，毕竟房间越大，房租自然越高。可以看出，1室的房租水平为2268元；2室的房租为3562元；3室房租为5131元；4室房租为8670元；5室房租为10469元，请对号入座，看看自己处于何种等级。最后看一下各区域各户型的均价水平。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">House_info <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+          group_by(Distrinct,Type) <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+          summarise(MeanPrice <span style="color:#f92672">=</span> mean(AdjPrice)) <span style="color:#f92672">%</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">%</span> 
+          ggplot(aes(x<span style="color:#f92672">=</span>Type,y<span style="color:#f92672">=</span><span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(MeanPrice))) <span style="color:#f92672">+</span> 
+              geom_bar(stat <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">identity</span><span style="color:#e6db74">&#39;</span>) <span style="color:#f92672">+</span> 
+              labs(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">户型</span><span style="color:#e6db74">&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">价格</span><span style="color:#e6db74">&#39;</span>) <span style="color:#f92672">+</span> 
+              facet_wrap(<span style="color:#f92672">~</span>Distrinct,nrow <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+</code></pre></div><p><img src="https://i.imgur.com/LpLqSzR.png" alt="各区域各户型租金水平">
+<img src="https://i.imgur.com/lxFZxZp.png" alt="">
+好了，就这样吧，大家处于什麼位置，自己找一下，租贵的也不要伤心，咱土豪嘛怕什麼，租便宜的就偷着乐吧。</p>
+<h3 id="heading4">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下怎么使用R语言去对链家网的租金数据进行分析，分别进行了租金数据的爬取，租金数据的清洗与规整以及租金数据的可视化，希望本文能够对于你们的租房提供一定的帮助，关于具体的数据源，各位可以自己通过运行本文的程序获得，也可以在公众号上给小编留言获取，就到这里吧，下期再见。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/r" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">R</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/ggplot2" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">ggplot2</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">数据分析</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%88%AC%E8%99%AB" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">爬虫</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/">ggplot2包介绍——深入图层语法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/">R语言进行数据清洗</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E7%BB%88%E7%BB%93%E7%AF%87xpath%E8%AF%AD%E6%B3%95/">网页解析工具终结篇——xpath语法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/">送上一碗鸡汤——BeautifulSoup网页解析介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E9%A3%8E%E9%9B%A8%E8%B7%AF%E6%AD%A3%E5%88%99%E7%9F%A5%E5%A4%9A%E5%B0%91/">爬虫风雨路，正则知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/">温故知新——python爬虫阶段总结</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MySQL数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MongoDB数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/">从qplot快速入门ggplot2</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/">R语言绘图——R语言绘制热地图实战</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

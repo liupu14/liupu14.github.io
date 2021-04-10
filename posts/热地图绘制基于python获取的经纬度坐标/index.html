@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>热地图绘制——基于python获取的经纬度坐标 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="热地图绘制——基于python获取的经纬度坐标" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-20
+
+写在前面
+盼望着盼望着，周五到了，周末的时光又开始了。前几天有朋友给小编留言，请教怎么绘制热地图，关于这一点小编之前已经讲过怎么使用R语言或者Python去实现，但是鉴于很多朋友还是习惯图形化操作，因此本期讲一下怎么使用相应的专业绘图软件去绘制热地图。本期还是以各省的人口数据为例来讲解怎么绘制国内各省的人口分布情况，其中会讲到怎么使用python去获得各省省会城市的经纬度，然后以这些数据为基础，分别讲述怎么使用相应的绘图软件去绘制人口分布的热地图。下面正式开始！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/" />
+<meta property="article:published_time" content="2018-08-24T22:07:31+00:00" />
+<meta property="article:modified_time" content="2018-08-24T22:07:31+00:00" />
+<meta itemprop="name" content="热地图绘制——基于python获取的经纬度坐标">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-20
+
+写在前面
+盼望着盼望着，周五到了，周末的时光又开始了。前几天有朋友给小编留言，请教怎么绘制热地图，关于这一点小编之前已经讲过怎么使用R语言或者Python去实现，但是鉴于很多朋友还是习惯图形化操作，因此本期讲一下怎么使用相应的专业绘图软件去绘制热地图。本期还是以各省的人口数据为例来讲解怎么绘制国内各省的人口分布情况，其中会讲到怎么使用python去获得各省省会城市的经纬度，然后以这些数据为基础，分别讲述怎么使用相应的绘图软件去绘制人口分布的热地图。下面正式开始！">
+<meta itemprop="datePublished" content="2018-08-24T22:07:31&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-24T22:07:31&#43;00:00" />
+<meta itemprop="wordCount" content="92">
+
+
+
+<meta itemprop="keywords" content="python,热地图," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="热地图绘制——基于python获取的经纬度坐标"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-20
+
+写在前面
+盼望着盼望着，周五到了，周末的时光又开始了。前几天有朋友给小编留言，请教怎么绘制热地图，关于这一点小编之前已经讲过怎么使用R语言或者Python去实现，但是鉴于很多朋友还是习惯图形化操作，因此本期讲一下怎么使用相应的专业绘图软件去绘制热地图。本期还是以各省的人口数据为例来讲解怎么绘制国内各省的人口分布情况，其中会讲到怎么使用python去获得各省省会城市的经纬度，然后以这些数据为基础，分别讲述怎么使用相应的绘图软件去绘制人口分布的热地图。下面正式开始！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/&amp;text=%e7%83%ad%e5%9c%b0%e5%9b%be%e7%bb%98%e5%88%b6%e2%80%94%e2%80%94%e5%9f%ba%e4%ba%8epython%e8%8e%b7%e5%8f%96%e7%9a%84%e7%bb%8f%e7%ba%ac%e5%ba%a6%e5%9d%90%e6%a0%87" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/&amp;title=%e7%83%ad%e5%9c%b0%e5%9b%be%e7%bb%98%e5%88%b6%e2%80%94%e2%80%94%e5%9f%ba%e4%ba%8epython%e8%8e%b7%e5%8f%96%e7%9a%84%e7%bb%8f%e7%ba%ac%e5%ba%a6%e5%9d%90%e6%a0%87" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">热地图绘制——基于python获取的经纬度坐标</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-08-24T22:07:31Z">August 24, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-20</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>盼望着盼望着，周五到了，周末的时光又开始了。前几天有朋友给小编留言，请教怎么绘制热地图，关于这一点小编之前已经讲过怎么使用R语言或者Python去实现，但是鉴于很多朋友还是习惯图形化操作，因此本期讲一下怎么使用相应的专业绘图软件去绘制热地图。本期还是以各省的人口数据为例来讲解怎么绘制国内各省的人口分布情况，其中会讲到怎么使用python去获得各省省会城市的经纬度，然后以这些数据为基础，分别讲述怎么使用相应的绘图软件去绘制人口分布的热地图。下面正式开始！</p>
+<h3 id="python">python获取地理位置经纬度坐标</h3>
+<p>任何热地图的绘制都离不开经纬度信息的获取，因为空间地图都是以经纬度为基础去进行绘制的。所以为了绘制各省的人口分布情况以及对各省进行标记，那么最基本的操作就是先获得各省省会城市经纬度，而后以经纬度为准进行标记。我国目前存在三十四个省市（包括特别行政区和台湾地区），考虑到澳门的人口数据无法获得，这里仅以其它三十三省市的人口数据进行热地图绘制。相信这三十三省市的省会大家应该不陌生吧，这里小编就不给你们总结了。首先请自己将各省的省会城市整理成Excel文件（这样方便程序的循环与存储），而后通过使用下面的程序得到各省会城市的经纬度坐标。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> json
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+
+<span style="color:#75715e"># 定义获取经纬度的函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_geo</span>(address):
+    par <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">address</span><span style="color:#e6db74">&#39;</span>:address,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">key</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xxxxxxxxxxxxxxxxxxxxx</span><span style="color:#e6db74">&#39;</span>}
+    api <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">http://restapi.amap.com/v3/geocode/geo</span><span style="color:#e6db74">&#39;</span>
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(api,par)
+    json_data <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(res<span style="color:#f92672">.</span>text)
+    <span style="color:#66d9ef">try</span>:
+        geo <span style="color:#f92672">=</span> json_data[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">geocodes</span><span style="color:#e6db74">&#39;</span>][<span style="color:#ae81ff">0</span>][<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">location</span><span style="color:#e6db74">&#39;</span>]
+        longitude <span style="color:#f92672">=</span> geo<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">,</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+        latitude <span style="color:#f92672">=</span> geo<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">,</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>]
+        <span style="color:#66d9ef">return</span> longitude,latitude
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">IndexError</span>:
+        <span style="color:#66d9ef">pass</span>
+    
+<span style="color:#75715e"># 读取数据表，循环获得各省会城市经纬度</span>
+Data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">population.xlsx</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">for</span> ii,item <span style="color:#f92672">in</span> enumerate(Data<span style="color:#f92672">.</span>CENTER):
+    Data<span style="color:#f92672">.</span>LOG[ii],Data<span style="color:#f92672">.</span>LAT[ii] <span style="color:#f92672">=</span> get_geo(item)
+Data<span style="color:#f92672">.</span>to_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">HeatmapData.xlsx</span><span style="color:#e6db74">&#39;</span>,index <span style="color:#f92672">=</span> False)
+</code></pre></div><p><img src="https://i.imgur.com/Aw6e1hw.png" alt="经纬度信息数据">
+小编是将省会信息以及人口信息存储在population这份Excel文件之中，所以这里读取这份文件并使用函数获得经纬度信息，而后将其保存早heatmapData这份Excel文件之中。这里需要注意的是，变量par中的key参数请替换成你自己的ID，这可以在百度开发平台获取，获取细节请咨询度娘。</p>
+<h3 id="heading1">热地图的绘制</h3>
+<p>其实很多绘图软件都可以绘制热地图，Excel自从2013版之后也引入了此种功能。不过小编在实践中如果一定要使用绘图软件去绘制热地图的话，那么一般会选择三种：商务智能可视化方面的绝对王者Tableau、地理信息绘制系统方面的绝对神器Arcgis以及一款本土化的免费绘制平台个人bdp。其中小编尤其喜欢前两个，有时你不得不说老外开发的软件是真的方便（这里绝无崇洋媚外之心）。所以小编下面就聊一下怎么使用这三种软件去绘制热地图。</p>
+<h4 id="tableau">Tableau与人口分布热地图</h4>
+<p>Tableau是一款收费的商务智能可视化软件，但是它有一个月的试用期，大家可以先试用一下。待试用期满了之后你无非三种选择：购买正版、破解后使用、转移到其它平台。对于从事商务智能且有经济基础的朋友，我希望你能够支持正版；至于破解版小编这里虽有办法，但并不提倡，各位自行谷歌；当然也可以选择微软的免费产品powerBI进行替代，两者的功能较为相似，是一个不错的选择。假设你已经安装了tableau，那么你只需要准备两份文件便可以完成热地图绘制。第一份文件就是刚刚小编提及的人口及省会城市经纬度信息数据表；第二份文件就是全国省界划分的shape文件。这个文件可以在小编关于R语言与热地图绘制的那期文章中下载，文件是一个名称为DataSet的压缩包，解压后里面有一个后缀名称为shp的文件就是你需要的。下面请按照以下顺序进行操作。</p>
+<ol>
+<li>打开Tableau并分别导入shape文件和Excel文件；</li>
+<li>转入到工作表；</li>
+<li>选择热地图选项；</li>
+<li>拖动相应的字段到绘图区域；</li>
+<li>完成绘图，保存图形。</li>
+</ol>
+<p><img src="https://i.imgur.com/ZChD36T.jpg" alt="Tableau与热地图">
+关于怎么使用tableau，这不是小编文章的主题，这里就不多讨论了，网上有大量教程，如果你有心，半天时间就会学会基本的操作，从而顺利完成上面所说到的各个步骤。</p>
+<h4 id="arcgis">Arcgis与人口分布热地图</h4>
+<p>Arcgis是处理地理信息的专门软件，也是地理信息处理方面的最优秀软件，不过不幸的是该软件是收费软件，所以你又不得不依赖于上面提到的三种路径。付费、破解或者选择这个软件的替代软件Qgis（小编这里建议无法购买Arcgis的朋友使用这个开源软件，因为小编亲测之后发现它完全可以完成你的商务绘图需求）。假设你已经安装了Arcgis，那么请按照以下步骤去完成热地图的绘制。</p>
+<ol>
+<li>打开Arcmap（arcgis是一个软件系统，最常用的就是arcmap）；</li>
+<li>导入shape文件和Excel文件，而后实现两个文件的连接；</li>
+<li>剔除shape文件属性表中多余的记录；</li>
+<li>按照pop字段进行地图分段显示（这里建议分成6段）；</li>
+<li>保存图形。</li>
+</ol>
+<p><img src="https://i.imgur.com/hYZVcPy.jpg" alt="Arcgis与热地图">
+关于arcgis的使用可以参看网上麻辣gis教程。</p>
+<h4 id="bdp">个人bdp与人口分布热地图</h4>
+<p>个人bdp是一款在线版数据可视化分析工具，最大的优点是免费，最大的缺点是很多功能需要付费才能使用（这可能是国内软件的共识吧），关于这个软件小编使用较少，这里大致地介绍一下操过程，操作步骤为：</p>
+<ol>
+<li>在浏览器中打开个人BDP网址（https://me.bdp.cn/home.html），然后注册并登陆；</li>
+<li>选择工作表，单击“上传数据”按钮，导入带有经纬度信息的Excel文件；</li>
+<li>在工作表中，单击“新建图表”按钮，然后选择“地图图表”选项，而后点击确定；</li>
+<li>选择经度和维度的字段以及选择好坐标系（默认的百度地图即可）；</li>
+<li>将数据托入图层，而后选择需要可视化的数据字段托放置画布上的相关字段区；</li>
+<li>完成绘图，保存图片。</li>
+</ol>
+<p><img src="https://i.imgur.com/b7pXcll.jpg" alt="个人BDP与热地图">
+关于个人BDP更多的介绍请参照其官网。</p>
+<h3 id="heading2">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下怎么使用python去获取经纬度信息，而后采用相关绘图软件对地理信息进行可视化。因为在实践中，小编更加喜欢直接采用R语言或者Python去实现空间地图的可视化，所以本文对于这些绘图软件的讲解有所过于简单，喜欢这些软件的朋友可以详细参看它们的官方文档。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%83%AD%E5%9C%B0%E5%9B%BE" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">热地图</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

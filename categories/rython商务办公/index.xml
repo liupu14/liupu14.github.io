@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rython商务办公 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/rython%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC/</link>
+    <description>Recent content in Rython商务办公 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 21 Jan 2019 21:38:27 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/rython%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>R语言进行数据清洗</title>
+      <link>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/</link>
+      <pubDate>Mon, 21 Jan 2019 21:38:27 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-26&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上次更新后已经有将近三个月没有进行文章更新，所以这里要向那些一直关注小编文章的朋友致以最诚挚的抱歉。因为在这三个月中一些琐事以及工作方面的事情一直缠绕着我，使得我总是没有精力或者心情去及时进行文章更新，再次向喜欢小编文章的各位朋友进行道歉！这也让小编感觉到一个人坚持做一件事情是多么的困难。我一直觉得自己还算是具有一种比较能够坚持的性格，然而实践证明，坚持总是说着容易。在反思了这段时间之后，小编决定在接下来的文章更新中尽量做到每周都有更新，不过每周更新的频率将有所调整，小编会尽量做到每周两更，然而考虑到工作人士的身不由己，一周一更也将成为一种常态，但是小编会保证每周都至少会有一篇文章更新，以感激你们这群长期支持小编的朋友。可能太久没有写文章了，所以一时间有点话痨，下面开始介绍一下本期的主题。本期文章中，小编将和大家介绍一下怎么使用R语言去进行数据的清洗以及规整。因为任何形式的数据分析都离不开数据清洗，可以说数据清洗整理占据了整个数据分析工作时间的80%，因此小编一直以来就极为重视这一点。长久以来小编一直使用Python和R进行数据分析，所以小编不可能只介绍R语言的数据清洗过程，也会介绍怎么使用Python去进行同类型的数据清洗工作，因为数据清洗真的比较重要，所以这期文章只介绍怎么使用R语言去进行数据清洗，下期文章介绍Python的处理过程。而本文选择进行清洗的数据来源于美国的UFO观察数据，考虑到数据将有80M的存量，这里就不将数据上传了，需要的朋友请给小编发私信或者留言，小编会及时发给你们！好了，这里就不再多说废话了，下面正式进入主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

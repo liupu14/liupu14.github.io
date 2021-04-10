@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>pdvega绘制常用商务图 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="pdvega绘制常用商务图" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+任何问题与讨论，请在在文末评论处或公众号留言
+最新更新时间：2018-4-17
+
+写在前面
+千呼万唤始出来，文章继续更新时！上一期小编说过，这一期文章中将讲一讲python中绘图那些事。相信一听到Python绘图，各位大大脑海中最先涌现出的绘图库应该就是Matplotlib库了（什麼，你说你从没有涌现出这个想法，小编只能说要不你就是小白，要不你就真的是Python小白）。但是，本期文章中，小编并不准备直接开始讲述这一Python绘图神器，原因小编有在上一期文章中提到过，这里就不再多说。那么大家肯定很疑惑，既然你小编你不准备讲述Matplotlib库，那你是准备这一期忽悠我们嘛（13万万中国人不会答应）。各位先别急着丢板砖呀，小编虽然不准备讲述这一绘图库，但已经准备了另外一个更加高效的绘图库予以大家，这个库就是基于altair库语法开发出来的一个快捷简便绘图库pdvega。至于小编为什麼要从这一个库开始讲起，这里是处于两个原因：其一，让大家了解到Python中绘图也可以如此简单美观，从而提升各位继续Python之路的兴趣；其二，正如公众号所明确的那样，本公众号旨在介绍一些简化办公的方法，那么在绘图方面自然需要不断介绍更加快捷便利的绘图库。好了，闲话不再多说，下面正式进入pdvega的世界。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/" />
+<meta property="article:published_time" content="2018-04-20T23:16:08+00:00" />
+<meta property="article:modified_time" content="2018-04-20T23:16:08+00:00" />
+<meta itemprop="name" content="pdvega绘制常用商务图">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+任何问题与讨论，请在在文末评论处或公众号留言
+最新更新时间：2018-4-17
+
+写在前面
+千呼万唤始出来，文章继续更新时！上一期小编说过，这一期文章中将讲一讲python中绘图那些事。相信一听到Python绘图，各位大大脑海中最先涌现出的绘图库应该就是Matplotlib库了（什麼，你说你从没有涌现出这个想法，小编只能说要不你就是小白，要不你就真的是Python小白）。但是，本期文章中，小编并不准备直接开始讲述这一Python绘图神器，原因小编有在上一期文章中提到过，这里就不再多说。那么大家肯定很疑惑，既然你小编你不准备讲述Matplotlib库，那你是准备这一期忽悠我们嘛（13万万中国人不会答应）。各位先别急着丢板砖呀，小编虽然不准备讲述这一绘图库，但已经准备了另外一个更加高效的绘图库予以大家，这个库就是基于altair库语法开发出来的一个快捷简便绘图库pdvega。至于小编为什麼要从这一个库开始讲起，这里是处于两个原因：其一，让大家了解到Python中绘图也可以如此简单美观，从而提升各位继续Python之路的兴趣；其二，正如公众号所明确的那样，本公众号旨在介绍一些简化办公的方法，那么在绘图方面自然需要不断介绍更加快捷便利的绘图库。好了，闲话不再多说，下面正式进入pdvega的世界。">
+<meta itemprop="datePublished" content="2018-04-20T23:16:08&#43;00:00" />
+<meta itemprop="dateModified" content="2018-04-20T23:16:08&#43;00:00" />
+<meta itemprop="wordCount" content="212">
+
+
+
+<meta itemprop="keywords" content="python,商务绘图," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="pdvega绘制常用商务图"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+任何问题与讨论，请在在文末评论处或公众号留言
+最新更新时间：2018-4-17
+
+写在前面
+千呼万唤始出来，文章继续更新时！上一期小编说过，这一期文章中将讲一讲python中绘图那些事。相信一听到Python绘图，各位大大脑海中最先涌现出的绘图库应该就是Matplotlib库了（什麼，你说你从没有涌现出这个想法，小编只能说要不你就是小白，要不你就真的是Python小白）。但是，本期文章中，小编并不准备直接开始讲述这一Python绘图神器，原因小编有在上一期文章中提到过，这里就不再多说。那么大家肯定很疑惑，既然你小编你不准备讲述Matplotlib库，那你是准备这一期忽悠我们嘛（13万万中国人不会答应）。各位先别急着丢板砖呀，小编虽然不准备讲述这一绘图库，但已经准备了另外一个更加高效的绘图库予以大家，这个库就是基于altair库语法开发出来的一个快捷简便绘图库pdvega。至于小编为什麼要从这一个库开始讲起，这里是处于两个原因：其一，让大家了解到Python中绘图也可以如此简单美观，从而提升各位继续Python之路的兴趣；其二，正如公众号所明确的那样，本公众号旨在介绍一些简化办公的方法，那么在绘图方面自然需要不断介绍更加快捷便利的绘图库。好了，闲话不再多说，下面正式进入pdvega的世界。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/&amp;text=pdvega%e7%bb%98%e5%88%b6%e5%b8%b8%e7%94%a8%e5%95%86%e5%8a%a1%e5%9b%be" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/&amp;title=pdvega%e7%bb%98%e5%88%b6%e5%b8%b8%e7%94%a8%e5%95%86%e5%8a%a1%e5%9b%be" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">pdvega绘制常用商务图</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-04-20T23:16:08Z">April 20, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+任何问题与讨论，请在在文末评论处或公众号留言
+最新更新时间：<code>2018-4-17</code></p>
+</blockquote>
+<h2 id="heading">写在前面</h2>
+<p>千呼万唤始出来，文章继续更新时！上一期小编说过，这一期文章中将讲一讲python中绘图那些事。相信一听到Python绘图，各位大大脑海中最先涌现出的绘图库应该就是Matplotlib库了（什麼，你说你从没有涌现出这个想法，小编只能说要不你就是小白，要不你就真的是Python小白）。但是，本期文章中，小编并不准备直接开始讲述这一Python绘图神器，原因小编有在上一期文章中提到过，这里就不再多说。那么大家肯定很疑惑，既然你小编你不准备讲述Matplotlib库，那你是准备这一期忽悠我们嘛（13万万中国人不会答应）。各位先别急着丢板砖呀，小编虽然不准备讲述这一绘图库，但已经准备了另外一个更加高效的绘图库予以大家，这个库就是基于altair库语法开发出来的一个快捷简便绘图库pdvega。至于小编为什麼要从这一个库开始讲起，这里是处于两个原因：其一，让大家了解到Python中绘图也可以如此简单美观，从而提升各位继续Python之路的兴趣；其二，正如公众号所明确的那样，本公众号旨在介绍一些简化办公的方法，那么在绘图方面自然需要不断介绍更加快捷便利的绘图库。好了，闲话不再多说，下面正式进入pdvega的世界。</p>
+<h3 id="heading1">第一讲：准备工作</h3>
+<h4 id="11-pdvega">1.1 pdvega简介</h4>
+<p>初次听到这个名字，相信各位除了疑惑就是疑惑（毕竟你看Matplotlib单从英文名字上就很明显可以是用来绘图的），这到底是什麼意思呢？对Python比较熟悉以及看过三傻并对其中的一段构词情节有印象的朋友可能会看出这个名字的由来。没错，pdvega正是一个合成词：pd+vega。pd是pandas.Dataframes的缩写，而vega源自于一个高效美观的交互式绘图系统Vega-Lite，所以pdvega的释义就是高效便捷地操作Python数据框进而得出美观图形。这个绘图库是由jake所创建的，当然这个大神作者还有另外一个高效的交互式绘图库altair，笔者会在以后的文章中做进一步介绍。这里你只需要知道，这个库真的很好用，并且下定决心去学习这个库。另外这里小编默认各位对于代码的操作是在jupyter notebook中进行的，如果你尚未安装jupyter notebook的话，那么久先动手安装一下吧，这里小编就不告诉你们怎么安装了。如果你有看过小编前面的文章以及已经听从了小编的建议，那么你现在所安装的Python系统应该是Anaconda，那么小编就要再一次恭喜你了，因为jupyter在Anaconda下式默认安装的，所以你只需要打开windows命令行，然后在命令行中输入jupyter notebook就可以正常打开jupyter notebook了。</p>
+<h4 id="12-pdvega">1.2 pdvega安装</h4>
+<p>既然已经了解了pdvega，那么就不要犹豫了，赶快在python中安装这个库，然后潇洒地绘制几个常用的商务图吧。为了讲解的需要，小编准备直接使用vega体系中自带的数据库，因此小编在这里也会推荐安装一下vega体系下的数据集成库vega_datasets。现在请把你的操作位置移植命令行，当然如果你已经在jupyter中也无所谓，jupyter中也可以进行安装的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 在命令行下进行安装的方式</span>
+pip install pdvega
+pip install vega_datasets
+jupyter nbextension install <span style="color:#f92672">-</span><span style="color:#f92672">-</span>sys<span style="color:#f92672">-</span>prefix <span style="color:#f92672">-</span><span style="color:#f92672">-</span>py vega3
+
+<span style="color:#75715e"># 在jupyter notebook下进行安装</span>
+<span style="color:#960050;background-color:#1e0010">!</span>pip install pdvega
+<span style="color:#960050;background-color:#1e0010">!</span>pip install vega_datasets
+<span style="color:#960050;background-color:#1e0010">!</span>jupyter nbextension install <span style="color:#f92672">-</span><span style="color:#f92672">-</span>sys<span style="color:#f92672">-</span>prefix <span style="color:#f92672">-</span>py vega3
+</code></pre></div><p>如果没有出错，那么你已经顺利地安装了所需要的库，下面随便绘制一个图形测试一下是否已经正常安装并且是否能够正常使用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> pdvega
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>:np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">20</span>),<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>:np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">20</span>)})
+df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>scatter(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>如果你的安装没有出错的话，你肯定可以得到以下的散点图：
+<img src="https://i.imgur.com/geMc7e9.png" alt="pdvega散点图">
+接下来你可以继续测试一下你的vega_datasets库是否安装成功，vega_datasets库里面具有多个数据集，小编这里就用其中的stocks数据集做一个测试吧（谁让小编是一多家上市公司的董事呢）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pdvega
+<span style="color:#f92672">from</span> vega_datasets <span style="color:#f92672">import</span> data
+stocks <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>stocks(pivoted <span style="color:#f92672">=</span> True)
+stocks<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>line()
+</code></pre></div><p>如果你安装成功并且你没有输入错误的话，你会得到：
+<img src="https://i.imgur.com/CrE6QwF.png" alt="pdvega_line测试图">
+是不是都开始怀疑人生了，这么简单就可以做出在Excel中至少需要花费十分钟才能做出的图形，请不要怀疑，pdvega就是这么任性，这么简便，下面笔者就带领各位一起去探索一下怎么使用pdvega做出常用的商务图表。</p>
+<h3 id="pdvega">第二讲：pdvega基本商务图形制作</h3>
+<p>在日常办公中，我们常常会遇到各种图表制作问题，因此掌握最常用图表的制作方式可以说你迈向人生巅峰的前提。那么在日常工作中最常用的一些图表是什麼呢，根据小编自己的经验以及交流所得，最常用的图形无非表现为六种：折线图、散点图、条形图、直方图、面积图以及饼图。下面小编就主要讲述一下这几类图形的绘制。</p>
+<h4 id="21-pdvega">2.1 pdvega与折线图</h4>
+<p>折线图就是将数据点以直线连接起来，常用来展示时间序列数据的趋势，被广泛地运用于各类时间序列数据、趋势数据以及各类办公图表中。使用pdvega绘制折线图可以说相对简便，仅仅需要一条语句就可以完成，前提条件是你已经将你的数据整理成了数据表的形式（当然pdvega也可以很方便地处理费数据表形式的数据，但是作为一个与数据和图表打交道的人，个人建议还是要养成一种保持干净整洁数据的习惯）。为了后面作图的需要，本期文章中会先后引用三个数据表，这三个数据表均来自于此前已经安装好了的vega_datasets数据集，下面先将后面将用的三个数据表引用进来。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> vega_datasets <span style="color:#f92672">import</span> data
+iris <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>iris()
+stocks <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>stocks(pivoted <span style="color:#f92672">=</span> True)
+cars <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>cars()
+iris<span style="color:#f92672">.</span>head()
+stocks<span style="color:#f92672">.</span>head()
+cars<span style="color:#f92672">.</span>head()
+</code></pre></div><p>而后就可以看到各个数据表的前几行数据状况：
+<img src="https://i.imgur.com/7kgp5sV.png" alt="iris">
+<img src="https://i.imgur.com/lfQztmB.png" alt="stocks">
+<img src="https://i.imgur.com/DcjR23O.png" alt="cars">
+既然已经对数据有了初步了解，下面就使用其中的stocks数据表来进行折线图的绘制，在pdvega中绘制折线图使用vgplot.line()函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pdvega
+stocks<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>line()
+</code></pre></div><p>这个图在上文中已经进行了展示，这里就不再进一步展示。这个函数默认是对数据表中的所有列分别绘制折线图的，如果你只想绘制其中两列数据的折线，那么你只需要很简单修改一下你的绘制数据表即可。如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">stocks[[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">AMZN</span><span style="color:#e6db74">&#39;</span>]]<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>line
+</code></pre></div><p><img src="https://i.imgur.com/IEhxSGN.png" alt="部分数据集折线图绘制">
+使用pdvega绘制折线图，你仅仅需要动动脑子的环节仅仅是你的数据选择，即你准备绘制那些数据的折线图，一旦确定图也就出来了。</p>
+<h4 id="22-pdvega">2.2 pdvega与散点图</h4>
+<p>当你想探索两个变量之间的相关关系时，那么散点图就是你最好的选择。在pdvega中绘制散点图仅仅需要使用vgplot.scatter()函数就可以了，这里使用iris数据表进行绘图操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">iris<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>scatter(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">petalLength</span><span style="color:#e6db74">&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">petalWidth</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这里的petalLength和petalWidth分别表示花萼的长度和宽度，两者之间当然存在着正相关关系，正如下图所示：
+<img src="https://i.imgur.com/sPIgl3m.png" alt="花萼长宽关系散点图">
+当然你也可以对散点图指定颜色，这在pdvega中是很容易实现的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">iris<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>scatter(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">petalLength</span><span style="color:#e6db74">&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">petalWidth</span><span style="color:#e6db74">&#39;</span>,c<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这里按照花类所属类别分别对其使用不同颜色，其中的参数c就是color的缩写。
+<img src="https://i.imgur.com/8TkG58E.png" alt="颜色归类下的花萼长宽关系散点图"></p>
+<h4 id="23-pdvega">2.3 pdvega与条形图</h4>
+<p>条形图常用来对分类数据进行展示，进而看出每种类别数据的相对大小，可以说是一种常用于进行的比较的图表形式。在pdvega中进行条形图的绘制，主要存在两种类型的函数，一种用来绘制水平条形图，另外一种用来绘制竖直条形图。用来绘制这两种条形图的函数分别为vgplot.barh()和vgplot.bar()。</p>
+<ul>
+<li>vgplot.barh()与水平条形图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">2</span>),columns <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>])
+df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>barh()
+</code></pre></div><p>输入上面的代码之后，便可以得到一个水平的条形图：
+<img src="https://i.imgur.com/rTmiu54.png" alt="非堆积水平条形图">
+当然有时我们需要堆积状的条形图，因此，我们只需要在上面的函数上加上一个相应的参数即可。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>barh(stacked <span style="color:#f92672">=</span> True)
+</code></pre></div><p>这样我们便可以得到一个堆积状的水平条形图，各位可以试着比较一下这两个水平条形图的相关区别。
+<img src="https://i.imgur.com/LwehzN0.png" alt="堆积式水平条形图"></p>
+<ul>
+<li>vgplot.bar()与垂直条形图
+上面笔者介绍了水平条形图的绘制，然而在很多时候我们可能更加常用的条形图表现为垂直条形图，因此下面介绍一下怎样使用pdvega绘制垂直条形图的方法。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>bar()
+</code></pre></div><p>通过使用上面命令便可以得到一个非堆积的垂直条形图：
+<img src="https://i.imgur.com/LuDUEZp.png" alt="非堆积垂直条形图">
+当然为了获得一个堆积的条形图，只需要和水平条形图一样，增加一个参数就可以了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>bar(stacked <span style="color:#f92672">=</span> True)
+</code></pre></div><p>如果你没有输入错代码，那么你便可以得到：
+<img src="https://i.imgur.com/tOxElne.png" alt="堆积状垂直条形图">
+看到这些输出，你是不是觉得通过pdvega绘制图形真的很简单，那么下面就让你们进一步认识到这种绘制方法的便利之处。</p>
+<h4 id="24-pdvega">2.4 pdvega与面积图</h4>
+<p>面积图可以说与折线图非常相似，不同的地方就是面积图是将曲线内部进行填充。这里还是以vega_datasets数据集中的stocks数据表进行说明。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">stocks <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>stocks()
+stocks[[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">MSFT</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">AAPL</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">AMZN</span><span style="color:#e6db74">&#39;</span>]]<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>area()
+</code></pre></div><p>通过输入以上代码，你就得到了一个面积图，这里为了让显示效果更加可观，所以只需要了stocks数据表中的三列数据，当然你也完全可以用全部数据进行面积图绘制，这里笔者不再进行介绍，需要的朋友只需要更换一下数据即可。
+<img src="https://i.imgur.com/ddth7tw.png" alt="pdvega面积图"></p>
+<h4 id="25-pdvega">2.5 pdvega与直方图</h4>
+<p>直方图相信各位从小学就已经开始接触了吧，所以笔者这里就不再对直方图的含义进行过多介绍，重点讲解一下怎么使用pdvega绘制直方图。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>:np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>:np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000</span>),<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">c</span><span style="color:#e6db74">&#39;</span>:np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>},columns <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">c</span><span style="color:#e6db74">&#39;</span>])
+df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>hist(bins <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>)
+</code></pre></div><p>没错，通过以上程序就可以很方便地绘制出一个直方图：
+<img src="https://i.imgur.com/XCaKzbO.png" alt="pdvega默认直方图">
+或者你也可以通过设置函数中的某些参数进而使得图形更加美观：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>hist(bins <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>,stacked <span style="color:#f92672">=</span> True,histtype <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stepfilled</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>试试看一下这个图形是否更加能够吸引你，如果你还是觉得不够美观，你可以自行设置其中的参数值，一得到你喜欢的图表形式。
+<img src="https://i.imgur.com/9eBqcno.png" alt="pdvega个性化直方图"></p>
+<h4 id="26-pdvega">2.6 pdvega与饼图</h4>
+<p>上文中已经介绍了五种常用的商务图，下面笔者继续讲解最后一种常用的商务图表，饼图。不过小编这里不准备介绍常用的那种饼图的绘制（因为小编作为一个美学与图表爱好者，一直都觉得传统的饼图可以说是一种最糟糕的数据可视化形式，不要问为什麼，你多看一些商业期刊就明白了），小编这里主要将介绍的是一种饼图的高级形式：热力图。在pdvega中绘制热地图依赖于vgplot.heatmap()函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">a <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>
+b <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000</span>)
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>:a,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>:b},columns <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>])
+df<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>heatmap(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>,gridsize <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>)
+</code></pre></div><p>在jupyter notebook中运行以上命令你便可以得到：
+<img src="https://i.imgur.com/Vzlt3NT.png" alt="pdvega热力图">
+这里只是简单地对这些商务图的绘制进行介绍，在往后的学习中会进一步介绍其中各种图形的绘制参数设置。</p>
+<h3 id="heading2">后记</h3>
+<p>本期文章介绍了怎么使用pdvega库绘制一些常用的商务图表的绘制方式，通过介绍，了解到了其中常用的折线图、散点图、条形图、直方图、面积图以及热力图的绘制方式。当然本文只是介绍了这些图形的基本绘制方法，对于个性化图形设置的内容介绍较少，这将在往后点额文章中做进一步介绍。在下一期文章中，小编将继续介绍python基础知识，敬请期待！好了，本期文章就介绍到这里了，再一次感谢诸位朋友对于小编的关注与支持。文末附带小编的微信公众号二维码，希望大家多多支持，你们的支持是小编写作的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务绘图</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

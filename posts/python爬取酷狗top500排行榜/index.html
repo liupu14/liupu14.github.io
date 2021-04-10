@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>python爬取酷狗Top500排行榜 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="python爬取酷狗Top500排行榜" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-9
+
+写在前面
+新的一周开始了，今天无意间听到一首比较好听的歌曲“学猫叫”，然后就开始了无限循环模式。本以为是新出的歌曲，故怀着激动的心情推荐给朋友，谁知朋友直接告诉我这首歌已经在酷狗top500排行榜高居榜首很久了。听到这个，不得不感慨，我是有多久没有了解酷狗的歌曲信息了。因此怀着好奇的心情去看了一下最新的酷狗top500排行，发现这首歌曲仍高居榜首，另外排行榜中也出现了很多我没有听说过的歌曲，真的打击到我了。对我这个喜欢听音乐的人来说，竟然对当下比较流行的一些歌曲竟然缺乏了基本认识。在这种耻辱心理的作用下，小编就想着统计一下最近的酷狗top500排行榜的歌曲信息，因此本期文章小编就和大家分享一下怎么使用python去爬取酷狗top500排行榜的歌曲信息，娱乐之余随时掌握点知识。下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/" />
+<meta property="article:published_time" content="2018-08-13T21:45:22+00:00" />
+<meta property="article:modified_time" content="2018-08-13T21:45:22+00:00" />
+<meta itemprop="name" content="python爬取酷狗Top500排行榜">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-9
+
+写在前面
+新的一周开始了，今天无意间听到一首比较好听的歌曲“学猫叫”，然后就开始了无限循环模式。本以为是新出的歌曲，故怀着激动的心情推荐给朋友，谁知朋友直接告诉我这首歌已经在酷狗top500排行榜高居榜首很久了。听到这个，不得不感慨，我是有多久没有了解酷狗的歌曲信息了。因此怀着好奇的心情去看了一下最新的酷狗top500排行，发现这首歌曲仍高居榜首，另外排行榜中也出现了很多我没有听说过的歌曲，真的打击到我了。对我这个喜欢听音乐的人来说，竟然对当下比较流行的一些歌曲竟然缺乏了基本认识。在这种耻辱心理的作用下，小编就想着统计一下最近的酷狗top500排行榜的歌曲信息，因此本期文章小编就和大家分享一下怎么使用python去爬取酷狗top500排行榜的歌曲信息，娱乐之余随时掌握点知识。下面正式开始。">
+<meta itemprop="datePublished" content="2018-08-13T21:45:22&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-13T21:45:22&#43;00:00" />
+<meta itemprop="wordCount" content="325">
+
+
+
+<meta itemprop="keywords" content="python,爬虫," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python爬取酷狗Top500排行榜"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-9
+
+写在前面
+新的一周开始了，今天无意间听到一首比较好听的歌曲“学猫叫”，然后就开始了无限循环模式。本以为是新出的歌曲，故怀着激动的心情推荐给朋友，谁知朋友直接告诉我这首歌已经在酷狗top500排行榜高居榜首很久了。听到这个，不得不感慨，我是有多久没有了解酷狗的歌曲信息了。因此怀着好奇的心情去看了一下最新的酷狗top500排行，发现这首歌曲仍高居榜首，另外排行榜中也出现了很多我没有听说过的歌曲，真的打击到我了。对我这个喜欢听音乐的人来说，竟然对当下比较流行的一些歌曲竟然缺乏了基本认识。在这种耻辱心理的作用下，小编就想着统计一下最近的酷狗top500排行榜的歌曲信息，因此本期文章小编就和大家分享一下怎么使用python去爬取酷狗top500排行榜的歌曲信息，娱乐之余随时掌握点知识。下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/&amp;text=python%e7%88%ac%e5%8f%96%e9%85%b7%e7%8b%97Top500%e6%8e%92%e8%a1%8c%e6%a6%9c" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/&amp;title=python%e7%88%ac%e5%8f%96%e9%85%b7%e7%8b%97Top500%e6%8e%92%e8%a1%8c%e6%a6%9c" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">python爬取酷狗Top500排行榜</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-08-13T21:45:22Z">August 13, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-9</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>新的一周开始了，今天无意间听到一首比较好听的歌曲“学猫叫”，然后就开始了无限循环模式。本以为是新出的歌曲，故怀着激动的心情推荐给朋友，谁知朋友直接告诉我这首歌已经在酷狗top500排行榜高居榜首很久了。听到这个，不得不感慨，我是有多久没有了解酷狗的歌曲信息了。因此怀着好奇的心情去看了一下最新的酷狗top500排行，发现这首歌曲仍高居榜首，另外排行榜中也出现了很多我没有听说过的歌曲，真的打击到我了。对我这个喜欢听音乐的人来说，竟然对当下比较流行的一些歌曲竟然缺乏了基本认识。在这种耻辱心理的作用下，小编就想着统计一下最近的酷狗top500排行榜的歌曲信息，因此本期文章小编就和大家分享一下怎么使用python去爬取酷狗top500排行榜的歌曲信息，娱乐之余随时掌握点知识。下面正式开始。</p>
+<h3 id="heading1">准备工作</h3>
+<p>本期文章主要将爬取酷狗top500排行榜的歌曲信息，具体来说就是获取排行榜中各首歌的排名、歌曲名称、歌手以及播放时间方面的信息，大家先来看一下基本的情况：
+<img src="https://i.imgur.com/uancSsg.png" alt="酷狗音乐top500排行榜">
+可以看到“学猫叫”仍然处在榜首。而小编准备获取的就是图中红线圈起的部分。既然总体思路是爬取排行榜中的歌曲信息，那么基本的准备还是需要有的。对于网络爬虫的具体介绍不是本文的目的，大家可以参考相关的书籍。本文侧重在实践，会具体告诉你怎么使用python去爬取这些信息，所以关于爬虫原理以及网页构造将不会过多介绍，重点放在实现上面。下面简单地介绍一下爬虫原理及网页构造、以及爬虫需要的工具库。</p>
+<h4 id="heading2">爬虫原理</h4>
+<p>说到爬虫，它不过是人工浏览网页的自动化实现，因此爬虫必备两件事情：</p>
+<ol>
+<li>模拟计算机对服务器发起Request请求；</li>
+<li>接受服务器端的Response内容并解析、提取自己需要的信息。</li>
+</ol>
+<p>因此任意一次爬虫，必须要做的都是发出请求获得网页，解析网页内容根据网页标签获得你所需要的信息。根据你需要浏览的网页的类型，爬虫不可避免地分为多页面爬虫和跨页面爬虫（常常浏览网页的你应该对此再熟悉不过，就不再多做解释）。多页面的爬虫基本流程为：</p>
+<ol>
+<li>手动翻页并观察各网页的URL构成特点，构造出所有页面的URL并存入列表中；</li>
+<li>根据URL列表依次循环取出各个URL；</li>
+<li>定义爬虫函数；</li>
+<li>循环调用爬虫函数，获得网页信息并存储数据；</li>
+<li>循环完毕，结束爬虫。</li>
+</ol>
+<p>而跨页面的爬虫流程表现为：</p>
+<ol>
+<li>定义爬虫函数爬取列表页所有专题的URL；</li>
+<li>将种子URL存放入列表之中；</li>
+<li>定义爬取种子URL页面的爬虫函数；</li>
+<li>爬取各个种子URL页面下的相关信息；
+5.存放数据，结束循环。</li>
+</ol>
+<p>所以可以看出相对于多页面爬虫，跨页面爬虫仅仅是需要多定义一个爬虫函数，两种爬虫流程的基本内容都是观察网页，定义爬虫函数而后爬取存储，所以了解一点网页知识是很有必要的。</p>
+<h4 id="heading3">网页构造</h4>
+<p>小编一直使用的都是Chrome浏览器（也就是谷歌浏览器），所以小编就以Chrome页面为例来进行说明，如果你没有安装这种浏览器也不用紧张，因为大多浏览器的页面构造都是相同的。不过小编还是推荐你能够使用谷歌浏览器，因为真的很快捷方便功能强，还有就是没有广告（这点我很欣赏）。任意打开一个网页，这里就以酷狗的官网为例吧（www.kugou.com），在地址栏输入网址，然后任意移到网页的某处右键选择检查命令，便可以得到如下网页代码：
+<img src="https://i.imgur.com/LuBgf5e.png" alt="网页构造">
+右边显示的就是网页代码，你可能对此感到头痛，但是学习网络爬虫还是需要那么一点点的网页知识的，所以可以适当地了解一下html的基本知识，小编这里就不再多说。</p>
+<h4 id="heading4">工具库安装</h4>
+<p>小编这里使用的是python进行爬虫，虽然python中已经自带了一些网页获取与解析工具，但是相对于某些第三方库，自带的库效率较低。因此这里小编就着重介绍两种在网络爬虫中最常用的第三方库requests和BeautifulSoup。</p>
+<p>Requests库的官方文档指出：让http服务人类。因此顾名思义，requests就是用来获取网页的；而BeautifulSoup库是用来解析网页的，通过这个库可以将网页代码格式化显示从而便于观察网页获取网页信息。两个库的安装，仅需要在命令行中输入以下代码即可。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install requests
+pip install BeautifulSoup
+</code></pre></div><p>不过如果你安装的是Anaconda的话，那么这两个库默认是已经安装好了的，所以小编这里再一次建议诸位安装Anaconda。好了，既然准备工作已经完成，那么下面正式开始爬虫实战。</p>
+<h3 id="top500">爬取酷狗Top500实战</h3>
+<p>Top500排行榜所在的网页地址为<code>http://www.kugou.com/yy/rank/home/1-8888.html?from=rank</code>，这是排行榜的第一页，共有24首歌曲信息，这样的页面应该有24页，第二页页面地址为<code>http://www.kugou.com/yy/rank/home/2-8888.html?from=rank</code>，所以你应该已经观察出特点了，每页唯一的不同点就是<code>8888</code>前面的数字，这个数字就是页面页码，所以如果要依次获得各页面的网址，你应该可以通过下面这种方式便捷地获得。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">urls <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">http://www.kugou.com/yy/rank/home/{}-8888.html?from=rank</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(ii) <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">25</span>)]
+</code></pre></div><p>这里小编以第一页的“学猫叫”这首歌的歌曲信息获取来说明爬取过程，第一页的网址已经知道，所以需要通过requests库获得网页内容。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+url <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">http://www.kugou.com/yy/rank/home/1-8888.html?from=rank</span><span style="color:#e6db74">&#34;</span>
+hearder <span style="color:#f92672">=</span> {
+User<span style="color:#f92672">-</span>Agent: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/xxxxxxxxx Safari/537.36</span><span style="color:#e6db74">&#39;</span>
+} <span style="color:#75715e"># xxxx内容为小编谷歌浏览器的相关私秘，这里请使用你自己的</span>
+res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url,header<span style="color:#f92672">=</span> header)
+res<span style="color:#f92672">.</span>text
+</code></pre></div><p><img src="https://i.imgur.com/0Jr7nBv.png" alt="requests获取网页内容">
+这就是requests获得网页内容的部分截图，现在知道为何要使用另外的解析库去解析网页内容了吧，这么混乱的网页构造估计能折腾死人，下面就使用BeautifulSoup来重新解析网页。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+bsobj
+</code></pre></div><p><img src="https://i.imgur.com/QkeAKm8.png" alt="BeautiSoup解析网页">
+这就是BeautiSoup的魅力所在，网页内容一下子整洁格式化了，非常便于你去查找各个内容，既然已经正确地解析了网页，那么下面自然就是需要获得需要的内容了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ranks <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#rankWrap &gt; div.pc_temp_songlist &gt; ul &gt; li:nth-of-type(1) &gt; span.pc_temp_num &gt; strong</span><span style="color:#e6db74">&#39;</span>)
+titles <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#rankWrap &gt; div.pc_temp_songlist &gt; ul &gt; li:nth-of-type(1) &gt; a</span><span style="color:#e6db74">&#39;</span>)
+play_times <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#rankWrap &gt; div.pc_temp_songlist &gt; ul &gt; li:nth-of-type(1) &gt; span.pc_temp_tips_r &gt; span</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#66d9ef">for</span> rank,title,play_time <span style="color:#f92672">in</span> zip(ranks,titles,play_times):
+    rank <span style="color:#f92672">=</span> rank<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>strip()
+    music <span style="color:#f92672">=</span> title<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>]
+    singer <span style="color:#f92672">=</span> title<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+    play_time <span style="color:#f92672">=</span> play_time<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>strip()
+<span style="color:#66d9ef">print</span>(rank,music,singer,play_time)
+</code></pre></div><p><img src="https://i.imgur.com/0tqRlyc.png" alt="输出内容">
+代码中的第一行用来获取歌曲的排名信息，bsobj.select()函数中的参数为歌曲排名信息在网页中的相应存储位置，这个可以通过将鼠标移至排名的地方右键检查命令，然后在弹出的网页内容中通过右键的copy selector命令获取，不过切记将其中的nth-child改成nth-of-type；代码中的第二行以及第三行分别获取歌曲的标题以及播放时间；for循环用来获取其中的每一个所需要素，这里不再过多讲解，因为相关的命令在之前的文章中小编已经有所提及，所以这里不存在陌生命令。最后的print()函数将内容输出，可以从图中看出，我们已经正确地爬取了内容，那么下一步自然是需要将爬取的内容存放起来方便后续使用，这就需要用到小编在前期所讲到的xlwings库了，这个库可以连通python和Excel，极大方便python对Excel的定向输出。关于它的使用，请参看小编的前期文章，这里不再赘述。至此，大致已经了解了怎么去爬取网页中的相关内容，那么下面就要正式开始爬取排行榜的所有信息了。</p>
+<h3 id="heading5">综合示例</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># _*_ coding:utf-8 _*_</span>
+<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Author: liupu</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @filename: top500_music</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @date: 2018-8-13</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    # Description:</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # usege: 爬取酷狗音乐Top500排行榜，并将其存放进excel文件中</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # 平台：Windows7 + Python3.6 + ipython/visual studio code</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # 基本库需求：requests,Beautifulsoup,xlwings</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+<span style="color:#75715e"># 导入相关的库</span>
+<span style="color:#f92672">import</span> requests
+<span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+<span style="color:#f92672">import</span> xlwings <span style="color:#f92672">as</span> xw 
+<span style="color:#f92672">import</span> time
+
+<span style="color:#75715e"># 创建一个excel文件，便于后面存放歌曲信息</span>
+wb <span style="color:#f92672">=</span> xw<span style="color:#f92672">.</span>Book()
+sht <span style="color:#f92672">=</span> wb<span style="color:#f92672">.</span>sheets[<span style="color:#ae81ff">0</span>]
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> [[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">排名</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">歌曲名称</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">歌手</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">播放时间</span><span style="color:#e6db74">&#39;</span>]]     <span style="color:#75715e"># 设置标题行</span>
+
+<span style="color:#75715e"># 定义爬虫函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_info</span>(url):
+    header <span style="color:#f92672">=</span> {
+    User<span style="color:#f92672">-</span>Agent: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mozilla/5.0 (Windows NT 6.1; Win64; x64) </span>
+    AppleWebKit<span style="color:#f92672">/</span><span style="color:#ae81ff">537.36</span> (KHTML, like Gecko) Chrome<span style="color:#f92672">/</span>xxxxxxxxx 
+    Safari<span style="color:#f92672">/</span><span style="color:#ae81ff">537.36</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span>
+    }  <span style="color:#75715e"># 再次提醒，请改成自己的，否则请在下面的函数中不要使用header参数。</span>
+
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url<span style="color:#960050;background-color:#1e0010">，</span>header <span style="color:#f92672">=</span> header)
+    bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+    ranks <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#rankWrap &gt; div.pc_temp_songlist &gt; ul &gt; li &gt; span.pc_temp_num</span><span style="color:#e6db74">&#39;</span>)
+    titles <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#rankWrap &gt; div.pc_temp_songlist &gt; ul &gt; li &gt; a</span><span style="color:#e6db74">&#39;</span>)
+    play_times <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#rankWrap &gt; div.pc_temp_songlist &gt; ul &gt; li &gt; span.pc_temp_tips_r &gt; span</span><span style="color:#e6db74">&#39;</span>)
+        <span style="color:#75715e"># 获取所需要的四种内容信息</span>
+    <span style="color:#66d9ef">for</span> rank,title,play_time <span style="color:#f92672">in</span> zip(ranks,titles,play_times):
+        rank <span style="color:#f92672">=</span> int(rank<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>strip())
+        music <span style="color:#f92672">=</span> title<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>]
+        singer <span style="color:#f92672">=</span> title<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+        play_time <span style="color:#f92672">=</span> play_time<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>strip()
+        <span style="color:#75715e"># 将爬取的内容存入Excel之中</span>
+        sht<span style="color:#f92672">.</span>range((rank<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>))<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> rank
+        sht<span style="color:#f92672">.</span>range((rank<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> music
+        sht<span style="color:#f92672">.</span>range((rank<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>))<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> singer
+        sht<span style="color:#f92672">.</span>range((rank<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">4</span>))<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> play_time
+
+
+<span style="color:#75715e"># 爬取各页面的信息</span>
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">__main__</span><span style="color:#e6db74">&#39;</span>:
+    urls <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">http://www.kugou.com/yy/rank/home/{}-8888.html?from=rank</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(str(ii)) <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">25</span>)]  <span style="color:#75715e"># 创建url列表</span>
+    <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> urls:
+        get_info(url)  <span style="color:#75715e"># 循环爬取各页面</span>
+        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">2</span>)  <span style="color:#75715e"># 设置一个间断时间，从而避免被反爬</span>
+    wb<span style="color:#f92672">.</span>save(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">top_500.xlsx</span><span style="color:#e6db74">&#39;</span>)  <span style="color:#75715e"># 保存Excel文件</span>
+    wb<span style="color:#f92672">.</span>close()       <span style="color:#75715e"># 关闭Excel</span>
+</code></pre></div><p><img src="https://i.imgur.com/2B2zfGQ.png" alt="爬虫结果"></p>
+<h3 id="heading6">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了使用python去爬取酷狗Top500排行榜的歌曲信息，了解了在python爬虫中最为常用的requests库和BeautifulSoup库的相关使用方法。本文的爬虫属于典型的多页面爬虫，这种类型的爬虫在生活与工作中非常常见，所以请大家能够熟练这种爬虫流程。后续文章小编也会加大这些的介绍，同时也会对跨页面爬虫进行介绍，敬请期待。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%88%AC%E8%99%AB" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">爬虫</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

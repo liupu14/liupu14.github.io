@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>机器学习系列——朴素贝叶斯算法 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="机器学习系列——朴素贝叶斯算法" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-21
+
+写在前面
+上期文章中，小编和大家谈了python中的七种可视化工具，了解了怎么使用python去绘制静态图形和交互式图形。本期文章，小编将兑现之前的承诺，和大家聊一下机器学习的一些事情。在先前的文章中，小编已经和大家谈过了机器学习中的KNN算法以及决策树算法，对这两方面感兴趣的朋友可以参看前期文章。而在本期中，小编将和大家聊一下机器学习之中的第三种算法：朴素贝叶斯算法。下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/" />
+<meta property="article:published_time" content="2018-06-25T21:30:04+00:00" />
+<meta property="article:modified_time" content="2018-06-25T21:30:04+00:00" />
+<meta itemprop="name" content="机器学习系列——朴素贝叶斯算法">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-21
+
+写在前面
+上期文章中，小编和大家谈了python中的七种可视化工具，了解了怎么使用python去绘制静态图形和交互式图形。本期文章，小编将兑现之前的承诺，和大家聊一下机器学习的一些事情。在先前的文章中，小编已经和大家谈过了机器学习中的KNN算法以及决策树算法，对这两方面感兴趣的朋友可以参看前期文章。而在本期中，小编将和大家聊一下机器学习之中的第三种算法：朴素贝叶斯算法。下面正式开始。">
+<meta itemprop="datePublished" content="2018-06-25T21:30:04&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-25T21:30:04&#43;00:00" />
+<meta itemprop="wordCount" content="316">
+
+
+
+<meta itemprop="keywords" content="python,机器学习," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="机器学习系列——朴素贝叶斯算法"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-21
+
+写在前面
+上期文章中，小编和大家谈了python中的七种可视化工具，了解了怎么使用python去绘制静态图形和交互式图形。本期文章，小编将兑现之前的承诺，和大家聊一下机器学习的一些事情。在先前的文章中，小编已经和大家谈过了机器学习中的KNN算法以及决策树算法，对这两方面感兴趣的朋友可以参看前期文章。而在本期中，小编将和大家聊一下机器学习之中的第三种算法：朴素贝叶斯算法。下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/&amp;text=%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e6%9c%b4%e7%b4%a0%e8%b4%9d%e5%8f%b6%e6%96%af%e7%ae%97%e6%b3%95" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/&amp;title=%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e6%9c%b4%e7%b4%a0%e8%b4%9d%e5%8f%b6%e6%96%af%e7%ae%97%e6%b3%95" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">机器学习系列——朴素贝叶斯算法</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-06-25T21:30:04Z">June 25, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-6-21</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上期文章中，小编和大家谈了python中的七种可视化工具，了解了怎么使用python去绘制静态图形和交互式图形。本期文章，小编将兑现之前的承诺，和大家聊一下机器学习的一些事情。在先前的文章中，小编已经和大家谈过了机器学习中的KNN算法以及决策树算法，对这两方面感兴趣的朋友可以参看前期文章。而在本期中，小编将和大家聊一下机器学习之中的第三种算法：朴素贝叶斯算法。下面正式开始。</p>
+<h3 id="heading1">朴素贝叶斯算法简介</h3>
+<p>相信大家都有过垃圾邮件的体验，对于这些垃圾邮件我们可谓是深恶痛绝，好一点的是目前多数的邮件收发平台都会自动去屏蔽一些垃圾邮件，所以我们才免于了被其狂轰乱战。那么这些平台是如何去识别邮件为垃圾邮件的呢，这个就要归功于本期的主题。这些平台依据邮件中出现的词语，通过将其与历史词典比对，从而得出含有这些词语的邮件为垃圾邮件的概率，最后对概率较大的予以屏蔽。相信有过KNN算法经验的朋友会说，使用KNN算法亦能对邮件进行分类，但是不要忘记一点，KNN算法依据的是特征以及样本量，如果样本量相对较少这种算法会出现很大的不稳定性，而如果特征变量过多又会导致算法的过于冗杂，所以当你面临小样本以及多特征变量时，依靠KNN算法会十分低效，这种情形下，使用概率的方法就相对来说具有优势。而朴素贝叶斯算法正是基于概率的机器学习算法，而且是目前比较经典的一种机器学习算法。</p>
+<p>朴素贝叶斯是贝叶斯决策理论的一部分，因此在正式讲述其之前有必要了解一下贝叶斯决策理论（概率论方面的大神请直接看下文）。假设现在有一个数据集，里面的每对数据点均属于A类或者B类，记pA(x,y)为数据点（x,y）属于A类的概率，同时pB(x,y)为数据点(x,y)属于B类的概率，那么对于一个数据点(x,y)，便可以通过其归属的概率值大小进行类别判定。</p>
+<ul>
+<li>如果pA(x,y) &gt; pB(x,y)，则数据点归属于A类</li>
+<li>如果pA(x,y) &lt; pB(x,y)，则数据点归属于B类</li>
+</ul>
+<p>这就是贝叶斯决策理论的核心思想，即选择具有最高概率的决策。因此所有问题的关键就是需要计算出归属类别的概率值，然而很多时候需要计算的概率值并不是绝对的概率值，而是一种条件概率，或者说贝叶斯概率基本都是与条件概率挂钩的。所谓条件概率就是在给定某种情形下某种状态出现的概率值。以天气状况为例，给定今天是晴天的条件下明天仍是是晴天的概率可以表示为P(明天晴天|今天晴天)，这就是条件概率的典型表示形式，如果你有过概率论的相关知识，那么很明白怎么计算这个。
+<strong>p(明天晴天|今天晴天) = p(明天晴天，今天晴天)/p(今天晴天)</strong></p>
+<p>当然还可以依照贝叶斯准则计算上面的条件概率，p(明天晴天|今天晴天)=p(今天晴天|明天晴天)* p(明天晴天)/p(今天晴天)，所以先前给出的类别归属概率也可以重新整理。pA(x,y)严格意义上也属于一种条件概率，可以表示为p(A|x,y)，即在给定数据点为(x,y)的条件下数据点属于A类的概率，依照前面的条件概率计算公式，可以将这一条件概率进行重新书写：p(A|x,y)=p(x,y|A)* p(A)/p(x,y)，所以类别归属决策依据就变成为：</p>
+<ul>
+<li>如果p(A|x,y) &gt; p(B|x,y)，则数据点属于A类</li>
+<li>如果p(A|x,y) &lt; p(B|x,y)，则数据点属于B类</li>
+</ul>
+<p>既然已经对贝叶斯算法有所了解，那么下面就可以正式展开对于朴素贝叶斯算法的介绍了，所谓朴素一词是指数据集中各特征之间相互独立，且各特征具有同等重要性，当然这两个假设有些瑕疵，但是基于这种假设的贝叶斯算法往往都有较好的表现，所以完全可以不必太过在意这种假设的不成熟问题。</p>
+<h3 id="python">文档分类的python实战</h3>
+<p>朴素贝叶斯的一个非常重要的应用就是文档分类。在文档分类中，整个文档（比如一封电子邮件）是实例，那么邮件中的单词就可以定义为特征。而在实践中常用的文档特征模型主要包括词集模型和词袋模型。词集模型就是对于一篇文档中出现的每个词，不考虑其出现次数，而只考虑其在文档中是否出现，并将此作为特征；假设得到了所有文档中出现的词汇列表，那么根据每个词是否出现，就可以将文档转为一个与词汇列表等长的向量。而词袋模型，就是在词集模型的基础上，还要考虑单词在文档中出现的次数，从而考虑文档中某些单词出现多次所包含的信息。本文的分析主要采用词集模型。好了，讲了关于文档分类的特征描述之后，下面开始正式上代码。</p>
+<h4 id="heading2">拆分文本，准备数据</h4>
+<p>要从文本中获取特征，显然需要先拆分文本，将一句话拆分成各个单词或者词语组成的列表，术语称之为拆分为词条。考虑到中文语义的多样性以及组词的复杂性，小编这里就暂时不用中文进行演示了，后文的分析皆以英文为例，关于中文的话题会在后面的文章中再次进行介绍。所以这里的拆分文本就是将一句完整的英语语句拆分为各个单词的组合。同时根据每个词条是否在整个词条字典中出现与否分别赋值0和1（其中1表示出现，0表示未出现），进而实现文本的数字向量化。</p>
+<p>接下来，小编将先创建一个文本数据集列表，列表中的每个元素均为一条语句，同时小编会将这每一条语句拆分成单词列表，所以数据集将表现为嵌套列表，内列表中的每一个元素均为句子中的单词。另外小编会创建一个类别列表，用来表示数据列表中的每条语句的性质，类别列表中的1表示所代表的语句为侮辱性的语句，而类别列表中的0则表示语句为非侮辱性的语句。在建立好数据集之后，小编会先根据语句中的所有单词构建一个词典，而后依据每个单词是否在词典中出现完成文本数字化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#----------创建数据集--------------#</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">loadDataSet</span>():
+<span style="color:#75715e"># 词条切分后的语句集合，列表每一行代表一条语句</span>
+    docList<span style="color:#f92672">=</span>[[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">my</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dog</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">has</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">flea</span><span style="color:#e6db74">&#39;</span>,\
+                  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">problems</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">help</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">please</span><span style="color:#e6db74">&#39;</span>],
+                 [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">maybe</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">not</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">take</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">him</span><span style="color:#e6db74">&#39;</span>,\
+                  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">to</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dog</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">park</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stupid</span><span style="color:#e6db74">&#39;</span>],
+                 [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">my</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dalmation</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">is</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">so</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">cute</span><span style="color:#e6db74">&#39;</span>,
+                  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">I</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">love</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">him</span><span style="color:#e6db74">&#39;</span>],
+                 [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stop</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">posting</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stupid</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">worthless</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">garbage</span><span style="color:#e6db74">&#39;</span>],
+                 [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">my</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">licks</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ate</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">my</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">steak</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">how</span><span style="color:#e6db74">&#39;</span>,\
+                  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">to</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stop</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">him</span><span style="color:#e6db74">&#39;</span>],
+                 [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">quit</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">buying</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">worthless</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dog</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">food</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stupid</span><span style="color:#e6db74">&#39;</span>]]
+    <span style="color:#75715e"># 创建类别列表表示每条语句的性质</span>
+    classVec<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+    <span style="color:#66d9ef">return</span> docList,classVec
+
+<span style="color:#75715e">#构建语句中的单词词典    </span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">createVocabList</span>(dataSet):
+    <span style="color:#75715e">#新建一个存放词条的集合</span>
+    vocabSet<span style="color:#f92672">=</span>set([])
+    <span style="color:#66d9ef">for</span> document <span style="color:#f92672">in</span> dataSet:
+        <span style="color:#75715e">#将文档列表转为集合的形式，保证每个词条的唯一性</span>
+        <span style="color:#75715e">#然后与vocabSet取并集，向vocabSet中添加没有出现</span>
+        <span style="color:#75715e">#的新的词条        </span>
+        vocabSet<span style="color:#f92672">=</span>vocabSet<span style="color:#f92672">|</span>set(document)
+    <span style="color:#75715e">#再将集合转化为列表，便于接下来的处理</span>
+    <span style="color:#66d9ef">return</span> list(vocabSet)
+
+<span style="color:#75715e">#实现文本数字向量化    </span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Words2Vec</span>(vocabSet,inputSet):
+    <span style="color:#75715e">#新建一个长度为vocabSet的列表，并且各维度元素初始化为0</span>
+    returnVec<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">*</span>len(vocabSet)
+    <span style="color:#66d9ef">for</span> word <span style="color:#f92672">in</span> inputSet:
+        <span style="color:#75715e">#如果词条在词条列表中出现</span>
+        <span style="color:#66d9ef">if</span> word <span style="color:#f92672">in</span> vocabSet:
+            <span style="color:#75715e">#通过列表获取当前word的索引(下标)</span>
+            <span style="color:#75715e">#将词条向量中的对应下标的项由0改为1</span>
+            returnVec[vocabSet<span style="color:#f92672">.</span>index(word)]<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">else</span>: <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">the word: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> is not in my vocabulary! </span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">%</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">word</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">return</span> returnVec
+</code></pre></div><p>这样小编便完成了文本数据集的创建以及文本的向量化，那么接下来就可以根据组织化的数据结构进行概率值的计算了。</p>
+<h4 id="heading3">朴素贝叶斯概率值计算</h4>
+<p>为了表述的方便，小编这里将之前的点(x,y)向量w(各维度的值由特征是否出现的0或1组成)，在这里词条向量的维度和词汇表长度相同。
+　　        <strong>p(ci|w)=p(w|ci) * p(ci)/p(w)</strong>
+使用该公式计算文档词条向量属于各个类的概率，然后比较概率的大小，从而预测出分类结果。首先，通过统计各个类别的文档数目除以总得文档数目，计算出相应的p(ci)；然后，基于条件独立性假设，将w展开为一个个的独立特征，那么就可以将上述公式写为p(w|ci)=p(w0|ci)p(w1|ci)…p(wN|ci),这样就很容易计算，从而极大地简化了计算过程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#构建算法，从词向量计算概率p(w0|ci)...及p(ci)</span>
+<span style="color:#75715e">#docMatrix：词条向量组成的矩阵</span>
+<span style="color:#75715e">#Category:类标签组成的向量</span>
+
+<span style="color:#75715e">#导入numpy</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">NB0</span>(docMatrix,Category):
+    <span style="color:#75715e">#获取文档矩阵中文档的数目</span>
+    numDocs<span style="color:#f92672">=</span>len(docMatrix)
+    <span style="color:#75715e">#获取词条向量的长度</span>
+    numWords<span style="color:#f92672">=</span>len(docMatrix[<span style="color:#ae81ff">0</span>])
+    <span style="color:#75715e">#所有文档中属于类1所占的比例p(c=1)</span>
+    p1<span style="color:#f92672">=</span>sum(Category)<span style="color:#f92672">/</span>float(numDocs)
+    <span style="color:#75715e">#创建一个长度为词条向量等长的列表</span>
+    p0Num<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>zeros(numWords);p1Num<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>zeros(numWords)
+    p0Denom<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0</span>;p1Denom<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(numDocs):
+        <span style="color:#66d9ef">if</span> Category[i]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>:
+            <span style="color:#75715e">#统计所有类别为1的词条向量中各个词条出现的次数</span>
+            p1Num<span style="color:#f92672">+</span><span style="color:#f92672">=</span>docMatrix[i]
+            <span style="color:#75715e">#统计类别为1的词条向量中出现的所有词条的总数</span>
+            p1Denom<span style="color:#f92672">+</span><span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>sum(docMatrix[i])
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#75715e">#统计所有类别为0的词条向量中各个词条出现的次数</span>
+            p0Num<span style="color:#f92672">+</span><span style="color:#f92672">=</span>docMatrix[i]
+            <span style="color:#75715e">#统计类别为0的词条向量中出现的所有词条的总数</span>
+            <span style="color:#75715e">#即统计类0所有文档中出现单词的数目</span>
+            p0Denom<span style="color:#f92672">+</span><span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>sum(docMatrix[i])
+    <span style="color:#75715e">#利用NumPy数组计算p(wi|c1)</span>
+    p1Vect<span style="color:#f92672">=</span>p1Num<span style="color:#f92672">/</span>p1Denom  
+    <span style="color:#75715e">#利用NumPy数组计算p(wi|c0)</span>
+    p0Vect<span style="color:#f92672">=</span>p0Num<span style="color:#f92672">/</span>p0Denom  
+    <span style="color:#66d9ef">return</span> p0Vect,p1Vect,p1
+</code></pre></div><p>上面程序构建了一个贝叶斯算法，这个算法用来求出最核心的概率值，一旦有了这些概率值，下面就可以通过导入该函数所需要的数据进而去求解分类了。不过在继续之前有必要指出，该算法存在两个问题，因此在正式使用之前需要对这两点进行重新构筑。</p>
+<ol>
+<li>由词向量计算朴素贝叶斯用到的概率值
+计算概率时，需要计算多个概率乘积以获得文档属于某个类别的概率，即计算p(w0|ci) * p(w1|ci) * …p(wN|ci)，然后当其中任意一项的值为0，那么最后的乘积也为0.为降低这种影响，在这里将所有词出现数初始化为1，并将分母初始化为2*1=2。</li>
+<li>解决下溢出问题
+由于有太多很小的数相乘，计算概率时，由于大部分因子都非常小，最后相乘的结果四舍五入为0,造成下溢或者得不到准确的结果，所以，可以对数据取自然对数。这样，可以避免下溢出或者浮点数舍入导致的错误。同时采用自然对数处理不会有任何损失。</li>
+<li>调整后的算法实现</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">NB1</span>(docMatrix,Category):
+    numDocs<span style="color:#f92672">=</span>len(docMatrix)
+    numWords<span style="color:#f92672">=</span>len(docMatrix[<span style="color:#ae81ff">0</span>])
+    p1<span style="color:#f92672">=</span>sum(Category)<span style="color:#f92672">/</span>float(numDocs)
+    p0Num<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>ones(numWords);p1Num<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>ones(numWords) <span style="color:#75715e"># 避免0值</span>
+    p0Denom<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>;p1Denom<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(numDocs):
+        <span style="color:#66d9ef">if</span> Category[i]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>:
+            p1Num<span style="color:#f92672">+</span><span style="color:#f92672">=</span>docMatrix[i]
+            p1Denom<span style="color:#f92672">+</span><span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>sum(docMatrix[i])
+        <span style="color:#66d9ef">else</span>:
+            p0Num<span style="color:#f92672">+</span><span style="color:#f92672">=</span>docMatrix[i]
+            p0Denom<span style="color:#f92672">+</span><span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>sum(docMatrix[i])
+    <span style="color:#75715e"># 解决下溢问题</span>
+    p1Vect<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>log(p1Num<span style="color:#f92672">/</span>p1Denom)  
+    p0Vect<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>log(p0Num<span style="color:#f92672">/</span>p0Denom)  
+    <span style="color:#66d9ef">return</span> p0Vect,p1Vect,p1
+</code></pre></div><p>既然已经确定好了算法，下面开始正式编写分类贝叶斯函数，见下面代码，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># ----------朴素贝叶斯分类函数-------------</span>
+<span style="color:#75715e">#vec2Classify:待测试分类的词条向量</span>
+<span style="color:#75715e">#p0Vec:类别0所有文档中各个词条出现的频数p(wi|c0)</span>
+<span style="color:#75715e">#p1Vec:类别1所有文档中各个词条出现的频数p(wi|c1)</span>
+<span style="color:#75715e">#pClass1:类别为1的文档占文档总数比例</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">classifyNB</span>(vec2Classify,p0Vec,p1Vec,pClass1):
+    <span style="color:#75715e">#根据朴素贝叶斯分类函数分别计算待分类文档属于类1和类0的概率</span>
+    p1<span style="color:#f92672">=</span>sum(vec2Classify<span style="color:#f92672">*</span>p1Vec)<span style="color:#f92672">+</span>log(pClass1)
+    p0<span style="color:#f92672">=</span>sum(vec2Classify<span style="color:#f92672">*</span>p0Vec)<span style="color:#f92672">+</span>log(<span style="color:#ae81ff">1.0</span><span style="color:#f92672">-</span>pClass1)
+    <span style="color:#66d9ef">if</span> p1<span style="color:#f92672">&gt;</span>p0:
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+     
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">testingNB</span>():
+ <span style="color:#75715e">#由数据集获取文档矩阵和类标签向量</span>
+    listOPosts,listClasses<span style="color:#f92672">=</span>loadDataSet()
+    <span style="color:#75715e">#统计所有文档中出现的词条，存入词条列表</span>
+    myVocabList<span style="color:#f92672">=</span>createVocabList(listOPosts)
+    <span style="color:#75715e">#创建新的列表</span>
+    trainMat<span style="color:#f92672">=</span>[]
+    <span style="color:#66d9ef">for</span> postinDoc <span style="color:#f92672">in</span> listOPosts:
+        trainMat<span style="color:#f92672">.</span>append(setOfWords2Vec(myVocabList,postinDoc))
+    p0V,p1V,pAb<span style="color:#f92672">=</span>trainNB0(array(trainMat),array(listClasses))
+ <span style="color:#75715e"># 第一个测试文档</span>
+    testEntry<span style="color:#f92672">=</span>[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">love</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">my</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dalmation</span><span style="color:#e6db74">&#39;</span>]
+    thisDoc<span style="color:#f92672">=</span>array(setOfWords2Vec(myVocabList,testEntry))
+    <span style="color:#75715e">#利用贝叶斯分类函数对测试文档进行分类并打印</span>
+    <span style="color:#66d9ef">print</span>(testEntry,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">classified as:</span><span style="color:#e6db74">&#39;</span>,classifyNB(thisDoc,p0V,p1V,pAb))
+
+    <span style="color:#75715e">#第二个测试文档</span>
+    testEntry1<span style="color:#f92672">=</span>[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stupid</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">garbage</span><span style="color:#e6db74">&#39;</span>]
+    <span style="color:#75715e">#同样转为词条向量，并转为NumPy数组的形式</span>
+    thisDoc1<span style="color:#f92672">=</span>array(setOfWords2Vec(myVocabList,testEntry1))<span style="color:#75715e">#分类测试整体函数        </span>
+    <span style="color:#66d9ef">print</span>(testEntry1,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">classified as:</span><span style="color:#e6db74">&#39;</span>,classifyNB(thisDoc1,p0V,p1V,pAb))
+</code></pre></div><p>上面代码上半部分给出了分类函数，而下半部分则使用已经定义好的模型来对指定的文本进行分类，小编这里使用了两个文档进行分类函数的测试，如果你的代码没有书写错误，那么在命令行中输入以上代码之后，你会得出两句特别优美的话：
+<strong>[&lsquo;love&rsquo;,&lsquo;my&rsquo;,&lsquo;dalmation&rsquo;] classified as: 0</strong>
+<strong>[&lsquo;stupid&rsquo;,&lsquo;garbage&rsquo;] classified as: 1</strong>
+可见小编这里的分类器还是可以的，既然这样，那么小编下面就将其运用于邮件的过滤之中，请见下面示例。</p>
+<h3 id="heading4">实例:过滤垃圾邮件</h3>
+<p>对于一个文本字符串，可以使用python的split()方法对文本进行切割，比如字符串'hello, Mr.lee.',分割结果为[&lsquo;hell0,',&lsquo;Mr.lee.'] ，标点符合也会被当成词的一部分，因为此种切割方法是基于词与词之间的空格作为分隔符的。然而在分类中小编并不需要标点符号，所以可以使用正则表达式解决。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> re
+re<span style="color:#f92672">.</span>compile(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">W*</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这样就得到了一系列词组成的词表，但是里面的空字符串还是需要去掉，此时可以通过字符的长度，去掉长度等于0的字符。并且，由于小编需要统计的某一词是否出现，并不考虑其大小写，所以这里可以使用lower()函数将所有词转为小写字符。具体代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 贝叶斯算法实例：过滤垃圾邮件</span>
+
+<span style="color:#75715e">#处理数据长字符串</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">testParse</span>(bigString):
+    <span style="color:#f92672">import</span> re
+    listOfTokens<span style="color:#f92672">=</span>re<span style="color:#f92672">.</span>split(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">\</span><span style="color:#e6db74">W*</span><span style="color:#e6db74">&#39;</span>,bigString)
+    <span style="color:#66d9ef">return</span> [tok<span style="color:#f92672">.</span>lower() <span style="color:#66d9ef">for</span> tok <span style="color:#f92672">in</span> listOPosts <span style="color:#66d9ef">if</span> len(tok)<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">2</span>]
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">spamTest</span>():
+    docList<span style="color:#f92672">=</span>[];classList<span style="color:#f92672">=</span>[];fullTest<span style="color:#f92672">=</span>[]
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">26</span>):
+        wordList<span style="color:#f92672">=</span>testParse(open(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">text1/</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">.txt</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span>i)<span style="color:#f92672">.</span>read())
+        docList<span style="color:#f92672">.</span>append(wordList)
+        fullTest<span style="color:#f92672">.</span>extend(wordList)
+        classList<span style="color:#f92672">.</span>append(<span style="color:#ae81ff">1</span>)
+        wordList<span style="color:#f92672">=</span>testParse(open(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">text2/&amp;d.txt</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span>i)<span style="color:#f92672">.</span>read())
+        docList<span style="color:#f92672">.</span>append(wordList)
+        fullTest<span style="color:#f92672">.</span>extend(wordList)
+        classList<span style="color:#f92672">.</span>append(<span style="color:#ae81ff">0</span>)
+    vocabList<span style="color:#f92672">=</span>createVocabList(docList)
+    trainingSet<span style="color:#f92672">=</span>range(<span style="color:#ae81ff">50</span>);testSet<span style="color:#f92672">=</span>[]
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+        randIndex<span style="color:#f92672">=</span>int(random<span style="color:#f92672">.</span>uniform(<span style="color:#ae81ff">0</span>,len(trainingSet)))
+        testSet<span style="color:#f92672">.</span>append(trainingSet[randIndex])
+        <span style="color:#66d9ef">del</span>(trainingSet[randIndex])
+    trainMat<span style="color:#f92672">=</span>[];trainClasses<span style="color:#f92672">=</span>[]
+    <span style="color:#66d9ef">for</span> docIndex <span style="color:#f92672">in</span> trainingSet:
+        trainMat<span style="color:#f92672">.</span>append(setOfWords2Vec(vocabList,fullTest[docIndex]))
+        trainClasses<span style="color:#f92672">.</span>append(classList[docIndex])
+    p0V,p1V,pSpam<span style="color:#f92672">=</span>trainNB0(array(trainMat),array(trainClasses))
+    errorCount<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+    <span style="color:#66d9ef">for</span> docIndex <span style="color:#f92672">in</span> testSet:
+        wordVector<span style="color:#f92672">=</span>setOfWords2Vec(vocabList,docList[docIndex])
+        <span style="color:#66d9ef">if</span> classifyNB(array(wordVector),p0V,p1V,pSpam)<span style="color:#f92672">!=</span>classList[docIndex]<span style="color:#960050;background-color:#1e0010">：</span>
+            errorCount<span style="color:#f92672">+</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">the error rate is:</span><span style="color:#e6db74">&#39;</span>,float(errorCount)<span style="color:#f92672">/</span>len(testSet))
+</code></pre></div><p>代码中，采用随机选择的方法从数据集中选择训练集，剩余的作为测试集。这种方法的好处是，可以进行多次随机选择，得到不同的训练集和测试集，从而得到多次不同的错误率，我们可以通过多次的迭代，求取平均错误率，这样就能得到更准确的错误率。至此小编完成了过滤邮件程序的编写，当然这里的邮件都是小编已经保存好的txt文档，并没有实现真正的动态监督，不过最核心的东西已有，下面的实践就归于诸公了。</p>
+<h3 id="heading5">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章和大家聊了一下机器学习之中的朴素贝叶斯算法，了解了怎么使用python去对文档进行分类，同时通过实例了解了怎么使用python去实现垃圾邮件的过滤。当然，本文中的实现方式存在着进一步改进的可能，同时某些算法也存在着进一步完善的可能，小编会在总结好这些更好的方式之后再对本文进行一次另类介绍。下一期文章中，小编想和大家聊一下怎么使用python去处理股票市场上的一些数据，敬请期待。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">机器学习</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

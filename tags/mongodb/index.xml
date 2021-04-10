@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MongoDB on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/mongodb/</link>
+    <description>Recent content in MongoDB on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 27 Aug 2018 21:24:12 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/mongodb/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>爬虫数据的数据库存储——MongoDB数据库</title>
+      <link>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Mon, 27 Aug 2018 21:24:12 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-24&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;关于python网络爬虫，小编在前面已经讲解了两期，分别讲述了多页面爬虫和跨页面爬虫的实现方式。同时在那两期文章中，小编都是采用Excel作为存储数据的方式，然而当面临较大的数据存储需求时，Excel相对来说缺乏效率，因此本期文章，小编将介绍怎么将python爬取下来的数据存放在数据库之中。从现有使用程度来讲，数据库主要分为关系型数据库以及非关系型数据库，所以小编会分两期对这两种数据库的存储予以介绍。在关系型数据库方面，小编将重点介绍MySQL；而在非关系型数据库方面，小编将以MongoDB为主。本期文章先来介绍一下怎么将python爬取下来的数据存储到MongoDB数据库之中。同时本期文章以爬取豆瓣电影中排名前250的影片信息为例进行讲解，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

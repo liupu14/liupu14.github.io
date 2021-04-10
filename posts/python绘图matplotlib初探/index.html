@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python绘图——matplotlib初探 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python绘图——matplotlib初探" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-7
+
+写在前面
+忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python&#43;pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/" />
+<meta property="article:published_time" content="2018-05-10T20:45:18+00:00" />
+<meta property="article:modified_time" content="2018-05-10T20:45:18+00:00" />
+<meta itemprop="name" content="Python绘图——matplotlib初探">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-7
+
+写在前面
+忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python&#43;pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。">
+<meta itemprop="datePublished" content="2018-05-10T20:45:18&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-10T20:45:18&#43;00:00" />
+<meta itemprop="wordCount" content="271">
+
+
+
+<meta itemprop="keywords" content="python,matplotlib,图表绘制," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python绘图——matplotlib初探"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-7
+
+写在前面
+忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python&#43;pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/&amp;text=Python%e7%bb%98%e5%9b%be%e2%80%94%e2%80%94matplotlib%e5%88%9d%e6%8e%a2" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/&amp;title=Python%e7%bb%98%e5%9b%be%e2%80%94%e2%80%94matplotlib%e5%88%9d%e6%8e%a2" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python绘图——matplotlib初探</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-10T20:45:18Z">May 10, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-7</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python+pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。</p>
+<h3 id="matplotlib">第一讲：matplotlib绘图准备</h3>
+<p>喜欢数据分析的朋友应该都知道在进行图表绘制时，最为方便的语言是R语言，R中自带的以及第三库绘图包极大地方便了各种绘图实践，这也使得“左手用R右手Python”成为数据分析领域的标志语言。相对于R语言中的绘图系统，python自身在绘图方面可以说就是一个小白，然而随着matplotlib库的开发以及基于matplotlib库而开发的其它绘图库，使得python的绘图能力得到了极大地提升，现在已经基本可以绘制你在工作中遇到的任意图表了，这也是笔者讲述python绘图系统会选择讲解matplotlib库的原因之一。</p>
+<p>那么问题来了，为什麼这个库被命名为matplotlib呢，为什麼不直接命名plot，这该多方便呀？其实这源自于本库开发者的绘图经历，你如果稍稍地分解一些这个单词，就会看到matplotlib=mat+plot+lib，这是三个单词的合成词，第一个单词是另外一种著名编程语言matlab的缩写，第二个单词是绘图的英文，第三个单词是库的英文缩写，所以整合在一起，matplotlib便是基于matlab绘图语法开发出的python绘图库。这就是为什麼使用matplotlib进行绘图时会和使用matlab绘图很像的缘故，如果熟悉matlab的朋友对此应该不会太陌生，小编当初就是被matlab那种简洁的绘图语法所吸引才从Excel走向了程序之路，后来偏爱于R语言的数据统计分析与高效美观绘图从而转向了R语言，虽然现在工作实践以python为主，但是小编还是坚持每天会使用R语言，尤其是生成自动化报告这一块（这些笔者这里就不再多讲了），现在相信你已经了解了matplotlib库的来源。</p>
+<p>因为matplotlib库来源于matlab绘图语法，所以matplotlib绘图时采用的各种绘图命令和matlab很相似；但是考虑到python自身的语法特征，matplotlib库又引入了第二套绘图语法，这套语法基于对象编程，可以说熟悉python的朋友会很喜欢这种方式。所以，现如今的matplotlib库存在着并行的两套绘图语法体系，笔者在这里不会刻意推荐你去学习哪一种，因为两种语法都有最适合使用之处，所以你完全可以交替或者互补地使用这两种语法，永远的一句真理之言就是能捉到老鼠的猫都是好猫，因此绘图语法的选择也是根据你使用哪一种更加方便进行选择。当然，小编前期会用两篇文章来依次介绍这两种绘图语法，而在之后的绘图中小编会根据场景选择语法体系。本期文章将先介绍matplotlib库的matlab式语法，后续的一篇文章会介绍面向对象的绘图语法体系。既然已经了解了matplotlib，那么接下来就开始相关的实践，在这之前确定你已经成功地在电脑上安装了matplotlib库。如果你安装的是anaconda软件包的话，就请忽略此处的安装问题，如果你安装的是原生态的python的话，那么你可以打开windows命令行（使用<code>win+R</code>进行打开）,然后在命令行中输入一下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install matplotlib
+<span style="color:#75715e"># 或者可以使用下面命令（推荐使用第一种方式，第二种方式针对老版本的python）</span>
+easy_install matplotlib
+</code></pre></div><p>这样就成功地安装了matplotlib，但是这种方式有时会出现一些异常情况从而导致安装不成功，所以笔者还是强烈地推荐你使用anaconda。好了，枪已磨好，路已建成，下面开战吧！</p>
+<h3 id="matplotlib1">第二讲：matplotlib绘图实践</h3>
+<p>本期文章主要是对matplotlib库绘制图表有个俯瞰式的了解，因此本期文章将主要介绍怎么使用matplotlib库进行常用的一些商务图表的绘制，而对于图表的细节描述以及一些更加复杂的图形绘制会在以后的文章中逐步介绍。所以下面主要以日常工作最为常用的六种图表（折线图、散点图、饼图、直方图、条形图以及箱线图）来对matplotlib库的使用语法进行介绍。，对于这些图表，相信各位朋友都已比较熟悉，而且笔者在先前的一篇文章中也已有介绍，所以接下来在各图的绘制中就不再对其进行介绍，而主要是以代码加图形的方式给出一些内容，而对于绘图中所采用的数据会采用两种：一种是即时创建的数据；第二种是python库中的一些内生数据集，因此这里就不再给出相关数据了。同时笔者建议你在ipython或者jupyter notebook中进行以下的绘图实践，如果你在ipython命令行中执行，那么请打开windows命令行窗口，然后输入<code>ipython --pylab</code>；如果在jupyter notebook中执行，那么请在第一行中输入<code>%matplotlib inline</code>，这样的话你的图形就能实时显示，而不用在另外输入命令让其显示出来。在绘制各类图形之前，让我们先做一下准备，请在你的操作平台上输入以下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> matplotlib <span style="color:#f92672">as</span> mpl
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">=</span>[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>]
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes.unicode_minus</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">=</span>False
+</code></pre></div><p>第一行代码带人numpy库，以便生成绘图数据；第二行和第三行代码导入matplotlib库，其中第二行代码可以不输入，这只是笔者个人的习惯；最后两行代码用于解决绘图中的中文显示问题。下面进行折线图的绘制</p>
+<h4 id="heading1">折线图</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0</span>,np<span style="color:#f92672">.</span>pi,<span style="color:#ae81ff">100</span>)
+y_cos <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>cos(x)
+y_sin <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(x)
+plt<span style="color:#f92672">.</span>plot(x,y_cos,label <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$cos(x)$</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>plot(x,y_sin,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$sin(x)$</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">三角函数</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>legend()
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$sin(x)&amp;cos(x)$</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>前三行代码用来生成我们绘图用的数据，四五两行代码将两条这些绘制在一个图中；后面几行代码分别用来为图形设置标题、图例、轴坐标名。其中括在$$间的代码是LaTeX语法，如果你不了解LaTeX也没关系，尽情将其删去即可。图形显示如下：
+<img src="https://i.imgur.com/2gVrXxe.png" alt="三角函数折线图">
+上面绘制了折线图，考虑到面积图也属于折线图的一种，这里也在下面展示一下面积图的绘制方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>]) 
+y1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">13</span>]) 
+y2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">10</span>])
+y3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">9</span>])
+labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">斐波那契数</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">偶数</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">奇数</span><span style="color:#e6db74">&#34;</span>] 
+plt<span style="color:#f92672">.</span>stackplot(x, y1, y2, y3, labels<span style="color:#f92672">=</span>labels) 
+plt<span style="color:#f92672">.</span>legend(loc<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>) 
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">面积图</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>前四行用于生成绘图时所用的数据；第五行代码定义了标签方便进行图例显示；第六行绘制了面积图，后面两行分别进行了图例设置和标题设置。
+<img src="https://i.imgur.com/qLAZoq3.png" alt="面积图"></p>
+<h4 id="heading2">散点图</h4>
+<p>上面对折线图的绘制进行了介绍，这里介绍散点图的绘制方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">1314</span>)
+x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">50</span>)
+y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">50</span>)
+z <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">50</span>)
+plt<span style="color:#f92672">.</span>scatter(x,y,c<span style="color:#f92672">=</span>z)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">散点图</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>第一行代码为随机数生成器设置了一个随机数种子，确保每次产生的随机数能够一致；第2-4行代码则分别生成了三个随机数序列；第五行代码进行散点图绘制，将z的值用于颜色标示，而x和y则分别用于X轴和y轴；后三行数据用于设置图形的标题与坐标名称。
+<img src="https://i.imgur.com/KRfhNJT.png" alt="散点图"></p>
+<h4 id="heading3">饼图</h4>
+<p>介绍完了散点图，下面接着介绍饼图的绘制。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sizes <span style="color:#f92672">=</span> [<span style="color:#ae81ff">15</span>,<span style="color:#ae81ff">30</span>,<span style="color:#ae81ff">45</span>,<span style="color:#ae81ff">10</span>]
+explode <span style="color:#f92672">=</span> (<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0.1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>)
+labels <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Frogs</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Hogs</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Dogs</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Logs</span><span style="color:#e6db74">&#39;</span>
+plt<span style="color:#f92672">.</span>pie(sizes,explode<span style="color:#f92672">=</span>explode,labels<span style="color:#f92672">=</span>labels,autopct<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%1.1f</span><span style="color:#e6db74">%%</span><span style="color:#e6db74">&#39;</span>,shadow<span style="color:#f92672">=</span>False,startangle<span style="color:#f92672">=</span><span style="color:#ae81ff">90</span>)
+</code></pre></div><p>第一行代码用于创建一个数据集；第二行代码用于饼图在显示时的分离状态，全部为0时则表示全部并在一起中间没有分离，数字越大分离程度越大；第三行代码定义了各个饼状的标签；第四行则用于绘制饼图，
+<img src="https://i.imgur.com/2oVj203.png" alt="饼图的绘制"></p>
+<h4 id="heading4">直方图</h4>
+<p>上面对饼图绘制进行了介绍，可以看出饼图真的不适合展示数字特征，这一点小编一再进行强调，如果不是必须，小编真的建议各位不要使用饼图。下面小编介绍另一种高频图形直方图的绘制方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sn
+sn<span style="color:#f92672">.</span>set()
+mu <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+sigma <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>
+x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(mu,sigma,<span style="color:#ae81ff">10000</span>)
+plt<span style="color:#f92672">.</span>hist(x,bins <span style="color:#f92672">=</span> <span style="color:#ae81ff">35</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Values</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Frequency</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$</span><span style="color:#e6db74">\</span><span style="color:#e6db74">mathrm{Histogram:}</span><span style="color:#e6db74">\</span><span style="color:#e6db74"> </span><span style="color:#e6db74">\</span><span style="color:#e6db74">mu=</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">,</span><span style="color:#e6db74">\</span><span style="color:#e6db74"> </span><span style="color:#e6db74">\</span><span style="color:#e6db74">sigma=</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">$</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">%</span>(mu,sigma))
+</code></pre></div><p>第一行代码和第二行代码用于重设图片绘制的默认风格，这个只是小编个人绘制直方图时习惯的风格，这两句语句不是必须的；3-5行用于生成10000个服从与均值为100标准差为15的正态分布数；第六行用于绘制直方图；后三行用于设置轴名称以及图表名称。
+<img src="https://i.imgur.com/YVjqWBu.png" alt="直方图绘制"></p>
+<h4 id="heading5">条形图</h4>
+<p>条形的绘制种类比较多，一般分为水平条形图和竖直条形图，根据数据堆积与否又分为堆积条形图和非堆积条形图，这里主要讲述一下堆积水平条形图和非堆积竖直条形图的绘制方法。下面想对水平堆积条形图的作法做一介绍</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">y1 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">34</span>,<span style="color:#ae81ff">53</span>,<span style="color:#ae81ff">64</span>,<span style="color:#ae81ff">47</span>,<span style="color:#ae81ff">35</span>]
+y2 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">26</span>,<span style="color:#ae81ff">37</span>,<span style="color:#ae81ff">56</span>,<span style="color:#ae81ff">39</span>,<span style="color:#ae81ff">28</span>]
+Label <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">5</span>)
+plt<span style="color:#f92672">.</span>barh(Label,y1)
+plt<span style="color:#f92672">.</span>barh(Label,y2)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Values</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Categories</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">stacked Barh</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>前三行代码用于生成绘图数据与分类标签；4-5行用于将两类数据绘制在一个条形图上；后三行分别用来定义图形的轴标签和图表名称，如下图所示：
+<img src="https://i.imgur.com/ohYIgA6.png" alt="堆积水平条形图绘制">
+上图对水平堆积条形图的作法做了一个说明，下面对非堆积竖直条形图的作法进行介绍，在这里绘制三列并排的条形：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">y1 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">34</span>,<span style="color:#ae81ff">53</span>,<span style="color:#ae81ff">43</span>,<span style="color:#ae81ff">47</span>,<span style="color:#ae81ff">54</span>]
+y2 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">26</span>,<span style="color:#ae81ff">37</span>,<span style="color:#ae81ff">56</span>,<span style="color:#ae81ff">39</span>,<span style="color:#ae81ff">28</span>]
+y3 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">24</span>,<span style="color:#ae81ff">34</span>,<span style="color:#ae81ff">35</span>,<span style="color:#ae81ff">43</span>,<span style="color:#ae81ff">42</span>]
+Label <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">5</span>)
+plt<span style="color:#f92672">.</span>bar(Label<span style="color:#f92672">-</span><span style="color:#ae81ff">0.2</span>,y1,width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>bar(Label,y2,width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>bar(Label<span style="color:#f92672">+</span><span style="color:#ae81ff">0.2</span>,y3,width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Categories</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Values</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Unstacked Bar</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>前四行用于定义绘制图形的数据和分类标签；5-7行用于绘制图形；最后三行用来设置图形的轴标签和图表名称，如下图所示：
+<img src="https://i.imgur.com/s6wi1Pi.png" alt="非堆积竖直条形图绘制">
+对于非堆积水平条形图的绘制以及堆积竖直条形图的绘制只需要在上面介绍的两种图形的代码上稍作调整即可生成，小编这里就不再进一步讲述了，下面讲述箱线图的绘制。</p>
+<h4 id="heading6">箱线图</h4>
+<p>箱线图用的最多的地方就是股市，因为K线图就是典型的箱线图，通过学习箱线图的绘制以及合理地收集数据，你完全可以自己做出一个完整的K线图系统。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">value1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>
+value2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">101</span>
+value3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">102</span>
+value4 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">103</span>
+plt<span style="color:#f92672">.</span>boxplot((value1,value2,value3,value4),labels<span style="color:#f92672">=</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D</span><span style="color:#e6db74">&#39;</span>))
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Labels</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Values</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">boxplot</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>前面四行定义了用于绘制箱线图的数据；第五行开始绘制箱线图，同时通过对labels参数的赋值进而进行分类；后三行用于定义箱线图的轴标签和图表名称，详见下图：
+<img src="https://i.imgur.com/Bh8inEE.png" alt="箱线图绘制"></p>
+<h3 id="heading7">第三讲：组合图绘制示例</h3>
+<p>上文对常用商务图表绘制方法进行了介绍，大致了解了这些商务图表的绘制方法，接下来小编更进一步将这些图表组合在一起，讲述组合图形的绘制方法，说到底仅仅是通过一条命令而已，各位可以在下面见到这一神秘命令。这里小编准备绘制四副图形的组合图，分别是折线图、散点图、直方图以及条形图（这是小编最为常用的集中图表，所以这里自然首选绘制它们了），废话不多说，直接上干货：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> datetime
+start <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>datetime(<span style="color:#ae81ff">2018</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)
+end <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>datetime(<span style="color:#ae81ff">2018</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">31</span>)
+delta <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>timedelta(days <span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+dates <span style="color:#f92672">=</span> mpl<span style="color:#f92672">.</span>dates<span style="color:#f92672">.</span>drange(start,end,delta)
+x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(len(dates))
+y1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">5</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>
+y2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">5</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">15</span>
+y3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">5</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">20</span>
+Index <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">5</span>)
+rng <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>RandomState(<span style="color:#ae81ff">0</span>)
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>)
+plt<span style="color:#f92672">.</span>plot_date(dates,x,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>)
+<span style="color:#66d9ef">for</span> marker <span style="color:#f92672">in</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">o</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">.</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">,</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">x</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">+</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">v</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">^</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&lt;</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">&#39;</span>]:
+    plt<span style="color:#f92672">.</span>plot(rng<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">5</span>), rng<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">5</span>), marker,label<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">marker=</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">{0}</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(marker))
+plt<span style="color:#f92672">.</span>legend(numpoints<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+plt<span style="color:#f92672">.</span>xlim(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1.8</span>)
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
+plt<span style="color:#f92672">.</span>hist(np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">100</span>,<span style="color:#ae81ff">15</span>,<span style="color:#ae81ff">10000</span>),bins<span style="color:#f92672">=</span><span style="color:#ae81ff">35</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">4</span>)
+plt<span style="color:#f92672">.</span>bar(Index<span style="color:#f92672">-</span><span style="color:#ae81ff">0.2</span>,y1,width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>bar(Index,y2,width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">y</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>bar(Index<span style="color:#f92672">+</span><span style="color:#ae81ff">0.2</span>,y3,width<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>suptitle(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">My favorate graph</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>上面代码绘制了一个组合图，其中很多代码在前面已经讲述过，这里就不再赘述，需要说明的一条绘图命令是<code>plt.subplot(row,col,i)</code>，这条命令用来绘制组合图，前两个参数说明绘制几行几列图形，最后一个参数是指当前绘制第几个图形，小编上面共绘制了2行2列图形，所以使用命令为<code>plt.subplot(2,2)</code>。
+<img src="https://i.imgur.com/bIzEsf5.jpg" alt="组合图的绘制"></p>
+<h3 id="heading8">后记</h3>
+<p>本文写到这里就告一段落了，通过本期文章，了解到了怎么使用matplotlib库去绘制常用的一些商务图表，尽管本文的介绍只是初步的绘图知识（正如文章标题），但是总体说来还算对常用的商务图表绘制给出了一个较为全面的介绍，更加高深、复杂以及个性化的图表绘制绘制后续的文章中进一步介绍。下一期文章的主题小编目前还在犹豫中，所以就暂时先不明确说出了，也给各位六点神秘感，敬请关注！最后，再一次感谢你们的支持，你们的支持是小编不断前行的动力。</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/matplotlib" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">matplotlib</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%9B%BE%E8%A1%A8%E7%BB%98%E5%88%B6" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">图表绘制</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

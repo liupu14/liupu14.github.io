@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>ggplot2包介绍——深入图层语法 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="ggplot2包介绍——深入图层语法" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-11
+
+写在前面
+本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/" />
+<meta property="article:published_time" content="2018-06-18T22:00:37+00:00" />
+<meta property="article:modified_time" content="2018-06-18T22:00:37+00:00" />
+<meta itemprop="name" content="ggplot2包介绍——深入图层语法">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-11
+
+写在前面
+本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。">
+<meta itemprop="datePublished" content="2018-06-18T22:00:37&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-18T22:00:37&#43;00:00" />
+<meta itemprop="wordCount" content="67">
+
+
+
+<meta itemprop="keywords" content="R,ggplot2,商务绘图," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ggplot2包介绍——深入图层语法"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-11
+
+写在前面
+本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/&amp;text=ggplot2%e5%8c%85%e4%bb%8b%e7%bb%8d%e2%80%94%e2%80%94%e6%b7%b1%e5%85%a5%e5%9b%be%e5%b1%82%e8%af%ad%e6%b3%95" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/&amp;title=ggplot2%e5%8c%85%e4%bb%8b%e7%bb%8d%e2%80%94%e2%80%94%e6%b7%b1%e5%85%a5%e5%9b%be%e5%b1%82%e8%af%ad%e6%b3%95" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">ggplot2包介绍——深入图层语法</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-06-18T22:00:37Z">June 18, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-6-11</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。</p>
+<h3 id="ggplot2">ggplot2语法初瞰</h3>
+<p>前期文章中，小编和大家讲了一下ggplot2包的快速入门命令——qplot，了解了ggplot2命令的高效简洁，如果你只是希望使用ggplot2去绘制最为基本的商务图表，那么仅仅需要掌握那一期文章的相关知识即可。然而，如果你想绘制更加美观个性化的图表，以及想更加深入地使用ggplot2，那么我想接下来的ggplot2系列文章才是你的重点关注对象。本期小编将和大家好好地聊一下ggplot2的图层语法，只有掌握了这些你才能算真正地进入到了ggplot2的殿堂。</p>
+<p>如果你还没有忘记前期文章的相关介绍，那么你应该知道ggplot2的绘图语法是基于图形图层语法，所以ggplot2的中绘图就是一种典型的图层叠加过程，各种图层依次叠加在一起进而形成图表，所以这种构造方式就给绘图提供了一种极大的便利，相对于其它绘图这种形式至少存在两种优势：其一，可以更加个性化地修改自己需要完善的图层部分，而不至于修正整体图形；其二，可以很方便地进行图层引用，进而高效便捷了绘图流程。小编这里以ggplot2包中自带的diamonds数据集绘制一个简单的图形进行说明吧。关于这个数据集，小编在之前的文章中已有介绍，这个数据集中主要存放了5000多颗钻石的相关信息，假设小编现在想了解一下重量和价格之间的关系，那么如果采用前面小编介绍的qplot方法，那么应该使用一下语法。（为了使得绘制的图形更加清晰已读，小编在原数据集中随机选择了100个钻石的数据进行绘制。）</p>
+<pre><code>library(ggplot2)
+dsmall &lt;- diamonds[sample(nrow(diamonds),100),]
+qplot(carat,price,data = dsmall)
+qplot(carat,price,data = dsmall,colour = color)
+</code></pre><p><img src="https://i.imgur.com/ytN9jwc.png" alt="ceshi01">
+<img src="https://i.imgur.com/LlBUDm3.png" alt="ceshi02">
+上面绘制的两个图，第一个图形进行默认绘制，而第二个图形则对颜色进行了设置。为了绘制上面两个图形，使用经典的ggplot2语法则需要这样：</p>
+<pre><code>library(ggplot2)
+dsmall &lt;- diamonds[sample(nrow(diamonds),100),]
+ggplot(dsmall,aes(carat,price))+geom_point()
+ggplot(dsmall,aes(carat,price,colour=color))+geom_point()
+</code></pre><p>使用上面语法，小编便能成功绘制出前面的两个图形。从语法命令中可以看出，这种绘图命令采用+号将各部分图层连接在了一起，+号前面的部分指定了图形绘制使用的数据集以及相关的数据映射；而+好后面的部分则指定了图形的选择。所谓数据的映射就是一种典型的标度转换，ggplot2会把数据按照你指定的顺序以及指定的命令值分别赋给相应的图形属性，例如上面第一幅图的绘图命令中，分别将dsmall数据集中的carat映射给x轴，而把price映射给Y轴，同时也将默认坐标系选择为笛卡尔坐标系，如果你想使用其它的坐标系则可以通过修改coord这个参数的值进行完成，常见的坐标系无非笛卡尔坐标系以及极坐标系。在完成了数据的相关映射之后，下一步则是需要对这种映射的值指定相应的图形显示，这里小编均采用了geom_point，ggplot2中的所有图形类型均存在于geom之中，因此选用图形时只需要在geom_后指定类型即可。文后小编会给出一个图形类别的全列表。所以，ggplot2的基本绘图就是两点：选择好数据集以及指定好映射规则，图形类别的选择。</p>
+<h3 id="heading1">图层语法示例</h3>
+<p>上文主要对ggplot2中的基本操作语法进行了初探，接下来使用一个稍微复杂一点的例子进一步说明一下这种语法。在绘制散点图时，我们经常需要使用拟合曲线来拟合数据的趋势，因此，在上文散点图的基础上对数据添加一条拟合线就显得很有必要，同时为了比较不同年份的数据集之间的不同，有必要将不同年份的数据集分开进行显示。所以，小编下面要做的就是在散点图的基础上增加统计量图层以及增加分面。下面先给出代码和图形呈现形式，而后再进行说明。</p>
+<pre><code>library(ggplot2)
+ggplot(data = mpg,aes(displ,hwy))+
+facet_grid(.~year)+
+geom_point()+
+geom_smooth()
+</code></pre><p><img src="https://i.imgur.com/HEMfDs6.png" alt="ceshi03">
+上图依据年份将图形划分成两类，一类为1999年的，另一类为2008年的，这就是分层概念，主要使用了ggplot2命令中的facet_grid()函数命令，这个函数中的参数就是你需要进行分层的基准，小编这里选择了年份，所以使用了数据集中的year变量，同时需要注意的是，参数的形式一定要是.~+变量，关于分层的更多内容会在后续文章中专门讲解，这里不再赘述。除了分层之外，在上面的图形中，小编对数据集拟合了一条平滑线。要记住，在ggplot2的世界中，平滑线也属于图层，只是它处于散点图层之上罢了。平滑曲线层与散点层的不同点在于它没有展示原数据，而仅仅是展示了统计变换后的数据。需要注意的一点就是标度转换要先于统计变换。</p>
+<h3 id="heading2">图层语法的组件</h3>
+<p>上文中分别用两种图形大致讲述了一下ggplot2的绘图思路，下面部分主要对ggplot2绘图中使用的图层语法组件进行一下说明，这将是使用ggplot2时最常接触的对象。总的说来，图层语法所定义的图主要有以下几部分构成：</p>
+<ul>
+<li>一个默认的数据集和一组从变量到图形属性的映射</li>
+<li>一个或者对个图层</li>
+<li>标度，每个图形属性映射都对应一个标度</li>
+<li>一个坐标系统</li>
+<li>分面设定</li>
+</ul>
+<p>考虑到数据集这部分组件没有太多需要讲解的内容，下面就直接略过这部分的内容，转而对其它四类组件进行描述。</p>
+<p><strong>1. 图层</strong></p>
+<p>小编这里还是要说一句，如果大家有过PS的经验，绝对不会对这个概念有所陌生，只不过相对于PS中的图层，ggplot2中的图层更加具有战斗力了。图层的作用就是生成在图像上能够被人所认知的各种对象，在ggplot2中的图层一般包含四部分：</p>
+<ul>
+<li>数据和图形属性映射</li>
+<li>一种统计变换</li>
+<li>一种几何对象</li>
+<li>一种位置调整方式</li>
+</ul>
+<p>对图层对象的讲解将是下一期ggplot2系列文章的主题，所以这里就不再多加讲述了。</p>
+<p><strong>2. 标度</strong></p>
+<p>标度控制数据到图形属性的映射，并且图形上所用到的每一个图形属性都对应着一个标度，同时每个标度都作用于图形中的所有数据，正是这种安排确保了图形属性和数据之间映射的一致性。</p>
+<p>一个标度就是一个含有一组参数的函数，它的逆也是如此。例如颜色梯度标度，它把一条实线的各部分映射成一条含有不同颜色的路径。函数中的参数可以规定该路径是只想还是曲线，从而决定选择哪个颜色空间。</p>
+<p><strong>3. 坐标系</strong></p>
+<p>坐标系，英文简称<strong>coord</strong>，可将对象的位置映射到图形平面上。在常用的二维笛卡尔坐标系中位置常常是由两个坐标(x,y)决定，而对于二维以上的坐标系则是需要更多坐标值，至于极坐标以及地图投影则需要各种不同的坐标信息，当然这类坐标系在实践中使用的也相对较少。坐标系可以同时影响所有的位置变量，与标度不同，坐标系还可以改变几何对象的外观，这方面熟悉极坐标的朋友绝对不会陌生，因为极坐标系中的各种图形基本是呈现扇形形状的。</p>
+<p><strong>4. 分面</strong></p>
+<p>分面在多不同类型的数据集进行比较时特别有用，因此它成为了绘图中一个不可获取的组件。分面是条件绘图和网格绘图的一般形式，通过它你可以很方面地比较同一个数据集中各个不同类别的子数据集的特征。特别是当验证在不同条件下模型是否保持一致时，分面绘图可以说是相当必要，所以关于分面小编会在后面专门使用一期文章进行专门讲述，这里就不再所说。</p>
+<h3 id="heading3">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章对ggplot2绘图中常接触到的一些基本组件以及ggplot2绘图中的基本语法操作进行了说明，从而对这个绘图包的绘图语法进行俯瞰式介绍，更加详细的组件语法介绍则会在后续文章中逐步给出。下期文章主题待定（可能是介绍机器学习，也可能是介绍一下投资鸡血），敬请期待。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/r" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">R</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/ggplot2" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">ggplot2</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务绘图</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/">从qplot快速入门ggplot2</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/">R语言绘图——R语言绘制热地图实战</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python商务办公系列——pandas执行Excel筛选编辑功能 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Python商务办公系列——pandas执行Excel筛选编辑功能" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-23
+
+写在前面
+各位大大，晚上好，我想死你们了！相信看这两期文章的朋友可能会注意到，这两期文章的开头都附带了小编自己的个人博客网址，没错，正是在这几周，小编终于完成了对于自己博客的搭建工作，以后小编会在微信公众号和博客上同步更新自己的文章，这两个平台总有一个适合你阅读的平台。至于微信公众号中的前期文章，小编也会在后面慢慢地将其全部转移至博客之中，争取以最大可能给支持小编的你们提供最舒适的阅读体验。上一期结尾，小编说过这一期文章将讲述一下机器学习之中的决策树算法，但是这几天小编正处于加班进行时，而那篇机器学习的文章又将是小编目前为止最长的一篇文章，因此，在这工作日无非完全完成更新，所以这一期小编准备暂时讲一下最近最常用的一些关于pandas库的一些话题，而对于机器学习的那片文章暂定于周末更新，再次，先向各位朋友说声抱歉了。至于这一期的重点，小编会介绍怎么使用pandas库来快速完成Excel中的筛选和编辑功能。下面正式进入本期的主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/" />
+<meta property="article:published_time" content="2018-04-27T01:19:42+00:00" />
+<meta property="article:modified_time" content="2018-04-27T01:19:42+00:00" />
+<meta itemprop="name" content="Python商务办公系列——pandas执行Excel筛选编辑功能">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-23
+
+写在前面
+各位大大，晚上好，我想死你们了！相信看这两期文章的朋友可能会注意到，这两期文章的开头都附带了小编自己的个人博客网址，没错，正是在这几周，小编终于完成了对于自己博客的搭建工作，以后小编会在微信公众号和博客上同步更新自己的文章，这两个平台总有一个适合你阅读的平台。至于微信公众号中的前期文章，小编也会在后面慢慢地将其全部转移至博客之中，争取以最大可能给支持小编的你们提供最舒适的阅读体验。上一期结尾，小编说过这一期文章将讲述一下机器学习之中的决策树算法，但是这几天小编正处于加班进行时，而那篇机器学习的文章又将是小编目前为止最长的一篇文章，因此，在这工作日无非完全完成更新，所以这一期小编准备暂时讲一下最近最常用的一些关于pandas库的一些话题，而对于机器学习的那片文章暂定于周末更新，再次，先向各位朋友说声抱歉了。至于这一期的重点，小编会介绍怎么使用pandas库来快速完成Excel中的筛选和编辑功能。下面正式进入本期的主题。">
+<meta itemprop="datePublished" content="2018-04-27T01:19:42&#43;00:00" />
+<meta itemprop="dateModified" content="2018-04-27T01:19:42&#43;00:00" />
+<meta itemprop="wordCount" content="267">
+
+
+
+<meta itemprop="keywords" content="python,excel,pandas," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python商务办公系列——pandas执行Excel筛选编辑功能"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-23
+
+写在前面
+各位大大，晚上好，我想死你们了！相信看这两期文章的朋友可能会注意到，这两期文章的开头都附带了小编自己的个人博客网址，没错，正是在这几周，小编终于完成了对于自己博客的搭建工作，以后小编会在微信公众号和博客上同步更新自己的文章，这两个平台总有一个适合你阅读的平台。至于微信公众号中的前期文章，小编也会在后面慢慢地将其全部转移至博客之中，争取以最大可能给支持小编的你们提供最舒适的阅读体验。上一期结尾，小编说过这一期文章将讲述一下机器学习之中的决策树算法，但是这几天小编正处于加班进行时，而那篇机器学习的文章又将是小编目前为止最长的一篇文章，因此，在这工作日无非完全完成更新，所以这一期小编准备暂时讲一下最近最常用的一些关于pandas库的一些话题，而对于机器学习的那片文章暂定于周末更新，再次，先向各位朋友说声抱歉了。至于这一期的重点，小编会介绍怎么使用pandas库来快速完成Excel中的筛选和编辑功能。下面正式进入本期的主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/&amp;text=Python%e5%95%86%e5%8a%a1%e5%8a%9e%e5%85%ac%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94pandas%e6%89%a7%e8%a1%8cExcel%e7%ad%9b%e9%80%89%e7%bc%96%e8%be%91%e5%8a%9f%e8%83%bd" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/&amp;title=Python%e5%95%86%e5%8a%a1%e5%8a%9e%e5%85%ac%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94pandas%e6%89%a7%e8%a1%8cExcel%e7%ad%9b%e9%80%89%e7%bc%96%e8%be%91%e5%8a%9f%e8%83%bd" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python商务办公系列——pandas执行Excel筛选编辑功能</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-04-27T01:19:42Z">April 27, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-4-23</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>各位大大，晚上好，我想死你们了！相信看这两期文章的朋友可能会注意到，这两期文章的开头都附带了小编自己的个人博客网址，没错，正是在这几周，小编终于完成了对于自己博客的搭建工作，以后小编会在微信公众号和博客上同步更新自己的文章，这两个平台总有一个适合你阅读的平台。至于微信公众号中的前期文章，小编也会在后面慢慢地将其全部转移至博客之中，争取以最大可能给支持小编的你们提供最舒适的阅读体验。上一期结尾，小编说过这一期文章将讲述一下机器学习之中的决策树算法，但是这几天小编正处于加班进行时，而那篇机器学习的文章又将是小编目前为止最长的一篇文章，因此，在这工作日无非完全完成更新，所以这一期小编准备暂时讲一下最近最常用的一些关于pandas库的一些话题，而对于机器学习的那片文章暂定于周末更新，再次，先向各位朋友说声抱歉了。至于这一期的重点，小编会介绍怎么使用pandas库来快速完成Excel中的筛选和编辑功能。下面正式进入本期的主题。</p>
+<h3 id="excel">第一讲：Excel中的筛选和编辑</h3>
+<p>Excel，相信对各位来说都不会陌生吧。作为一名办公人士，我们在日常工作中最常用的Excel功能可能是数据透视表，但是，绝对不能否定的一点就是，Excel中的筛选功能绝对是我们最熟悉的Excel操作之一。你如果真的是一名中规中矩的办公人士的话，相信你对下面的这种表格绝对不会陌生。如果你想按照本文的顺序进行练习的话，那么请直接下载本文所采用的案例文件<a href="https://liupu14.github.io/download/sample_sale.xlsx">sample_sale</a>。
+<img src="https://i.imgur.com/BcZvIMK.png" alt="Excel筛选">
+是不是很熟悉的界面，假设你想筛选出其中账号,编码为141962，sku以B1开头的所有记录，那么就会使用这种筛选方式，当然你肯定会比小编更加熟练地使用这种功能。当然，很多时候，筛选只是前提，而后是要针对被筛选出来的数据进行一定的操作，例如对于上面符合条件的记录，增加一列佣金率，并将这些满足筛选条件的记录统一赋值为0.05，如果我们都比较规矩的话，那么应该会得到下面这张表：
+<img src="https://i.imgur.com/qXiWaFH.png" alt="Excel编辑功能">
+本例中，小编选择了账号编码为141962，sku以B1开头的记录，同时为其增加了佣金率一列，并将其赋值为0.05.很明显，通过Excel进行这些操作方便快捷，而且不需要你会Excel函数以及vba基础就可以操作相对复杂的数据。然而，通过这种操作，至少存在两处的不便：其一，你不能使你的操作重复进行，如果下次你遇到同类型的问题，你必须再次按照同样的流程再来一遍；其二，单纯地通过筛选后的数据表你并不能看出到底对数据赋予了什麼筛选条件，所以使得你每次筛选前必须先了解清楚前次操作都执行了什麼筛选（当然你可以直接清除所有的筛选条件，重新进行筛选，但是你要知道，虽然这不是很浪费时间，但是也是时间呀），这就造成了一定的不便。鉴于这两点，作为习惯偷懒的我们自然会想是否存在着另外的优质方法，那么这里小编就要告诉你，欢迎来到Python的世界，Python中的pandas库是你的首选，所以，下面小编就和大家唠唠怎么使用pandas库完成这种Excel操作。</p>
+<h3 id="pandasexcel">第二讲：Pandas执行Excel筛选与编辑操作</h3>
+<p>pandas库是Python中的一个第三方库，如果你是按照笔者的推荐安装了Anaconda的话，那么这个库就已经默认安装了，如果你尚未安装这个Python库，那么可以通过在命令行中输入一下命令进行安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install numpy
+pip install pandas
+</code></pre></div><p>在安装pandas库之前最后先安装numpy库，因为pandas库就是基于numpy库进行开发的，所以最后能把他的老头子也带进你的圈子。这里笔者不会完整地介绍各种Python库的安装流程，如果你在安装过程中出现问题可以自行百度，也可以在问候或者小编的博客给小编留言。一旦安装好了这些库，你就告别了数据处理的石器时代，而正式迈入了二十一世纪。</p>
+<h4 id="21-">2.1 布尔索引</h4>
+<p>前面笔者已经和大家讲过什麼是布尔值，那么布尔索引，顾名思义就是一句布尔值的真假进行相关位置的索引。pandas库对于数据表的筛选就是依赖于这种布尔索引，索引小编这里有必要再一次和大家聊一下这种索引方式。小编这里先创建一个pandas数据框，然后以此进行讲解。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd   <span style="color:#75715e"># 导入pandas库，并命名为pd</span>
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Account Name</span><span style="color:#e6db74">&#39;</span>:[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">张三</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">李四</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">王五</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">赵六</span><span style="color:#e6db74">&#39;</span>],<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Total Sales</span><span style="color:#e6db74">&#39;</span>:[<span style="color:#ae81ff">120</span>,<span style="color:#ae81ff">234</span>,<span style="color:#ae81ff">125</span>,<span style="color:#ae81ff">342</span>],<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">City</span><span style="color:#e6db74">&#39;</span>:[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GuangZhou</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GuangZhou</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ShenZhen</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ShenZhen</span><span style="color:#e6db74">&#39;</span>]})
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> df
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Account Name</th>
+<th align="center">Total Sales</th>
+<th align="center">City</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0</td>
+<td align="center">张三</td>
+<td align="center">120</td>
+<td align="center">GaungZhou</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="center">李四</td>
+<td align="center">234</td>
+<td align="center">GaungZhou</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="center">王五</td>
+<td align="center">125</td>
+<td align="center">ShenZhen</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="center">赵六</td>
+<td align="center">342</td>
+<td align="center">ShenZhen</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到，在生成的表格中默认在第一列生成了0,1,2,3这些编号，虽然在这些编号没有解释意义，但是它们却很方便地为索引创造了条件，当然你如果实在不喜欢这种索引，你也可以指定自己的索引值，这里小编就不予以介绍了。现在假设你想获得张三、王五、赵六的相关记录，那么你完全可以通过以下方式获得：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> Indices <span style="color:#f92672">=</span> [True,False,True,True]
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> df[Indices]
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Account Name</th>
+<th align="center">Total Sales</th>
+<th align="center">City</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0</td>
+<td align="center">张三</td>
+<td align="center">120</td>
+<td align="center">GaungZhou</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="center">王五</td>
+<td align="center">125</td>
+<td align="center">ShenZhen</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="center">赵六</td>
+<td align="center">342</td>
+<td align="center">ShenZhen</td>
+</tr>
+</tbody>
+</table>
+<p>发现一个有趣的现象了吗，第一列的索引号并没有重新排列，而是还是按照原来的索引号进行，现在知道为什麼小编说过这种索引很有用了吧，因为它会随时让你了解你改动了哪里，删去了哪里，以便让你随时有后悔药可以吃。既然了解了这种方式，那么你就不会让自己尽量少输入，而是通过判断得出布尔值进而去执行索引。想想一下，假设你现在想去获得来自于广州的客户记录，你会怎么做？当然你完全可以通过重新赋值一个变量<code>Indices=[True,True,False,False]</code>来执行索引，但是为什麼不尝试更加快捷的方式呢？</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> df[df<span style="color:#f92672">.</span>City <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GuangZhou</span><span style="color:#e6db74">&#39;</span>]
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Account Name</th>
+<th align="center">Total Sales</th>
+<th align="center">City</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0</td>
+<td align="center">张三</td>
+<td align="center">120</td>
+<td align="center">GaungZhou</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="center">李四</td>
+<td align="center">234</td>
+<td align="center">GaungZhou</td>
+</tr>
+</tbody>
+</table>
+<p>我想你现在应该对布尔索引有所印象了吧，那么现在就不要再迟疑了，利用这一武器来完成Excel的解救任务吧。</p>
+<h4 id="22-pandas">2.2 pandas执行筛选</h4>
+<p>上文采用布尔索引，一般我们得出的所有列的数据，但是，现实中我们可能并不是需要所有列的数据，因此Python设计了三种列索引方式从而去引用相应的列。</p>
+<ul>
+<li><code>loc</code>这种索引是按照列名进行选择，可以选择单个列名，当然也可以选择多列</li>
+<li><code>iloc</code>这种方式是按照列名的相对顺序进行选择，即按照0,1,2……进行选择</li>
+<li><code>ix</code>综合的选择方法，既可以扮演<code>loc</code>的角色，又可以扮演<code>iloc</code>的角色，不过小编强烈建议不要使用这种索引，除非你实在不明白<code>loc</code>和<code>iloc</code>。</li>
+</ul>
+<p>只说理论不是小编的风格，小编还是以例子来进行说明，这里还是采用前面创建的df数据框来说明<code>loc</code>和<code>iloc</code>的用法，正如小编已经说到的那样，不推荐使用<code>ix</code>，所以这里就不介绍它的用法了。假设你现在想获取来源与广州的客户的销售信息，那么你可以采用下面两种方法中的任意一种达到目的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df[df<span style="color:#f92672">.</span>City <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GuangZhou</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Total Sales</span><span style="color:#e6db74">&#39;</span>]  <span style="color:#75715e"># loc方式</span>
+df[df<span style="color:#f92672">.</span>City <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GaungZhou</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">1</span>]              <span style="color:#75715e"># iloc方式</span>
+</code></pre></div><p><img src="https://i.imgur.com/Sp0WVMO.png" alt="loc和iloc用法比较">
+所以你明白两种用法了吗？小编日常工作中，常常会将数据表整理成比较容易分析的数据表，是故每一列自然是被赋予了很好的列名的，因此在后续的分析中，小编将主要使用<code>loc</code>来进行列的索引。上面只是对一列的所以，我们自然可以通过赋予多个列名来进行多列的索引了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> df[df<span style="color:#f92672">.</span>City <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">GaungZhou</span><span style="color:#e6db74">&#39;</span>,[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Account Name</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Total Sales</span><span style="color:#e6db74">&#39;</span>]]
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Account Name</th>
+<th align="center">Total Sales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0</td>
+<td align="center">张三</td>
+<td align="center">120</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="center">李四</td>
+<td align="center">234</td>
+</tr>
+</tbody>
+</table>
+<p>所以不要限制你的想象，Python中的pandas库总会给你意想不到的解决方案，既然现在已经学会了筛选数据，那么可以接着进行pandas库的第二项任务介绍了。</p>
+<h4 id="23-pandas">2.3 pandas执行编辑</h4>
+<p>既然已经知道怎么筛选数据表，那么接下来你就可以按照需要进行数据的编辑了。这里还是以我们自创的数据框为例进行说明。假设你现在想在原数据表中增加一列佣金率，并且都将其赋值为0.01，那么你可以通过一条很简短的语句完成其构造。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Commision_Rate</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span>,<span style="color:#ae81ff">0.01</span>
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Account Name</th>
+<th align="center">Total Sales</th>
+<th align="center">City</th>
+<th align="center">Commisin_Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0</td>
+<td align="center">张三</td>
+<td align="center">120</td>
+<td align="center">GaungZhou</td>
+<td align="center">0.02</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="center">李四</td>
+<td align="center">234</td>
+<td align="center">GaungZhou</td>
+<td align="center">0.02</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="center">王五</td>
+<td align="center">125</td>
+<td align="center">ShenZhen</td>
+<td align="center">0.02</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="center">赵六</td>
+<td align="center">342</td>
+<td align="center">ShenZhen</td>
+<td align="center">0.02</td>
+</tr>
+</tbody>
+</table>
+<p>通过这一命令，现在你加入了一列佣金率列，,并都将其赋值为了0.02，但是一般对大客户总是需要有些优惠的嘛，所以现在你考虑将其中销售额大于200的客户的佣金率定为0.01，如果在Excel中操作，那么你必须要先筛选出来然后再重新赋值，最后再清除筛选，但是使用pandas，仍然还是一条语句（如果你熟练了pandas库的操作运用其实很多Excel中的功能都是可以通过一条语句完成的）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> df[df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Total Sales</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">200</span>,[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Commision_Rate</span><span style="color:#e6db74">&#39;</span>]] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+</code></pre></div><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Account Name</th>
+<th align="center">Total Sales</th>
+<th align="center">City</th>
+<th align="center">Commisin_Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0</td>
+<td align="center">张三</td>
+<td align="center">120</td>
+<td align="center">GaungZhou</td>
+<td align="center">0.02</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="center">李四</td>
+<td align="center">234</td>
+<td align="center">GaungZhou</td>
+<td align="center">0.01</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="center">王五</td>
+<td align="center">125</td>
+<td align="center">ShenZhen</td>
+<td align="center">0.02</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="center">赵六</td>
+<td align="center">342</td>
+<td align="center">ShenZhen</td>
+<td align="center">0.01</td>
+</tr>
+</tbody>
+</table>
+<p>现在已经完成了对于pandas执行Excel筛选和编辑功能的基本介绍，现在是时候来一个综合性的例子进行操作了，你准备好了吗？</p>
+<h4 id="24-">2.4 综合示例</h4>
+<p>本示例以Excel文件<a href="https://liupu14.github.io/download/Sales.xlsx">Sales.xlsx</a>为例进行说明，想同步进行的朋友请务必先下载分析中所使用的数据表。我们现在的数据处理要求主要有以下几点：</p>
+<ul>
+<li>所有商品的佣金率在基准佣金率上进行调整，基准佣金率为0.02；</li>
+<li>衬衫类（Shirt）商品的佣金率为0.025；</li>
+<li>腰带(Belt)销量超过10条的佣金率为0.04；</li>
+<li>鞋类(Shoes)销售额超过1000的，在享受0.045的佣金率的同时可以再额外获得250的奖金</li>
+<li>计算出个客户最终可以获得的补偿</li>
+</ul>
+<p>现在既然已经明白了数据处理需求，那么下面就是针对每一条要求进行程序编写。小编这里直接上程序，在程序内对各要求进行说明：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入pandas库，并读取Excel文件Sales</span>
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd 
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Sales.xlsx</span><span style="color:#e6db74">&#39;</span>)  <span style="color:#75715e"># 这一步操作建立在你的Excel文件处于你的工作路径中，否则使用`cd`命令改变操作路径</span>
+
+<span style="color:#75715e"># 增加佣金率列，并赋值为0.02</span>
+df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Commission_Rate</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.02</span> 
+
+<span style="color:#75715e"># 衬衫类佣金率为0.025</span>
+df<span style="color:#f92672">.</span>loc[df<span style="color:#f92672">.</span>category <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Shirt</span><span style="color:#e6db74">&#39;</span>,[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Commission_Rate</span><span style="color:#e6db74">&#39;</span>]] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.025</span>
+
+<span style="color:#75715e"># 腰带(Belt)销量超过10条的佣金率为0.04</span>
+df<span style="color:#f92672">.</span>loc[(df<span style="color:#f92672">.</span>category <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Belt</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">&amp;</span>(df<span style="color:#f92672">.</span>quantity <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">10</span>),[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Commission_Rate</span><span style="color:#e6db74">&#39;</span>]] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.04</span>
+
+<span style="color:#75715e"># 鞋类(Shoes)销售额超过1000的，在享受0.045的佣金率的同时可以再额外获得250的奖金</span>
+df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bonus</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+df<span style="color:#f92672">.</span>loc[(df<span style="color:#f92672">.</span>category <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Shoes</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">&amp;</span>(df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ext price</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1000</span>),[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bonus</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Commission_Rate</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">250</span>,<span style="color:#ae81ff">0.045</span>
+
+<span style="color:#75715e"># 计算出各客户最终可以获得的补偿</span>
+df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">compesation</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>Commission_Rate<span style="color:#f92672">*</span>df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ext price</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">+</span> df<span style="color:#f92672">.</span>bonus
+</code></pre></div><p>现在已经完成了分析，你可以看一下最后的输出数据表结果：
+<img src="https://i.imgur.com/2IaRhua.png" alt="处理好数据表结果"></p>
+<h3 id="heading1">后记</h3>
+<p>文章写到这里已告一段落，本期文章主要介绍了怎么使用Python中的pandas库来执行Excel中常见的筛选和编辑操作，从而了解到了Excel中相对繁琐的鼠标操作完成可以由较为简单的Python程序予以实现。当然，本文的介绍相对来说还较为简单，后期，笔者会继续进行这一方面的介绍，以期真正实现Excel办公的Python化。下一期文章中，笔者将和大家讲一下本期原本想讲解的机器学习系列中的另外一种高频引用算法——决策树，敬请期待。最后再一次感谢你们的支持，你们的支持使我奋力前行！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/excel" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">excel</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/pandas" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">pandas</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

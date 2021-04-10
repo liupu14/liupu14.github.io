@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySQL on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/mysql/</link>
+    <description>Recent content in MySQL on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 31 Aug 2018 21:16:50 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>爬虫数据的数据库存储——MySQL数据库</title>
+      <link>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Fri, 31 Aug 2018 21:16:50 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-28&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期文章，小编和大家聊了一下怎么使用MongoDB数据库去存储python爬取到的数据，本期小编准备再接再厉，接着介绍一下关系型数据库和爬取数据的存储。关系型数据库一直以来都是市场的主流，因此存在众多的关系型数据库管理系统，然而在这众多的数据库管理系统中，小编尤为推荐MySQL这款开源数据库，因此本文将讲解怎么将爬取到的数据存储到MySQL数据库之中，这期爬取的内容小编以豆瓣上面排名前250的书籍信息获取为主，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

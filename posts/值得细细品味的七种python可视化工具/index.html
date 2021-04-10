@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>值得细细品味的七种python可视化工具 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="值得细细品味的七种python可视化工具" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-18
+
+写在前面
+新的一周已经结束尾声，一句字总结本周：累！不过写作一事总是不能放下，小编将一如既往地和大家一起前行。上期文章中，小编和大家谈了ggplot2的图层语法，相对来说比较枯燥（理论的东西一直以来都比较枯燥，即使小编也无法避免此类情形），然而那期文章却对ggplot2的基本图层语法进行了俯瞰式介绍，为实战绘图打下了基础。本来准备在这期文章中给大家谈一下机器学习中的朴素贝叶斯算法，但是考虑到这篇文章也主要表现为理论与程序，所以为了不使各位出现审美疲劳，最重要的是为了不使各位陷入枯燥之所，暂时打算将这篇机器学习的文章放在周末进行介绍，本期文章小编准备讲一个比较欢快的主题，顺便也让劳累的小编放松一下。这期文章，小编将和大家聊一下python中的七种数据可视化工具，以便为各位的绘图实践提供更多可能性。废话不再多说，下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/" />
+<meta property="article:published_time" content="2018-06-21T23:29:41+00:00" />
+<meta property="article:modified_time" content="2018-06-21T23:29:41+00:00" />
+<meta itemprop="name" content="值得细细品味的七种python可视化工具">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-18
+
+写在前面
+新的一周已经结束尾声，一句字总结本周：累！不过写作一事总是不能放下，小编将一如既往地和大家一起前行。上期文章中，小编和大家谈了ggplot2的图层语法，相对来说比较枯燥（理论的东西一直以来都比较枯燥，即使小编也无法避免此类情形），然而那期文章却对ggplot2的基本图层语法进行了俯瞰式介绍，为实战绘图打下了基础。本来准备在这期文章中给大家谈一下机器学习中的朴素贝叶斯算法，但是考虑到这篇文章也主要表现为理论与程序，所以为了不使各位出现审美疲劳，最重要的是为了不使各位陷入枯燥之所，暂时打算将这篇机器学习的文章放在周末进行介绍，本期文章小编准备讲一个比较欢快的主题，顺便也让劳累的小编放松一下。这期文章，小编将和大家聊一下python中的七种数据可视化工具，以便为各位的绘图实践提供更多可能性。废话不再多说，下面正式开始。">
+<meta itemprop="datePublished" content="2018-06-21T23:29:41&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-21T23:29:41&#43;00:00" />
+<meta itemprop="wordCount" content="247">
+
+
+
+<meta itemprop="keywords" content="python,商务绘图," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="值得细细品味的七种python可视化工具"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-6-18
+
+写在前面
+新的一周已经结束尾声，一句字总结本周：累！不过写作一事总是不能放下，小编将一如既往地和大家一起前行。上期文章中，小编和大家谈了ggplot2的图层语法，相对来说比较枯燥（理论的东西一直以来都比较枯燥，即使小编也无法避免此类情形），然而那期文章却对ggplot2的基本图层语法进行了俯瞰式介绍，为实战绘图打下了基础。本来准备在这期文章中给大家谈一下机器学习中的朴素贝叶斯算法，但是考虑到这篇文章也主要表现为理论与程序，所以为了不使各位出现审美疲劳，最重要的是为了不使各位陷入枯燥之所，暂时打算将这篇机器学习的文章放在周末进行介绍，本期文章小编准备讲一个比较欢快的主题，顺便也让劳累的小编放松一下。这期文章，小编将和大家聊一下python中的七种数据可视化工具，以便为各位的绘图实践提供更多可能性。废话不再多说，下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/&amp;text=%e5%80%bc%e5%be%97%e7%bb%86%e7%bb%86%e5%93%81%e5%91%b3%e7%9a%84%e4%b8%83%e7%a7%8dpython%e5%8f%af%e8%a7%86%e5%8c%96%e5%b7%a5%e5%85%b7" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/&amp;title=%e5%80%bc%e5%be%97%e7%bb%86%e7%bb%86%e5%93%81%e5%91%b3%e7%9a%84%e4%b8%83%e7%a7%8dpython%e5%8f%af%e8%a7%86%e5%8c%96%e5%b7%a5%e5%85%b7" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">值得细细品味的七种python可视化工具</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-06-21T23:29:41Z">June 21, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-6-18</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>新的一周已经结束尾声，一句字总结本周：累！不过写作一事总是不能放下，小编将一如既往地和大家一起前行。上期文章中，小编和大家谈了ggplot2的图层语法，相对来说比较枯燥（理论的东西一直以来都比较枯燥，即使小编也无法避免此类情形），然而那期文章却对ggplot2的基本图层语法进行了俯瞰式介绍，为实战绘图打下了基础。本来准备在这期文章中给大家谈一下机器学习中的朴素贝叶斯算法，但是考虑到这篇文章也主要表现为理论与程序，所以为了不使各位出现审美疲劳，最重要的是为了不使各位陷入枯燥之所，暂时打算将这篇机器学习的文章放在周末进行介绍，本期文章小编准备讲一个比较欢快的主题，顺便也让劳累的小编放松一下。这期文章，小编将和大家聊一下python中的七种数据可视化工具，以便为各位的绘图实践提供更多可能性。废话不再多说，下面正式开始。</p>
+<h3 id="heading1">正式进入前再说两句</h3>
+<p>提到python中的数据可视化工具，相信了解python的朋友或者看过小编文章的志同道合者定然会条件反射般说出matplotlib这一神级库。然而可能令各位想不到的是，小编在这里即将介绍的七种可视工具却是不包含matplotlib绘图库的，至于原因主要有两点：其一，matplotlib与其说是一种绘图工具，倒不如说是一种绘图体系，基于它相继诞生了很多高效简介的绘图库，所以我更加希望将matplotlib作为一种绘图系统进行说明，而不是将它作为单一的绘图工具；其二，宋子（宋小宝）曰：雨露均沾。因为小编对matplotlib库的偏爱，故在文章写作框架中专门开辟出了一个系列用来介绍matplotlib，所以这里介绍python中的绘图库时自然要予以冷淡处理，不然小编就不是偏爱，而是独宠了。而本文小编准备介绍的七种python可视化工具主要包括：</p>
+<ul>
+<li>pandas</li>
+<li>seaborn</li>
+<li>ggplot</li>
+<li>pdvega</li>
+<li>altair</li>
+<li>bokeh</li>
+<li>plotly</li>
+</ul>
+<p>前五个库主要用于绘制静态图表，而后两个库主要用来绘制交互式图表，俗称动态图表或网页图表。其中的pandas绘图体系以及seaborn绘图体系皆继承于matplotlib。下面正式展开对于这两种绘图工具的介绍，下面的介绍中，小编将主要采用程序+图表的形式进行，同时辅之以文字解释。为了比较各种绘图工具的绘图效果，小编在后面的绘图中会采用相同的数据集，即著名的记载鸢尾花相关特征的iris数据集，这个数据集可以从多种地方获得，小编这里是从vega_datasets中获得该数据集，如果你还没有听说过这个数据集或者说你尚未安装vega_datasets库，那么小编建议你安装这个库，如果你觉得麻烦，请点击<a href="%5Cdownload%5Ciris.csv">这里</a>下载（公众号中无法获得数据链接，请移步小编博客<a href="www.liupu.top">Liupu's Blog</a>），你也可以在公众号中留下地址让小编发送给你，不过小编不建议你们这么做。另外小编将使用这个数据集中的花萼长度和宽度数据进行散点图绘制。在开始各个绘图工具介绍之前，小编想做一些基础准备，即导入数据集。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 如果已经安装了vega_datasets库，请用一下方式获得数据</span>
+<span style="color:#f92672">from</span> vega_datasets <span style="color:#f92672">import</span> data
+iris <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>iris()
+
+<span style="color:#75715e"># 如果你是使用小编的数据集，那么请确保数据集在当前工作目录下，然后使用以下方式获得数据</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+iris <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">iris.csv</span><span style="color:#e6db74">&#39;</span>)
+
+<span style="color:#75715e"># 查看一下数据集特征</span>
+iris<span style="color:#f92672">.</span>head()
+</code></pre></div><p><img src="https://i.imgur.com/TpEhvcU.png" alt="iris数据集展示">
+下面正式开始各种绘图工具的介绍。</p>
+<h3 id="pandas">pandas</h3>
+<p>你没看错，这里小编所写的正是pandas，是那个用于数据分析的高效库，不过pandas之所以受欢迎绝不仅仅因为其高效的数据分析与处理能力，它同时也能够快速地实现数据可视化。pandas可视化的语法源自于matplotlib，因此使用pandas绘图，你会感觉到自己只是换了一种方式操作matplotlib罢了。下面见程序和图形展示。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关的python库</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+<span style="color:#75715e"># 设置图形绘制背景</span>
+pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>display<span style="color:#f92672">.</span>mpl_style <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">default</span><span style="color:#e6db74">&#39;</span> <span style="color:#75715e">#经典的pandas设置方式，不过这种方式现在已经不再提供维护，所以小编推荐下面这种方式</span>
+plt<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">default</span><span style="color:#e6db74">&#39;</span>
+
+<span style="color:#75715e"># 绘图</span>
+iris_plot01 <span style="color:#f92672">=</span> iris<span style="color:#f92672">.</span>plot<span style="color:#f92672">.</span>scatter(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalWidth</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalLength</span><span style="color:#e6db74">&#39;</span>,title <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Scatter by pandas</span><span style="color:#e6db74">&#39;</span>)
+fig <span style="color:#f92672">=</span> iris_plot01<span style="color:#f92672">.</span>get_figure()
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">pandas.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/34Nym09.png" alt="pandas绘制散点图示例">
+绘图程序中的第一行代码用来进行散点图绘制，并将其存放在iris_plot01对象之下，后两行命令用来获得绘制的图形并将其保存在磁盘中以方便后续使用。这里有两点需要说明，当然也是对后面几个绘图工具绘图时的说明：其一，小编不将深入各个绘图工作的语法之中，只是简要绘制出散点图；其二，小编默认各位已经安装了这些绘图库，如尚未安装可以在决定好使用哪种绘图库之后再进行安装，如遇安装问题可以给小编留言。</p>
+<h3 id="seaborn">seaborn</h3>
+<p>如果你在python下只是想进行静态图的绘制，那么seaborn绝对可以说是你的首选。seaborn库是python中的一个基于matplotlib库开发的简便库，它简化了使用matplotlib库绘制图表的流程，因此在诞生之后变得到广泛使用。下面小编就和大家一起粗略地看一下它的绘图语法与绘图效果。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入seaborn库</span>
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
+
+<span style="color:#75715e"># 设置绘图背景</span>
+sns<span style="color:#f92672">.</span>set_style(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">darkgrid</span><span style="color:#e6db74">&#39;</span>)
+
+<span style="color:#75715e"># 图形绘制</span>
+iris_plot02 <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>stripplot(x <span style="color:#f92672">=</span> iris[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalWidth</span><span style="color:#e6db74">&#39;</span>],y <span style="color:#f92672">=</span> iris[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalLength</span><span style="color:#e6db74">&#39;</span>],palette<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">muted</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>xticks(rotation <span style="color:#f92672">=</span> <span style="color:#ae81ff">60</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">The Scatter between sepalWidth and sepalLength by seaborn</span><span style="color:#e6db74">&#39;</span>)
+fig <span style="color:#f92672">=</span> iris_plot02<span style="color:#f92672">.</span>get_figure()
+fig<span style="color:#f92672">.</span>savefig(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">seaborn.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/DsehXDB.png" alt="seaborn绘制散点图示例">
+图形的字体显示以及图形的色彩显示，这些都是seaborn在考虑到数据的特征后自动予以显示的，省却了你很多图形格式设置时间。除此之外，seaborn最令人向往的优势是它其中设置的多种图形背景，seaborn中的绘图背景已经完全可以满足你的工作需要。</p>
+<h3 id="ggplot">ggplot</h3>
+<p>这个库相信看过小编文章的朋友不会有丝毫陌生吧，这个库就是R语言中的那个申请的python化库，不过相对于ggplot2仍然存在劣势，不过这里小编可不打算去阐述这其中的不同，小编这里仅仅展示一下怎么自python中使用这个库去快速绘制图形。如果你看过小编前面的文章，你会发现python中的ggplot库的操作语法形式和R语言中的ggplot2操作语法形式很像，下面见实例。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入ggplot库</span>
+<span style="color:#f92672">import</span> ggplot
+
+<span style="color:#75715e"># 绘制图形</span>
+fig <span style="color:#f92672">=</span> ggplot<span style="color:#f92672">.</span>ggplot(iris,ggplot<span style="color:#f92672">.</span>aes(x <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalWidth</span><span style="color:#e6db74">&#39;</span>,y <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalLength</span><span style="color:#e6db74">&#39;</span>)) <span style="color:#f92672">+</span> 
+ggplot<span style="color:#f92672">.</span>geom_point() <span style="color:#f92672">+</span>
+ggplot<span style="color:#f92672">.</span>ggtitle(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">The Scatter between sepalWidth and sepalLength by gglot</span><span style="color:#e6db74">&#39;</span>)
+fig<span style="color:#f92672">.</span>save(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">ggplot.png</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/tQ4NkhW.png" alt="ggpot绘制散点图示例">
+相对于前面两种绘图工具，使用ggplot库进行图形绘制时，没有对绘图背景进行设置，这个是源自于ggplot默认的绘图背景已经很美观，除非你对背景颜色有偏好或者说你有爱丑的癖好，不然一般很少会去进行背景设置的。</p>
+<h3 id="pdvega">pdvega</h3>
+<p>这个库小编在之前的系列文章中以及介绍过，而且介绍了使用这个库如何绘制常用的六种商务图表，如果没有印象，可以去看一下小编前期的文章，相信在哪里你会对这个库的绘图语法以及绘图便捷性有一个更深的了解。这里仅仅以散点图为例进行一下展示。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入pdvega包</span>
+<span style="color:#f92672">import</span> pdvega
+
+<span style="color:#75715e"># 图形绘制</span>
+iris<span style="color:#f92672">.</span>vgplot<span style="color:#f92672">.</span>scatter(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalWidth</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalLength</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/V8TsBPA.png" alt="pdvega绘制散点图示例">
+的确需要怀疑人生了，仅仅需要两条语句就可以完全完成基本图形的绘制，其实使用pdvega进行绘图很多时候使用的语句总数真的就只在5句以内。</p>
+<h3 id="altair">altair</h3>
+<p>了解了pdvega，自然要了解一下pdvega的师兄altair，这两个库是同一个牛人所创建的，只不过altair功能更加强大，当然就伴随着稍微复杂一点的语法。正是因为较为复杂的语法，本库的作者猜着实开发了一个更加简洁的版本pdvega。不过你如果希望使用这套语法绘制更加复杂以及个性化的图形，那么相对pdvega，你只能选择altair。下面就来了解一下这个绘图库的语法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入altair </span>
+<span style="color:#f92672">import</span> altair <span style="color:#f92672">as</span> alt
+
+<span style="color:#75715e"># 绘制图形</span>
+alt<span style="color:#f92672">.</span>Chart(iris)<span style="color:#f92672">.</span>mark_point()<span style="color:#f92672">.</span>encode(
+    x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">petalLength</span><span style="color:#e6db74">&#39;</span>,
+    y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">petalWidth</span><span style="color:#e6db74">&#39;</span>,
+    color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">species</span><span style="color:#e6db74">&#39;</span>
+)
+</code></pre></div><p><img src="https://i.imgur.com/XeeZHL8.png" alt="altair绘制散点图示例">
+它和pdvega一样，都内置好了绘图背景，所以在使用时你不再需要另外指定绘图背景，初次之外使用这两个库进行图形的绘制会直接弹出保存按钮，不需要你在另外使用命令进行图形保存，这个功能对小编来说有点多余，但是对于菜单操作爱好者无疑是一个很好的消息，所以可以进行一下尝试。</p>
+<h3 id="bokeh">bokeh</h3>
+<p>上面介绍的五种绘图工具主要表现为静态作图，然而很多时候工作中需要动图，或者说做一些交互式图形，为了实现这种功能，小编下面介绍的两个库就完全派上用场了。当然小编无法将这种交互式的图形放置在文中之中，所以仅用它们的静图予以展示。小编这里想介绍一个依赖于python的绘图库bokeh，后面介绍伟大的plotly绘图体系。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关的操作函数</span>
+<span style="color:#f92672">from</span> bokeh.plotting <span style="color:#f92672">import</span> figure, output_file, show
+
+<span style="color:#75715e"># 定义输出文件</span>
+output_file(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">bokeh.html</span><span style="color:#e6db74">&#34;</span>) <span style="color:#75715e"># 这里小编生成了一个网页文件，图形正是从网页上截取的</span>
+
+<span style="color:#75715e"># 注意bokeh作图时的变量为列表，所以这里先将数据进行列表化</span>
+x <span style="color:#f92672">=</span> iris[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalWidth</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>values<span style="color:#f92672">.</span>tolist()
+y <span style="color:#f92672">=</span> iris[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalLength</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">.</span>values<span style="color:#f92672">.</span>tolist()
+
+<span style="color:#75715e"># 设置图形大小</span>
+p <span style="color:#f92672">=</span> figure(plot_width<span style="color:#f92672">=</span><span style="color:#ae81ff">600</span>, plot_height<span style="color:#f92672">=</span><span style="color:#ae81ff">400</span>)
+
+<span style="color:#75715e"># 绘图与显示</span>
+p<span style="color:#f92672">.</span>circle(x,y)
+show(p)
+</code></pre></div><p><img src="https://i.imgur.com/2asQ9uj.png" alt="bokeh绘制散点图示例">
+特别需要注意的就是绘图变量需要先转换成列表形式，这一点一定要注意，不然是无法绘制出图形的。另外可以通过运行这段代码生成网页文件，在网页上查看图形才能发现其交互形态。</p>
+<h3 id="plotly">plotly</h3>
+<p>上面介绍了bokeh这一交互式图形绘制工具，下面介绍交互式绘图中的绝对王者plotly，有一点一定要注意，plotly可不单纯是一个python库，它是一个交互式图形绘制系统，当然更加是一个图形绘制解决服务商，所以使用plotly绘制交互式图形对于小编来说一直是首选，下面看下例子。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关的库与函数</span>
+<span style="color:#f92672">import</span> plotly.plotly <span style="color:#f92672">as</span> py
+<span style="color:#f92672">import</span> plotly.graph_objs <span style="color:#f92672">as</span> go
+
+<span style="color:#75715e"># 设置绘图的数据与图形形式</span>
+trace <span style="color:#f92672">=</span> go<span style="color:#f92672">.</span>Scatter(
+    x <span style="color:#f92672">=</span> iris[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalWidth</span><span style="color:#e6db74">&#39;</span>],
+    y <span style="color:#f92672">=</span> iris[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">sepalLength</span><span style="color:#e6db74">&#39;</span>],
+    mode <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">markers</span><span style="color:#e6db74">&#39;</span>
+)
+data <span style="color:#f92672">=</span> [trace]
+
+<span style="color:#75715e"># 绘制图形</span>
+py<span style="color:#f92672">.</span>iplot(data, filename<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">basic-scatter</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/PvYWKsq.png" alt="plotly绘制散点图示例">
+这个体系庞大复杂，然而却又方便快捷，因此掌握这个库以及相应的plotly体系，对于进行交互式图形的绘制绝对是一大裨益。</p>
+<h3 id="heading2">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章对python中七种可视化工具进行了简要介绍，其中五种工具用于静态图形绘制，另外两种工具用于交互式图形绘制。通过介绍，小编希望各位能够选定自己喜欢的库，切记不要贪多，在这方面小编的建议是，如果绘制静态图的话请掌握pandas和seaborn，pandas用于快速分析作图，而seaborn用于图形的美化；而在交互式图形方面，小编建议使用plotly。当然使用pandas和seaborn的前提是你对matplotlib库有所了解，所以一定要定期阅读小编的文章呀。下期文章小编将介绍一下机器学习中的朴素贝叶斯算法，敬请期待。再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">商务绘图</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/">ggplot2包介绍——深入图层语法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

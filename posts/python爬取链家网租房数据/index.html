@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>python爬取链家网租房数据 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="python爬取链家网租房数据" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-17
+
+写在前面
+前期文章和大家聊了一下怎么爬取多页面网页，了解了爬虫的基本原理及步骤，那么本期小编准备再接再厉，介绍一下跨页面爬虫原理。考虑到八月将逝，九月即来，新的租房需求即将诞生，本期小编就来讲一下怎么使用python爬取链家网上面的租房信息，希望对大家的租房有所帮助。下面正式开始！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/" />
+<meta property="article:published_time" content="2018-08-20T21:15:46+00:00" />
+<meta property="article:modified_time" content="2018-08-20T21:15:46+00:00" />
+<meta itemprop="name" content="python爬取链家网租房数据">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-17
+
+写在前面
+前期文章和大家聊了一下怎么爬取多页面网页，了解了爬虫的基本原理及步骤，那么本期小编准备再接再厉，介绍一下跨页面爬虫原理。考虑到八月将逝，九月即来，新的租房需求即将诞生，本期小编就来讲一下怎么使用python爬取链家网上面的租房信息，希望对大家的租房有所帮助。下面正式开始！">
+<meta itemprop="datePublished" content="2018-08-20T21:15:46&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-20T21:15:46&#43;00:00" />
+<meta itemprop="wordCount" content="424">
+
+
+
+<meta itemprop="keywords" content="python,爬虫," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python爬取链家网租房数据"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-8-17
+
+写在前面
+前期文章和大家聊了一下怎么爬取多页面网页，了解了爬虫的基本原理及步骤，那么本期小编准备再接再厉，介绍一下跨页面爬虫原理。考虑到八月将逝，九月即来，新的租房需求即将诞生，本期小编就来讲一下怎么使用python爬取链家网上面的租房信息，希望对大家的租房有所帮助。下面正式开始！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/&amp;text=python%e7%88%ac%e5%8f%96%e9%93%be%e5%ae%b6%e7%bd%91%e7%a7%9f%e6%88%bf%e6%95%b0%e6%8d%ae" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/&amp;title=python%e7%88%ac%e5%8f%96%e9%93%be%e5%ae%b6%e7%bd%91%e7%a7%9f%e6%88%bf%e6%95%b0%e6%8d%ae" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">python爬取链家网租房数据</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-08-20T21:15:46Z">August 20, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-8-17</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>前期文章和大家聊了一下怎么爬取多页面网页，了解了爬虫的基本原理及步骤，那么本期小编准备再接再厉，介绍一下跨页面爬虫原理。考虑到八月将逝，九月即来，新的租房需求即将诞生，本期小编就来讲一下怎么使用python爬取链家网上面的租房信息，希望对大家的租房有所帮助。下面正式开始！</p>
+<h3 id="heading1">准备工作及需求分析</h3>
+<p>跨页面爬虫的基本原理步骤小编已经在前期文章中有所介绍，这里就不再多说。考虑到任意的爬虫都是提出网页需求，获得网页，而后解析网页获得相关数据，最后保存数据用于分析，跨页面爬虫自然也逃不出这个套路。只不过相对于多页面爬虫来说，跨页面爬虫需要多定义一个爬取网页链接的函数而已。本文仍然以python为工具详细介绍怎么使用python以及相关的库来爬取链家网的租房数据。在爬取租房数据开始之前，首先需要提出一个问题，在爬取过程中需要获得什麼信息？这里小编认为，既然要爬取租房的相关信息，房源名称自然是要需要的，房源的位置以及房价信息自然是少不了的，最终在考虑的诸多因素以及链家网的网页构造之后，小编决定获取十种租房信息：房源名称、房源所在小区、房源所在商圈、房源所在区域、房源价格、房源面积、户型、临近地铁、房源经纪以及相应的联系号码。考虑到小编住在广州且对广州情有独钟，这里的租房信息全部表现为广州区域的租房信息，当然你也可以通过替换小编的代码获取不同城市的租房信息。既然已经了解了需求，那么下面就要正式开始爬虫实战了。在爬取之前，让我们先导入相应的库。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests 
+<span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+<span style="color:#f92672">import</span> xlwings <span style="color:#f92672">as</span> xw
+<span style="color:#f92672">import</span> time
+</code></pre></div><p>前两个库是完成爬虫的主力，第三个库是用来将数据存入Excel之中，至于第四个库的导入主要是为了使用库中的休眠函数，以应对反爬。因为跨页面爬虫需要爬取网页链接以及爬取网页内的信息，所以下面需要定义两个函数，其中一个用来爬取网页链接，另一个用来爬取详细的网页数据。下面首先介绍第一个函数。</p>
+<h3 id="heading2">网页链接爬取函数构造</h3>
+<p>所谓网页链接，就是指当你点击之时会弹出另外的网页，链家网上面的租房信息就是这种构造。当你在主页中点击房源的名称之时，会弹出关于该房源的详细信息，你所需要的租房数据就保存在详细信息页面中，但是为了达到详细信息页面，你必须先获得达到这一页面的网页链接，这就是需要定义爬取网页链接函数的原因。当然，说的好像很高大上，但是不得不说爬取网页的链接是真的容易。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">header <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">User-Agent</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/xxxxxxxxx Safari/537.36</span><span style="color:#e6db74">&#39;</span>}   <span style="color:#75715e"># 记得替换成你自己的请求头文件</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_url</span>(url):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url<span style="color:#960050;background-color:#1e0010">，</span>header <span style="color:#f92672">=</span> header)
+    bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+    urls <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#house-lst &gt; li &gt; div.info-panel &gt; h2 &gt; a</span><span style="color:#e6db74">&#39;</span>)    
+</code></pre></div><p>上面的函数可以爬取一页中所有房源的具体网页链接，可以看到上面并没有什麼新的命令，这些命令在前期的文章中都已有介绍，所以这里就不再赘述。通过这个函数，可以获得进入详细页面的链接，因此下一步就是需要构造一个爬取详细页面数据的函数。</p>
+<h3 id="heading3">爬取详细页面数据</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_info</span>(url):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url,header <span style="color:#f92672">=</span> header)
+    bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+    title <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">h1</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">main</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()
+    price <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">span</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">total</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()
+    area <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lf</span><span style="color:#e6db74">&#39;</span>})[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>get_text()[<span style="color:#ae81ff">3</span>:]
+    house_type <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lf</span><span style="color:#e6db74">&#39;</span>})[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>get_text()[<span style="color:#ae81ff">5</span>:]
+    metor <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">4</span>]<span style="color:#f92672">.</span>get_text()[<span style="color:#ae81ff">3</span>:]
+    park <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">5</span>]<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">3</span>:]
+    distrinct <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">6</span>]<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">3</span>:]
+    bankuai <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">6</span>]<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>]
+    broker <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">brokerName</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">if</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">brokerName</span><span style="color:#e6db74">&#39;</span>}) <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>
+    phone <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">phone</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>strip()<span style="color:#f92672">.</span>replace(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>replace(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>) <span style="color:#66d9ef">if</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">phone</span><span style="color:#e6db74">&#39;</span>}) <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>
+</code></pre></div><p>在获取网页信息时，小编采用了find和find_all函数，这里有必要介绍一下这两个函数。这两个函数正如其名字所示，根据函数中的参数选择出相应内容，其中第一个参数为网页标签，第二个参数为属性对，一般来说在网络爬虫中熟练掌握这两个参数就可以了。这两个函数典型的不同点就在于，find函数选择出满足参数设定的第一条内容，而find_all函数则用来选择出所有满足参数值的内容，并将这些内容构成列表，所以使用find_all参数常常伴随有列表选择。至于参数值的设定，则需要你掌握一些基本的网页代码知识，这里小编就不多说了，感兴趣的朋友可以看一下相关的书籍。另外在代码中，小编也使用了一些字符串操作函数，主要有三个：split、replace以及strip。第一个用来根据指定符号将字符串分割中列表；第二个函数用来替换字符串中的内容；第三个函数用来消除字符串中的空格。这三个函数在网络爬虫中使用较为频繁，希望诸位朋友能够熟练掌握，关于这几个函数小编在前期的文章中也有所介绍，大家可以参看小编之前关于字符串介绍的那期文章。最后需要说明的是最后两行代码，这两行代码小编使用了二元选择表达式，因为某些房源并没有经纪人信息和联系电话方面的信息，所以为了避免这种情况的出现造成程序的中断，这里采用二元选择表达式构造了变量值，这种表达式在一些场景中极其好用。既然已经有了相应的网页链接爬取函数和具体网页信息获取函数，那么是时候将其整合在一起了，下面给出完整代码。</p>
+<h3 id="heading4">爬取链接租房数据的详细代码</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># _*_ coding:utf-8 _*_</span>
+<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Author: liupu</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Filename: lianjia_zufang.py</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Date: 2018-8-20</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    @Description:</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # usage: 爬取链家网租房数据</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">        # platform: win7 + python3 + visual studio code</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+<span style="color:#75715e"># 导入关联库</span>
+<span style="color:#f92672">import</span> requests 
+<span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+<span style="color:#f92672">import</span> xlwings <span style="color:#f92672">as</span> xw 
+<span style="color:#f92672">import</span> time
+
+<span style="color:#75715e"># 创建Excel文件，并命名标题行</span>
+wb <span style="color:#f92672">=</span> xw<span style="color:#f92672">.</span>Book()
+sht <span style="color:#f92672">=</span> wb<span style="color:#f92672">.</span>sheets[<span style="color:#ae81ff">0</span>]
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">房源名称</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">所在小区</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">C1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">所在商圈</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">D1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">区域</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">E1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">价格</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">面积</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">G1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">户型</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">H1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">地铁</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">I1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">经纪人</span><span style="color:#e6db74">&#39;</span>
+sht<span style="color:#f92672">.</span>range(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">J1</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">联系电话</span><span style="color:#e6db74">&#39;</span>
+
+header <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">User-Agent</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/xxxxxxxxx Safari/537.36</span><span style="color:#e6db74">&#39;</span>} 
+<span style="color:#75715e"># 构造爬取网页链接的函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_html</span>(url,pages):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url<span style="color:#960050;background-color:#1e0010">，</span>header <span style="color:#f92672">=</span> header)
+    bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+    urls <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>select(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#house-lst &gt; li &gt; div.info-panel &gt; h2 &gt; a</span><span style="color:#e6db74">&#39;</span>)
+    location <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+    <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> urls:
+        url <span style="color:#f92672">=</span> url<span style="color:#f92672">.</span>get(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">href</span><span style="color:#e6db74">&#39;</span>)
+        get_info(url,location,page <span style="color:#f92672">=</span> pages)
+        location <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+
+<span style="color:#75715e"># 构造爬取详细网页网页信息的函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_info</span>(url,location,page <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>):
+    res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url,header <span style="color:#f92672">=</span> header)
+    bsobj <span style="color:#f92672">=</span> BeautifulSoup(res<span style="color:#f92672">.</span>text,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lxml</span><span style="color:#e6db74">&#39;</span>)
+    title <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">h1</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">main</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()
+    price <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">span</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">total</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()
+    area <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lf</span><span style="color:#e6db74">&#39;</span>})[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>get_text()[<span style="color:#ae81ff">3</span>:]
+    house_type <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>,{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lf</span><span style="color:#e6db74">&#39;</span>})[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>get_text()[<span style="color:#ae81ff">5</span>:]
+    metor <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">4</span>]<span style="color:#f92672">.</span>get_text()[<span style="color:#ae81ff">3</span>:]
+    park <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">5</span>]<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">3</span>:]
+    distrinct <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">6</span>]<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">3</span>:]
+    bankuai <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">p</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">6</span>]<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>]
+    broker <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">brokerName</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>split(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">if</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">brokerName</span><span style="color:#e6db74">&#39;</span>}) <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>
+    phone <span style="color:#f92672">=</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">phone</span><span style="color:#e6db74">&#39;</span>})<span style="color:#f92672">.</span>get_text()<span style="color:#f92672">.</span>strip()<span style="color:#f92672">.</span>replace(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>)<span style="color:#f92672">.</span>replace(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span>) <span style="color:#66d9ef">if</span> bsobj<span style="color:#f92672">.</span>find(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">div</span><span style="color:#e6db74">&#39;</span>, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">class</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">phone</span><span style="color:#e6db74">&#39;</span>}) <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>
+<span style="color:#75715e"># 存储数据到Excel中</span>
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> title
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> park
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">3</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> bankuai
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">4</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> distrinct
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">5</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> price
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">6</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> area
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> location, <span style="color:#ae81ff">7</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> house_type
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span>location, <span style="color:#ae81ff">8</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> metor
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span>location, <span style="color:#ae81ff">9</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> broker
+    sht<span style="color:#f92672">.</span>range(page <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span>location, <span style="color:#ae81ff">10</span>)<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> phone
+
+<span style="color:#75715e"># 运行程序</span>
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">__main__</span><span style="color:#e6db74">&#39;</span>:
+    urls <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">https://gz.lianjia.com/zufang/pg{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(ii) <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">101</span>)]
+    <span style="color:#66d9ef">for</span> ii,url <span style="color:#f92672">in</span> enumerate(urls):
+        get_html(url,ii)
+        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>) 
+    wb<span style="color:#f92672">.</span>save(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">lianjia_zufang.xlsx</span><span style="color:#e6db74">&#39;</span>)
+    wb<span style="color:#f92672">.</span>close()
+</code></pre></div><p><img src="https://i.imgur.com/nTYB9gv.png" alt="爬虫结果">
+现在已经成功爬取了链家上面的租房信息，并成功地将其存放在了Excel文件中，后续便可以采用这些数据进行相应的分析了。另外程序的完整代码可以在作者的github获得，关于小编的github账号可以参看前期的文章。</p>
+<h3 id="heading5">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下怎么使用python去爬取链家网上面的租房信息，初步掌握了爬取跨页面网页的基本操作步骤。对于爬取到的数据，小编后续文章中会使用它们去分析一下租房市场的基本情况，当然如果需要这些数据的朋友也可以和小编留言，小编这里就不再上传数据集（小编会在多爬取几次之后形成一份更加完备的数据集之后再上传数据集），敬请期待后续的租金数据分析文章。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E7%88%AC%E8%99%AB" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">爬虫</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/">xlsxwriter库介绍—（（二）——workbook命令介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">xlsxwriter快速入门</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/">python操作Word和PPT</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BE%E5%86%8D%E6%8E%A2matplotlib/">Python绘图——再探matplotlib</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/">使用python库进行Excel读写</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ppt on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/ppt/</link>
+    <description>Recent content in ppt on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 21 May 2018 21:51:45 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/ppt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>python操作Word和PPT</title>
+      <link>https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/</link>
+      <pubDate>Mon, 21 May 2018 21:51:45 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-17&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周又开始了，祝愿各位新的一周一切顺利舒心！这两天家里断网，因此原定于周日进行更新的计划不得已推迟到今天，对此，小编先说声抱歉了。上期文章中小编和大家聊了一下matplotlib库的第二种绘图语法，了解到第二种绘图语法的便捷高效，从而为后期深化奠定了基础。这期文章中，小编准备讲一下python如何操作office办公中的三大神器——word/excel/ppt。鉴于前期文章中，小编已经对Excel和python的协作有所介绍，这一期文章中就不再进行说明。这期文章将重点讲解怎样使用python去操作word和PPT。笔者的目的是通过探索程序语言与办公软件的协作，从而争取去实现办公与报告撰写的自动化。现在正式开始。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>xpath on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/xpath/</link>
+    <description>Recent content in xpath on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 17 Sep 2018 21:45:31 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/xpath/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>网页解析工具终结篇——xpath语法</title>
+      <link>https://liupu14.github.io/posts/%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E7%BB%88%E7%BB%93%E7%AF%87xpath%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Mon, 17 Sep 2018 21:45:31 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E7%BB%88%E7%BB%93%E7%AF%87xpath%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-14&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;山竹（难怪都说越是美丽的东西越危险，这么美的名字下竟是如此狂野）终于过去了，囤货泡面的日子真的不好受，希望天佑中华，无狂风再至！本期文章接着和大家讲一下相关网页解析工具xpath。如果大家熟悉文档路径结构的话，那么xpath绝对是一种较为容易掌握的网页解析方式，这也是小编为什麼将其放在最后一期网页解析系列文章的原因之一。小编一直觉得学东西一定要先啃掉难的，而后再去掌握简单的（或者说此时你只需要较少的时间投入便可掌握简单的知识）。废话就不多说了，下面正式开始本期文章的介绍。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

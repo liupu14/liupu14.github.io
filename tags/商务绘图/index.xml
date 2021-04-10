@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>商务绘图 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE/</link>
+    <description>Recent content in 商务绘图 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 17 Aug 2018 22:51:07 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E7%BB%98%E5%9B%BE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Rython与散点图绘制</title>
+      <link>https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/</link>
+      <pubDate>Fri, 17 Aug 2018 22:51:07 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-13&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期文章和大家简单聊了一下怎么使用python去爬取酷狗Top500排行榜的相关数据，了解了python爬取多页面网页的基本原理，也让大家了解到了目前流行的一些歌曲情况，后续文章会进一步介绍python的网络爬虫。但是，本期对于爬虫的介绍将先放一下，因为小编似乎很久没有和大家聊图表的绘制了，小编觉得很有必要讲一下这个。因此本期文章将和大家接着聊一下图表的绘制，主要是散点图的绘制。在本期的介绍中，小编将先介绍最基本的matplotlib实现过程，而后介绍python中绘制静态图表的优秀库seaborn的实现过程，最后将介绍怎么使用R语言来实现散点图的绘制。下面正式开始！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>值得细细品味的七种python可视化工具</title>
+      <link>https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Thu, 21 Jun 2018 23:29:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-18&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周已经结束尾声，一句字总结本周：累！不过写作一事总是不能放下，小编将一如既往地和大家一起前行。上期文章中，小编和大家谈了ggplot2的图层语法，相对来说比较枯燥（理论的东西一直以来都比较枯燥，即使小编也无法避免此类情形），然而那期文章却对ggplot2的基本图层语法进行了俯瞰式介绍，为实战绘图打下了基础。本来准备在这期文章中给大家谈一下机器学习中的朴素贝叶斯算法，但是考虑到这篇文章也主要表现为理论与程序，所以为了不使各位出现审美疲劳，最重要的是为了不使各位陷入枯燥之所，暂时打算将这篇机器学习的文章放在周末进行介绍，本期文章小编准备讲一个比较欢快的主题，顺便也让劳累的小编放松一下。这期文章，小编将和大家聊一下python中的七种数据可视化工具，以便为各位的绘图实践提供更多可能性。废话不再多说，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ggplot2包介绍——深入图层语法</title>
+      <link>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Mon, 18 Jun 2018 22:00:37 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/ggplot2%E5%8C%85%E4%BB%8B%E7%BB%8D%E6%B7%B1%E5%85%A5%E5%9B%BE%E5%B1%82%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-11&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;本来准备及时更新的两期文章，因为粽子节的来临而不得已进行了延长，因而也就造成了小编的即使文章调整，对此，小编要先对那些长期关注小编的朋友说一声抱歉了。上一期微文中，小编主要对文章今后的写作框架及文章的目录进行了整理，可能很多人会觉得上期文章没有含金量。诚然，从一个看客的角度看来，那期文章的干货的确很少，但是对于小编来说，那期文章却是极其重要的。我们常说“吾日三省吾身”，那期文章是对小编写作的阶段性总结以及对于自己写作思路的重新梳理，是对自己的一种重新审视，所以从这一点看来，小编离不开这种思考，今后肯定还会有类似的这种文章。本期小编准备继续和大家讲述一下ggplot2的相关知识，介绍ggplot2绘图中的常用组件以及基本操作语法。现在正式进入文章主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>pdvega绘制常用商务图</title>
+      <link>https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/</link>
+      <pubDate>Fri, 20 Apr 2018 23:16:08 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+任何问题与讨论，请在在文末评论处或公众号留言
+最新更新时间：&lt;code&gt;2018-4-17&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;heading&#34;&gt;写在前面&lt;/h2&gt;
+&lt;p&gt;千呼万唤始出来，文章继续更新时！上一期小编说过，这一期文章中将讲一讲python中绘图那些事。相信一听到Python绘图，各位大大脑海中最先涌现出的绘图库应该就是Matplotlib库了（什麼，你说你从没有涌现出这个想法，小编只能说要不你就是小白，要不你就真的是Python小白）。但是，本期文章中，小编并不准备直接开始讲述这一Python绘图神器，原因小编有在上一期文章中提到过，这里就不再多说。那么大家肯定很疑惑，既然你小编你不准备讲述Matplotlib库，那你是准备这一期忽悠我们嘛（13万万中国人不会答应）。各位先别急着丢板砖呀，小编虽然不准备讲述这一绘图库，但已经准备了另外一个更加高效的绘图库予以大家，这个库就是基于altair库语法开发出来的一个快捷简便绘图库pdvega。至于小编为什麼要从这一个库开始讲起，这里是处于两个原因：其一，让大家了解到Python中绘图也可以如此简单美观，从而提升各位继续Python之路的兴趣；其二，正如公众号所明确的那样，本公众号旨在介绍一些简化办公的方法，那么在绘图方面自然需要不断介绍更加快捷便利的绘图库。好了，闲话不再多说，下面正式进入pdvega的世界。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

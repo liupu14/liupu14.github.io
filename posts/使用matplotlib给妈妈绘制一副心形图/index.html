@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>使用matplotlib给妈妈绘制一副心形图 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="使用matplotlib给妈妈绘制一副心形图" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-10
+
+写在前面
+今天是一年一度的母亲节（请记住这个时间，每年五月的第二个星期日），在这里小编要向所有伟大母亲送上祝福，祝愿全天下的母亲都能够健康、快乐、长寿！本来小编这一期是准备写另一个主题的，不过考虑到今天是母亲节，小编必须将那一篇文章进行推迟，因为在小编看来任何事情都没有家人重要，至此伟大的母亲节之时，小编想谈一下母亲节那些事情，也想表达一下小编对于自己那位平凡而又伟大、慈祥温柔的母亲的爱与思念！所以本期文章更多的是一篇情怀类文章，当然小编也会在写作中使用python中的一些工具绘制一些图形，下面进入主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/" />
+<meta property="article:published_time" content="2018-05-13T16:51:23+00:00" />
+<meta property="article:modified_time" content="2018-05-13T16:51:23+00:00" />
+<meta itemprop="name" content="使用matplotlib给妈妈绘制一副心形图">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-10
+
+写在前面
+今天是一年一度的母亲节（请记住这个时间，每年五月的第二个星期日），在这里小编要向所有伟大母亲送上祝福，祝愿全天下的母亲都能够健康、快乐、长寿！本来小编这一期是准备写另一个主题的，不过考虑到今天是母亲节，小编必须将那一篇文章进行推迟，因为在小编看来任何事情都没有家人重要，至此伟大的母亲节之时，小编想谈一下母亲节那些事情，也想表达一下小编对于自己那位平凡而又伟大、慈祥温柔的母亲的爱与思念！所以本期文章更多的是一篇情怀类文章，当然小编也会在写作中使用python中的一些工具绘制一些图形，下面进入主题。">
+<meta itemprop="datePublished" content="2018-05-13T16:51:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-13T16:51:23&#43;00:00" />
+<meta itemprop="wordCount" content="149">
+
+
+
+<meta itemprop="keywords" content="python,matplotlib,节日," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用matplotlib给妈妈绘制一副心形图"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-10
+
+写在前面
+今天是一年一度的母亲节（请记住这个时间，每年五月的第二个星期日），在这里小编要向所有伟大母亲送上祝福，祝愿全天下的母亲都能够健康、快乐、长寿！本来小编这一期是准备写另一个主题的，不过考虑到今天是母亲节，小编必须将那一篇文章进行推迟，因为在小编看来任何事情都没有家人重要，至此伟大的母亲节之时，小编想谈一下母亲节那些事情，也想表达一下小编对于自己那位平凡而又伟大、慈祥温柔的母亲的爱与思念！所以本期文章更多的是一篇情怀类文章，当然小编也会在写作中使用python中的一些工具绘制一些图形，下面进入主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/&amp;text=%e4%bd%bf%e7%94%a8matplotlib%e7%bb%99%e5%a6%88%e5%a6%88%e7%bb%98%e5%88%b6%e4%b8%80%e5%89%af%e5%bf%83%e5%bd%a2%e5%9b%be" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/&amp;title=%e4%bd%bf%e7%94%a8matplotlib%e7%bb%99%e5%a6%88%e5%a6%88%e7%bb%98%e5%88%b6%e4%b8%80%e5%89%af%e5%bf%83%e5%bd%a2%e5%9b%be" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">使用matplotlib给妈妈绘制一副心形图</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-13T16:51:23Z">May 13, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-10</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>今天是一年一度的母亲节（请记住这个时间，每年五月的第二个星期日），在这里小编要向所有伟大母亲送上祝福，祝愿全天下的母亲都能够健康、快乐、长寿！本来小编这一期是准备写另一个主题的，不过考虑到今天是母亲节，小编必须将那一篇文章进行推迟，因为在小编看来任何事情都没有家人重要，至此伟大的母亲节之时，小编想谈一下母亲节那些事情，也想表达一下小编对于自己那位平凡而又伟大、慈祥温柔的母亲的爱与思念！所以本期文章更多的是一篇情怀类文章，当然小编也会在写作中使用python中的一些工具绘制一些图形，下面进入主题。</p>
+<h3 id="matplotlib">使用Matplotlib向母亲表达爱意</h3>
+<p>都说女儿是爸爸上一世的情人，那么我想说的是母亲又何尝不是我们上一世的情人呢？然而我们这些习惯了被宠的孩子现在只知情人节向女友示爱，又有几人会哪怕一次对自己的母亲说一声“我爱你，妈妈”呢？也许我们可能羞于示爱于母亲，但是须知，爱不只男女之间的情爱，爱更加包含了儿女与父母之间的款款深情。而且在小编看来，这后者之爱虽然不是必须要高于前者之爱，但是至少也要和前者之爱持平，所以习惯了向爱人示爱的我们也应该习惯于向自己的父母示爱！而这其中更加应该表达爱意的是对自己的母亲，因为她们本质上仍是女性，她们感情细腻敏感，对这些她们比父亲具有更加强烈的需求，所以我希望这个节日中，大家能够深情地向自己的妈妈说一句“我爱你，妈妈”。</p>
+<p>我们都知道，笛卡尔当年为了向自己的小女友示爱创造了心形图，所以我们何尝不能使用这种心形图向自己的母亲表达爱意呢？心形图的绘制无非就是数学公式的可视化，因此小编这里先介绍一些这些爱的方程式，而后使用python代码实现心形图的绘制。</p>
+<ul>
+<li>心形图的极坐标方程
+<ul>
+<li>水平方向：$r = a(1-cos(\theta),a&gt;0$</li>
+<li>竖直方向：$r = a(1-sin(\theta),a&gt;0$</li>
+</ul>
+</li>
+<li>心形图的直角坐标方程
+<ul>
+<li>水平方向：$x^2+y^2+ax=a\sqrt{x^2+y^2}$</li>
+<li>竖直方向：$x^2+y^2-ax=a\sqrt{x^2+y^2}$</li>
+</ul>
+</li>
+<li>心形图的参数方程
+$ x = a(2cos(t) - cos(2t))$
+$ y = a(2sin(t) - sin(2t))$</li>
+</ul>
+<p>了解了心形图的方程系统，那么下面就可以开始进行心形图的绘制了，小编这里采用python中matplotlib库来实现心形图的绘制。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入绘图中所需库</span>
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt   
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np  
+<span style="color:#f92672">import</span> math  
+<span style="color:#75715e"># 定义绘图函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">drawHeart</span>():  
+    t <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0</span>, math<span style="color:#f92672">.</span>pi, <span style="color:#ae81ff">1000</span>)  
+    x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(t)  
+    y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>cos(t) <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>power(x, <span style="color:#ae81ff">2.0</span><span style="color:#f92672">/</span><span style="color:#ae81ff">3</span>)  
+    plt<span style="color:#f92672">.</span>plot(x, y, color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">red</span><span style="color:#e6db74">&#39;</span>, linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)  
+    plt<span style="color:#f92672">.</span>plot(<span style="color:#f92672">-</span>x, y, color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">red</span><span style="color:#e6db74">&#39;</span>, linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)  
+    plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">t</span><span style="color:#e6db74">&#39;</span>)  
+    plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">h</span><span style="color:#e6db74">&#39;</span>)  
+    plt<span style="color:#f92672">.</span>ylim(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1.6</span>)  
+    plt<span style="color:#f92672">.</span>xlim(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.1</span>, <span style="color:#ae81ff">1.1</span>)   
+    plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">off</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#75715e"># 调用函数</span>
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> drawHeart()
+</code></pre></div><p>前三行代码导入了绘图中需要使用的一些库，中间的代码定义了一个进行心形图绘制的函数，最后调用这一绘图函数可以得到以下图形：
+<img src="https://i.imgur.com/okykQOr.png" alt="心形图">
+现在已经绘制出了心形图，那下面自然要将我们的爱意送给妈妈，实现这个仅仅需要在原图中加入文本标注即可：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">drawHeart</span>():  
+    t <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0</span>, math<span style="color:#f92672">.</span>pi, <span style="color:#ae81ff">1000</span>)  
+    x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(t)  
+    y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>cos(t) <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>power(x, <span style="color:#ae81ff">2.0</span><span style="color:#f92672">/</span><span style="color:#ae81ff">3</span>) 
+    plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">off</span><span style="color:#e6db74">&#39;</span>)
+    plt<span style="color:#f92672">.</span>plot(x, y, color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">red</span><span style="color:#e6db74">&#39;</span>, linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)  
+    plt<span style="color:#f92672">.</span>plot(<span style="color:#f92672">-</span>x, y, color<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">red</span><span style="color:#e6db74">&#39;</span>, linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)  
+    plt<span style="color:#f92672">.</span>ylim(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1.6</span>)  
+    plt<span style="color:#f92672">.</span>xlim(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.1</span>, <span style="color:#ae81ff">1.1</span>)
+    plt<span style="color:#f92672">.</span>text(<span style="color:#ae81ff">0.05</span>,<span style="color:#ae81ff">0.4</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">我爱你，妈妈！</span><span style="color:#e6db74">&#39;</span>,fontsize <span style="color:#f92672">=</span> 
+    <span style="color:#ae81ff">18</span>,bbox<span style="color:#f92672">=</span>dict(facecolor<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">red</span><span style="color:#e6db74">&#39;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>), 
+    horizontalalignment<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">center</span><span style="color:#e6db74">&#39;</span>,verticalalignment<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">center</span><span style="color:#e6db74">&#39;</span>)
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> drawheart()
+</code></pre></div><p>通过与上面代码对比，主要就是增加了一条<code>plt.text</code>命令，这样我们就把我们的爱的话语送给了妈妈。
+<img src="https://i.imgur.com/dvqukO1.png" alt="爱的心形图">
+这样便制作了一个向妈妈表达爱意的心形图，当然还可以进一步制作一些动态的心形图，那将通过使用matplotlib库中的animation函数进行实现，小编这里就不再继续讲述了，有兴趣的朋友可以自己动手实践一下。</p>
+<h3 id="heading1">你是一个合格的儿女吗？</h3>
+<p>上文小编引导大家完成了心形图的绘制，下面小编将谈一下我们目前所处于的实际，我们真的是合格的儿女吗？这里小编不说其他的，仅仅以我们在各个阶段中每年所能陪同父母的时间来进行说明。小编将我们的一生划分成六个阶段：幼童及小学；初中；高中；大学；工作阶段以及退休阶段。每个阶段以年均陪同父母的天数作为时间的度量标准。幼童及小学时期，我们基本是陪同在父母身边的，我们一年中最少能够陪同你父母360天；初中时期，我们很多人可能需要住校，因此一般是每周在家两天，一年有53周外加各种假期，我们能够陪同父母的时间大概是160天；高中时期，基本是每个月能够回家一次（而且寒暑假需要在校进行补课），因此我们在高中时期最多每年能够陪同父母80天；大学时期一般是半年回去一次，因此我们主要是在寒暑假时才会陪同在父母身边，每年最多60天；工作之后，我们基本是每年回去一次，年假一般不会超过十天，考虑到其它假期，我们每年最大陪同父母15天；等我们退休了，你觉得我们还能够陪同父母吗，此时我们能够陪同父母的时间大致是0，见下表总结：</p>
+<table>
+<thead>
+<tr>
+<th align="center">人生阶段</th>
+<th align="center">陪同父母时间</th>
+<th align="center">时间占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">幼童及小学时期</td>
+<td align="center">360</td>
+<td align="center">$\sim$100%</td>
+</tr>
+<tr>
+<td align="center">初中阶段</td>
+<td align="center">160</td>
+<td align="center">43.8%</td>
+</tr>
+<tr>
+<td align="center">高中阶段</td>
+<td align="center">80</td>
+<td align="center">21.9%</td>
+</tr>
+<tr>
+<td align="center">大学阶段</td>
+<td align="center">60</td>
+<td align="center">16.4%</td>
+</tr>
+<tr>
+<td align="center">工作阶段</td>
+<td align="center">15</td>
+<td align="center">4.1%</td>
+</tr>
+<tr>
+<td align="center">退休阶段</td>
+<td align="center">0</td>
+<td align="center">0%</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://i.imgur.com/P5t7qrn.png" alt="不同阶段陪同父母时间">
+可以很明显地看出，随着我们逐步长大，我们陪同父母的时间越来越短，而且我们真正陪在父母身边比较长的阶段主要是在幼童及小学，以及初中时期，这个时段与其说是我们陪同父母，倒不如更加确切地说是父母浪费他们的最宝贵时间陪在了我们身边，一旦当我们心智开始成熟之后，即在高中及之后，我们便开始了越发远离父母的趋势。</p>
+<p>古人云：父母在不远游。然而从中学时代开始，我们便开始了离开父母身边的历程，而且距离越来越来，及至现在已有千里之距。经济学家都是一群聪明的人，他们能够研究各种信息不对称的情况，但是他们却从来不会去了解父母与子女之间爱的不对称现象。随着时间的流逝，父母增加的是日益花白的发丝以及对于子女的无限挂念，而我们增加的却是永不满足的野心以及征服一切的欲望，这就使得我们和父母间不论从物理距离还是从心理距离方面都渐行渐远。</p>
+<p>所以我想说的是，你现在真的还觉得你是一个合格的子女吗？作为一个合格的子女，你不能常伴父母身边尽孝；即使你不得以常年在外，你又多久才会选择和父母好好通一次电话，随便唠唠日常的一切呢？我们总是把忙当作我们应对一切的借口，把追求事业的成功以及声誉的显赫作为我们懈怠其它的工具，然而我们何时又真的去反思过我们的成长又何尝不是父母逝去他们的宝贵时光换来的呢？所以，每念及此，小编总是会眼噙泪水，无法释怀！对于父母，我亏欠他们太多；作为儿子，我终究不是一个合格的儿子。</p>
+<h3 id="heading2">文末感言</h3>
+<p>本期文章就写到这里吧！在这个伟大的节日，小编只想好好和家人聊聊天，好好地对自己的妈妈说一声爱意，所以笔者也诚挚地希望大家都能够在这个节日里好好地陪陪家人或者好好地和他们聊聊天，千万不要用金钱来显示你的恶俗，不要让自己陷入“子欲养而亲不待”的无尽遗憾之中。最后，再次祝愿全天下伟大的母亲都能够健康长寿！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/matplotlib" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">matplotlib</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E8%8A%82%E6%97%A5" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">节日</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>机器学习系列——决策树 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="机器学习系列——决策树" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-26
+
+写在前面
+刚刚过完了人头季，各位没有被堵吧？本来准备在周末更新本文的，但是假期之时偶感不适，因而使得本文的更新有所推迟，还请各位谅解。上期，小编和各位讲解了怎么使用pandas库去进行Excel中的筛选和编辑功能，初步认识了pandas库的相应能力。这一期文章中，笔者将践行之前所作出的承诺，和各位讲一下机器学习中的另外一种经典算法：决策树。闲言就不多说了，直接进入主题吧。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/" />
+<meta property="article:published_time" content="2018-05-02T22:42:07+00:00" />
+<meta property="article:modified_time" content="2018-05-02T22:42:07+00:00" />
+<meta itemprop="name" content="机器学习系列——决策树">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-26
+
+写在前面
+刚刚过完了人头季，各位没有被堵吧？本来准备在周末更新本文的，但是假期之时偶感不适，因而使得本文的更新有所推迟，还请各位谅解。上期，小编和各位讲解了怎么使用pandas库去进行Excel中的筛选和编辑功能，初步认识了pandas库的相应能力。这一期文章中，笔者将践行之前所作出的承诺，和各位讲一下机器学习中的另外一种经典算法：决策树。闲言就不多说了，直接进入主题吧。">
+<meta itemprop="datePublished" content="2018-05-02T22:42:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-02T22:42:07&#43;00:00" />
+<meta itemprop="wordCount" content="338">
+
+
+
+<meta itemprop="keywords" content="python,机器学习,决策树," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="机器学习系列——决策树"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-4-26
+
+写在前面
+刚刚过完了人头季，各位没有被堵吧？本来准备在周末更新本文的，但是假期之时偶感不适，因而使得本文的更新有所推迟，还请各位谅解。上期，小编和各位讲解了怎么使用pandas库去进行Excel中的筛选和编辑功能，初步认识了pandas库的相应能力。这一期文章中，笔者将践行之前所作出的承诺，和各位讲一下机器学习中的另外一种经典算法：决策树。闲言就不多说了，直接进入主题吧。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/&amp;text=%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e5%86%b3%e7%ad%96%e6%a0%91" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/&amp;title=%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%e2%80%94%e2%80%94%e5%86%b3%e7%ad%96%e6%a0%91" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">机器学习系列——决策树</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-02T22:42:07Z">May 2, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-4-26</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>刚刚过完了人头季，各位没有被堵吧？本来准备在周末更新本文的，但是假期之时偶感不适，因而使得本文的更新有所推迟，还请各位谅解。上期，小编和各位讲解了怎么使用pandas库去进行Excel中的筛选和编辑功能，初步认识了pandas库的相应能力。这一期文章中，笔者将践行之前所作出的承诺，和各位讲一下机器学习中的另外一种经典算法：决策树。闲言就不多说了，直接进入主题吧。</p>
+<h3 id="heading1">第一讲：决策树基础</h3>
+<p>决策树，相信画过流程图的朋友都知道，当然学过金融的朋友也很清楚（期权算法中典型的二叉树算法就是一种决策树流程图），如果既不是学习计算机，又不知道金融的朋友，那么，我想你们至少应该玩过一些心有灵犀游戏吧：游戏的规则是被猜的人首先将心中所想的事物写在纸上，而后猜测人通过提出一些是否问题去逐步锁定被猜者心中所想，通过这种方式不断压缩想法空间，并最终猜测到别人心中所想之物。以一个是否进行约会的例子来进行说明吧。假设一个女生是否和人进行约会基于两个考量：其一，这个男士是不是帅哥；其二，这个男士是否有车有房。如果此男士为帅哥，则直接进行约会；如果不是，则考虑他是否有房有车，如果有，那么约会，如果没有，就不进行约会（这里只是举例，绝无讽刺任何人的想法），具体的决策流程就如下图：
+<img src="https://i.imgur.com/tfKWVny.jpg" alt="是否约会决策树流程图">
+这里给出了一个两步决策树，第一步将相貌作为属性特征进行判断，第二步将房车作为属性特征进行判断，这个决策树最多在两步之后结束。既然了解了什麼是决策树，那么下面的关键就是要构建决策树。</p>
+<h4 id="heading2">决策树的构建</h4>
+<p>前面已经了解了什麼是决策树，那么决策树的构建就是要选择属性特征作为节点。即在构建决策树时，我们首先需要解决的问题就是，选择哪一个具有决定性作用的特征首先去划分数据集。为了能够找到这种最优特征，划分出最优结果，必须对每个特征进行评估。完成测试之后，原始数据集就被划分为几个数据子集，这些数据子集会分布在每一个决策点的所有分支上。如果某个分支下的数据属于同一类型，则无需再对数据集进行下一步的划分；如果数据子集内的数据不属于同一数据，则重复划分数据集直到不能再划分为止。因此创建分支函数createbranch()的伪码为：</p>
+<pre><code class="language-检测数据集中的每一个分项是否属于同一类别：" data-lang="检测数据集中的每一个分项是否属于同一类别：">if so return 类标签
+ELSE
+    寻找划分数据集的最好特征
+    划分数据集
+    创建分支节点
+        for 每个划分的子集
+            调用函数createbranch()并增加返回结果到分支节点中
+    return 分支节点
+</code></pre><p>这里所给出的仅仅是分支函数的伪代码，下面笔者会逐步把这些伪代码转换为python代码。通过上面也大致了解了决策树的一般流程：</p>
+<table>
+<thead>
+<tr>
+<th align="left">决策树的一般流程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">(1)收集数据：任何能够收集数据的方法都是好方法</td>
+</tr>
+<tr>
+<td align="left">(2)准备数据：决策树构造算法只适用于分类型数据，因此数值型数据必须离散化</td>
+</tr>
+<tr>
+<td align="left">(3)分析数据：可以使用任何方法，主要检查决策树图形是否符合预期</td>
+</tr>
+<tr>
+<td align="left">(4)训练数据：决策树的数据结构</td>
+</tr>
+<tr>
+<td align="left">(5)测试数据：主要是计算算法的错误率</td>
+</tr>
+<tr>
+<td align="left">(6)使用算法：一旦测试算法有效，则将其付诸实践</td>
+</tr>
+</tbody>
+</table>
+<p>了解到了决策树的一般流程，那么很明显决策树的核心就是筛选出最优的特征，这就需要对各特征进行评估，所以熵就成为了这一评估的关键。</p>
+<h4 id="heading3">熵值（信息增益）</h4>
+<p>划分数据集的大原则是：将无序的数据变得更加有序。而在此方面一直比较有效的方法就是信息论方面的熵值法（也被称之为信息增益），即通过比较数据集划分前和划分后的信息增加值大小来选定优先分割特征。这一方法体系是由克劳德·香农提出的，因此在有些地方也被称之为香农值或香农熵。
+熵被定义为信息的期望值，因此熵值的计算首先离不开对于信息的度量。在香农的定义中，如果待分类的数据分散在多个子类之中，那么第i个子类$x_i$的信息就被定义为：
+$$ Info(x_i) = -log_2p(x_i) $$
+其中$p(x_i)$被定义为该分类的概率。
+一旦计算得出了各个分类的信息值，那么便可以对各分类的信息值进行加权得出此类数据集的的熵值：
+$$ H = \sum_{i=1}^np(x_i)Info(x_i)=-\sum_{i=1}^np(x_i)log_2p(x_i)$$
+其中n是数据集中的类别数。这里还是举一个例子予以说明吧，例如下表给出了一个分类数据集，其中类别被分成了是否两类，是的概率为0.6，否的概率为0.4。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">是否帅气</th>
+<th align="center">是否有房有车</th>
+<th align="center">约会否</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">否</td>
+</tr>
+</tbody>
+</table>
+<p>因此这一数据集的熵值为$-0.4* log2(0.4)-0.6* log(0.6)=0.97$。一般说来，一个数据集的类别越分散，熵值就越大，当一个数据集类别均匀分布时，熵值达到最大。既然已经明白了决策树的关键以及确定了划分的算法，那么下面就进入python之中吧。</p>
+<h3 id="python">第二讲：决策树的Python实践</h3>
+<p>上文举了一个是否约会的例子，这里将其创建为一个数据集，其中1表示是，0表示否。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">createDataSet</span>():
+    dataSet <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">是</span><span style="color:#e6db74">&#39;</span>],[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">是</span><span style="color:#e6db74">&#39;</span>],[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">是</span><span style="color:#e6db74">&#39;</span>],[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">否</span><span style="color:#e6db74">&#39;</span>],[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">否]]</span>
+    labels <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">帅否</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">有车房否</span><span style="color:#e6db74">&#39;</span>]
+    <span style="color:#66d9ef">return</span> dataSet,labels
+</code></pre></div><p>通过以上代码，我们便把上面所举的例约会例子进行了数据化，后面就可以使用相应的数据方法对其进行计算了。</p>
+<h3 id="heading4">熵值的计算</h3>
+<p>上面已经对熵值的计算进行了介绍，这里主要将其代码化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 从math模块中导入log2函数，计算以2为底的对数</span>
+<span style="color:#f92672">from</span> math <span style="color:#f92672">import</span> log2  
+
+<span style="color:#75715e"># 创建熵值计算函数</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">shannonIndex</span>(dataSet):
+    numSample <span style="color:#f92672">=</span> len(dataSet)
+    labelSet <span style="color:#f92672">=</span> {}
+    <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> dataSet:
+        currentLabel <span style="color:#f92672">=</span> item[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+        <span style="color:#66d9ef">if</span> currentLabel <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> labelSet<span style="color:#f92672">.</span>keys():
+            labelSet[currentLabel] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+        labelSet[currentLabel] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    shannonindex <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> labelSet:
+        prob <span style="color:#f92672">=</span> float(labelSet[key])<span style="color:#f92672">/</span>numSample
+        shannonindex <span style="color:#f92672">-</span><span style="color:#f92672">=</span> prob<span style="color:#f92672">*</span>log2(prob)
+    <span style="color:#66d9ef">return</span> shannonindex
+</code></pre></div><p>这样我们就创建了一个计算熵值的函数shannonIndex()，利用它我们便可以得出相应的数据集的熵值，以前面创建的数据集dataSet为例，通过输入一下代码便可以得出我们这一数据集的熵值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> shannonIndex(dataSet)
+<span style="color:#ae81ff">0.97</span>
+</code></pre></div><p>一旦你也得到了和小编一样的结果，那么就说明你已经正确创建了数据集，并且已经正确定义了熵值计算的函数，那么下面你就需要考虑基于特征分割数据集了。</p>
+<h4 id="heading5">数据集的分割与最优划分</h4>
+<p>因为在计算某个特征下的信息增益时，分割基于某个特征的数据集至关重要，因此这里要必要创建一个分割数据集的函数splitDataSet()。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">splitDataSet</span>(dataSet,axis,value):
+    retDataSet <span style="color:#f92672">=</span> []
+    <span style="color:#66d9ef">for</span> featVec <span style="color:#f92672">in</span> dataSet:
+        <span style="color:#66d9ef">if</span> featVec[axis] <span style="color:#f92672">==</span> value:
+            reducedFeatVec <span style="color:#f92672">=</span> featVec[:axis]
+            reducedFeatVec<span style="color:#f92672">.</span>extend(featVec[axis<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>:])
+            retDataSet<span style="color:#f92672">.</span>append(reducedFeatVec)
+    <span style="color:#66d9ef">return</span> retDataSet     
+</code></pre></div><p>这里给出了一个分割数据集的函数，其中的三个参数分别表示带划分的数据集、带划分数据集的特征（这里请记得输入他的索引位置）以及需要返回的特征的值。因为列表是可以修改的，所以为了避免出现修改原始列表，这里创建了一个新列表retDataSet，同时还有一点需要强调的是Python中的append和extend方法，这两者的区别笔者在之前的文章中已有介绍，这里就不再重复介绍了，还不是很清楚的朋友可以参考笔者前期的列表系列文章或者参看python手册。相关准备已经完成，那么接下来就要开始去选取出数据集中的最优特征了。如果你还没有忘记，就应该记得前面笔者所说的，所谓最优特征就是基于此特征划分下的信息增益最大。笔者这里先用之前所给出的那个约会例子进行一个简单的介绍，而后再给出相应的代码表述，希望这种做法可以使你真的能够加深对于这种最优特征选取的了解。</p>
+<p>前面所描述的约会例子中存在两个特征，分别为面貌特征和财力特征。我们首先来计算面貌特征的信息增益。面貌特征中主要存在两类，帅和不帅，其中帅的样本为三个，不帅的样本为2个，所以如果以此特征为标准划分，则将数据集划分成了两类，第一类中共有三个样本，而第二类中共有两个样本，即分割的概率分别为0.6和0.4。而在帅类的数据集中，成果约会的样本有两个，没有成功的样本有1个，那么这种成功的概率为2/3，没有成功的概率为1/3，那么帅数据集的熵为$ -\frac{2}{3} * log_2(\frac{2}{3})-\frac{1}{3} * log_2(\frac{1}{3})= 0.92 $，不帅数据集中成功约会的样本数为2，因此约会成功的概率为1，所以不帅数据集的熵为0，最终基于面貌特征进行划分的数据的总的熵值为<code>0.6*0.92+0.4*0=0.552</code>，而前面我们计算得出的基准熵值为0.97，所以基于面貌特征的信息增益为0.97-0.552=0.418。同样的过程，我们可以算出基于财力特征的熵值为0.8<em>1+0.2</em>0=0.8，信息增益为0.17,所以大家现在应该都知道需要选择面貌特征作为首选特征。笔者觉得这里已经讲得比较通俗了吧，如果还没明白就请多看几遍体会一下，下面上代码，笔者创建一个selectBestFeature()函数去选出最优的特征。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">selectBestFeature</span>(dataSet):
+    numofFeature <span style="color:#f92672">=</span> len(dataSet[<span style="color:#ae81ff">0</span>])<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+    baseShannonIndex <span style="color:#f92672">=</span> shannonIndex(dataSet)
+    baseInfoGain <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+    BestFeature <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(numofFeature):
+        featList <span style="color:#f92672">=</span> [item[ii] <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> dataSet]
+        uniqueFeature <span style="color:#f92672">=</span> set(featList)
+        newShannonIndex <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+        <span style="color:#66d9ef">for</span> value <span style="color:#f92672">in</span> uniqueFeature:
+            subDataSet <span style="color:#f92672">=</span> splitDataSet(dataSet,ii,value)
+            prob <span style="color:#f92672">=</span> len(subDataSet)<span style="color:#f92672">/</span>len(dataSet)
+            newShannonIndex <span style="color:#f92672">+</span><span style="color:#f92672">=</span> prob<span style="color:#f92672">*</span>shannonIndex(subDataSet)
+        infoGain <span style="color:#f92672">=</span> baseShannonIndex <span style="color:#f92672">-</span> newShannonIndex
+        <span style="color:#66d9ef">if</span> infoGain <span style="color:#f92672">&gt;</span> bestInfoGain:
+            bestInfoGain <span style="color:#f92672">=</span> infoGain
+            BestFeature <span style="color:#f92672">=</span> ii
+    <span style="color:#66d9ef">return</span> BestFeature
+</code></pre></div><p>上面的代码构建了一个用于选取最优特征的函数，这个函数仅仅需要一个参数就是数据集本身，因此不难理解。因为上面已经用例子对计算过程进行了说明，这里便不再对代码的各句含义进行赘述了，一旦你完成了函数的创建，不妨用前面所创建的约会数据集进行一下验证，在命令行中输入：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> selectBestFeature(dataSet)
+<span style="color:#ae81ff">0</span>
+</code></pre></div><p>看到了吧，如果你的函数没有写错，那么最后就会返回一个0，即第0个特征，也就是约会数据集中的面貌特征，和我们前面自己计算没有任何出入。既然已经完成了相关的子模块构建，那么下面就正式开始构建决策树程序。</p>
+<h4 id="heading6">递归构建决策树</h4>
+<p>前面介绍了从数据集构造决策树算法所需要的子模块，其工作原理为：得到原始数据集，然后基于最好的属性值划分数据集，由于特征值可能多于两个，因此可能存在大于两个分支的数据集划分。第一次划分之后，数据将向下传递到树分支的下一个节点，在这个节点上，可能需要对数据集进行再次划分，是不是很像递归的流程，所以接下来就需要采用递归的方法来处理这种不断延续的数据集划分。递归结束的条件是：程序遍历完所以划分数据集的属性，或者每个分支下的所有实例都具有相同的分类。如果所有实例具有相同的分类，则得到一个叶子节点或者终止块，任何到达叶子节点的数据必然属于叶子节点的分类。当然这是最后的结果，如果在遍历完所有属性之后，类标签仍然不是唯一的，那么就需要另外的解决方案，这里笔者引入多数表决方法，即在遍历完所有属性之后，类标签仍然不唯一，则根据类标签中出现最多的标签决定类别归属。所以，这里笔者进一步创建一个多数表决函数majorVote()。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> operator
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">majorVote</span>(labelList):
+    labelCount <span style="color:#f92672">=</span> {}
+    <span style="color:#66d9ef">for</span> vote <span style="color:#f92672">in</span> labelList:
+        <span style="color:#66d9ef">if</span> vote <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> labelCount<span style="color:#f92672">.</span>key():
+            labelCount[vote] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+        labelCount[vote] <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    sortedLabelCount <span style="color:#f92672">=</span> sorted(labelCount<span style="color:#f92672">.</span>key(),key <span style="color:#f92672">=</span> operator<span style="color:#f92672">.</span>itemgetter(<span style="color:#ae81ff">1</span>),reverse <span style="color:#f92672">=</span> True)
+    retrun sortedLabelCount[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]
+</code></pre></div><p>这样就创建了一个多数表决的函数，至此我们已经完成了一切准备，下面正式引入决策树创建函数createTree()。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">createTree</span>(dataSet,labels):
+    labelList <span style="color:#f92672">=</span> [item[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> dataSet]
+    <span style="color:#66d9ef">if</span> labelList<span style="color:#f92672">.</span>count(labelCount[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">==</span> len(labelList):
+        <span style="color:#66d9ef">return</span> labelList[<span style="color:#ae81ff">0</span>]
+    <span style="color:#66d9ef">if</span> len(dataSet[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+        <span style="color:#66d9ef">return</span> majorVote(labelList)
+    bestFeature <span style="color:#f92672">=</span> selectBestFeature(dataSet)
+    bestFeatureLabel <span style="color:#f92672">=</span> labels[bestFeature]
+    dicisionTree <span style="color:#f92672">=</span> {bestFeatureLabel:{}}
+    <span style="color:#66d9ef">del</span>(labels[bestFeature])
+    featureValues <span style="color:#f92672">=</span> [item[bestFeature] <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> dataSet]
+    uniqueFeature <span style="color:#f92672">=</span> set(featureValues)
+    <span style="color:#66d9ef">for</span> value <span style="color:#f92672">in</span> uniqueFeature:
+        subLabels <span style="color:#f92672">=</span> labels[:]
+        dicisionTree[bestFeature][value] <span style="color:#f92672">=</span> createTree(splitDataSet(dataSet,bestFeature,value),subLabels)
+    <span style="color:#66d9ef">return</span> dicisionTree
+</code></pre></div><p>至此，我们完成了决策树的构建过程，下面让我们用先前的约会数据检验一下我们的程序效果，请在命令行中输入一下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> DataSet,Labels <span style="color:#f92672">=</span> createDataSet()
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> createTree(DataSet,Labels)
+{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">帅否</span><span style="color:#e6db74">&#39;</span>:{<span style="color:#ae81ff">0</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">否</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">1</span>:{<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">有车房否</span><span style="color:#e6db74">&#39;</span>:{<span style="color:#ae81ff">0</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">否</span><span style="color:#e6db74">&#39;</span>,<span style="color:#ae81ff">1</span>:<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">是</span><span style="color:#e6db74">&#39;</span>}}}}
+</code></pre></div><p>至此，对于决策树的构建已经全部介绍完毕，“纸上得来终觉浅，绝知此事要躬行”，希望本文在给你带来灵感的同时能够激励你真正地在计算机上敲写一下代码。</p>
+<h3 id="heading7">后记</h3>
+<p>关于决策树的程序构造，本文就介绍到这里了，通过本文的介绍，初步了解了决策树的概念以及决策树构建的基本构成，为利用决策树进行分类决断奠定了初步基础。但是本文尚存在两个方面的不足：其一，文章中数据集仍然采用的是列表形式，这对于目前比较流行的表格形式来说有点滞后；其二，对于决策树的构建一般不能离开决策树的绘制，然而本文尚未对决策树进行绘制。鉴于这两点，笔者会在后续文章中增加一篇关于决策树的文章，考虑到决策树的绘制会用到Python中的matplotlib库，因此小编初步打算将这一篇文章在以后的Matplotlib绘图系列文章进行介绍。好了，本期文章就写到这里了，感谢你们的支持，下期文章笔者可能会介绍一篇使用R语言绘制热地图的文章，敬请期待。</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">机器学习</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">决策树</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

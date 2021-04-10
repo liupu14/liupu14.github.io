@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python商务办公 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC/</link>
+    <description>Recent content in Python商务办公 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 17 Sep 2018 21:45:31 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>网页解析工具终结篇——xpath语法</title>
+      <link>https://liupu14.github.io/posts/%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E7%BB%88%E7%BB%93%E7%AF%87xpath%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Mon, 17 Sep 2018 21:45:31 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E7%BB%88%E7%BB%93%E7%AF%87xpath%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-14&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;山竹（难怪都说越是美丽的东西越危险，这么美的名字下竟是如此狂野）终于过去了，囤货泡面的日子真的不好受，希望天佑中华，无狂风再至！本期文章接着和大家讲一下相关网页解析工具xpath。如果大家熟悉文档路径结构的话，那么xpath绝对是一种较为容易掌握的网页解析方式，这也是小编为什麼将其放在最后一期网页解析系列文章的原因之一。小编一直觉得学东西一定要先啃掉难的，而后再去掌握简单的（或者说此时你只需要较少的时间投入便可掌握简单的知识）。废话就不多说了，下面正式开始本期文章的介绍。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>送上一碗鸡汤——BeautifulSoup网页解析介绍</title>
+      <link>https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Fri, 14 Sep 2018 23:12:30 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-10&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期讲述了正则表达式在网页解析中的用法，了解了怎么使用正则表达式去获取网页数据。然而正则表达式语法相对较难掌握以及正则表达式书写相对繁琐，所以就相继有了其它一些网页解析方式。本期就和大家讲一下其中的代表BeautifulSoup，可以说这种解析工具在网页解析中是使用最为方便的一种解析方式，其清晰便捷的语法规则真的如其名字所彰显的那样（美丽心灵一般不会作恶），下面正式开始对其的讲解。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>爬虫风雨路，正则知多少？</title>
+      <link>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E9%A3%8E%E9%9B%A8%E8%B7%AF%E6%AD%A3%E5%88%99%E7%9F%A5%E5%A4%9A%E5%B0%91/</link>
+      <pubDate>Mon, 10 Sep 2018 22:43:46 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E9%A3%8E%E9%9B%A8%E8%B7%AF%E6%AD%A3%E5%88%99%E7%9F%A5%E5%A4%9A%E5%B0%91/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-7&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;原计划接下来的几期文章聊一下pandas库以及机器学习的那些事，奈何终究还是受不了一些朋友的反馈，希望小编讲一些网页解析的知识。既然如此，小编就满足一下这些朋友的要求，接下来几期就和大家聊一下网络爬虫中网页解析方面的相关知识。这将主要围绕正则表达式、lxml、beautifulsoup以及pyquery四种解析工具展开。因为正则表达式是所有解析方式中最高效以及适用性最高的工具，所以这期文章就先和大家讲一下正则表达式的相关用法，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>python生成随机漫步序列——醉鬼能回到家吗？</title>
+      <link>https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/</link>
+      <pubDate>Fri, 07 Sep 2018 22:12:41 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-9-3&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;最近小编又重温了一下《随机漫步的傻瓜》这本书，再次被纳西姆的智慧所征服，不过本文小编可不准备讲这些读后感，而是准备着重讲一下随机漫步这个词汇。因为随机漫步这个词汇可以说现在已经广泛地被用于文理，这个词汇期初起源于科学杂志上面的一篇论文，用来介绍一个醉鬼行走的路线路径，而后这一次被引入数学、金融、哲学思想方面，更是诞生了想随机分析这些学科。因此，本文准备介绍一些怎么使用python来生成随机游走序列以及绘制相应的路径图，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>温故知新——python爬虫阶段总结</title>
+      <link>https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Mon, 03 Sep 2018 22:02:52 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-31&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;前几期文章中，小编先后和大家讲述了四篇关于python爬取的文章，分别涉及到的主题是分页面以及跨页面网页数据的爬取、爬取数据怎么存储的Excel以及相关的数据库系统之中，通过四期文章的介绍，大致可以了了python爬虫的基本原理及步骤。所谓温故而知新，因此本期小编准备对那几期文章及python爬虫做一个总结，从而使大家更加深刻地认识到python爬虫。闲话不多说，下面正式进入主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>爬虫数据的数据库存储——MySQL数据库</title>
+      <link>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Fri, 31 Aug 2018 21:16:50 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-28&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;上期文章，小编和大家聊了一下怎么使用MongoDB数据库去存储python爬取到的数据，本期小编准备再接再厉，接着介绍一下关系型数据库和爬取数据的存储。关系型数据库一直以来都是市场的主流，因此存在众多的关系型数据库管理系统，然而在这众多的数据库管理系统中，小编尤为推荐MySQL这款开源数据库，因此本文将讲解怎么将爬取到的数据存储到MySQL数据库之中，这期爬取的内容小编以豆瓣上面排名前250的书籍信息获取为主，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>爬虫数据的数据库存储——MongoDB数据库</title>
+      <link>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Mon, 27 Aug 2018 21:24:12 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-24&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;关于python网络爬虫，小编在前面已经讲解了两期，分别讲述了多页面爬虫和跨页面爬虫的实现方式。同时在那两期文章中，小编都是采用Excel作为存储数据的方式，然而当面临较大的数据存储需求时，Excel相对来说缺乏效率，因此本期文章，小编将介绍怎么将python爬取下来的数据存放在数据库之中。从现有使用程度来讲，数据库主要分为关系型数据库以及非关系型数据库，所以小编会分两期对这两种数据库的存储予以介绍。在关系型数据库方面，小编将重点介绍MySQL；而在非关系型数据库方面，小编将以MongoDB为主。本期文章先来介绍一下怎么将python爬取下来的数据存储到MongoDB数据库之中。同时本期文章以爬取豆瓣电影中排名前250的影片信息为例进行讲解，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>热地图绘制——基于python获取的经纬度坐标</title>
+      <link>https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/</link>
+      <pubDate>Fri, 24 Aug 2018 22:07:31 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-20&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;盼望着盼望着，周五到了，周末的时光又开始了。前几天有朋友给小编留言，请教怎么绘制热地图，关于这一点小编之前已经讲过怎么使用R语言或者Python去实现，但是鉴于很多朋友还是习惯图形化操作，因此本期讲一下怎么使用相应的专业绘图软件去绘制热地图。本期还是以各省的人口数据为例来讲解怎么绘制国内各省的人口分布情况，其中会讲到怎么使用python去获得各省省会城市的经纬度，然后以这些数据为基础，分别讲述怎么使用相应的绘图软件去绘制人口分布的热地图。下面正式开始！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>python爬取链家网租房数据</title>
+      <link>https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/</link>
+      <pubDate>Mon, 20 Aug 2018 21:15:46 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-17&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;前期文章和大家聊了一下怎么爬取多页面网页，了解了爬虫的基本原理及步骤，那么本期小编准备再接再厉，介绍一下跨页面爬虫原理。考虑到八月将逝，九月即来，新的租房需求即将诞生，本期小编就来讲一下怎么使用python爬取链家网上面的租房信息，希望对大家的租房有所帮助。下面正式开始！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>python爬取酷狗Top500排行榜</title>
+      <link>https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/</link>
+      <pubDate>Mon, 13 Aug 2018 21:45:22 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-8-9&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周开始了，今天无意间听到一首比较好听的歌曲“学猫叫”，然后就开始了无限循环模式。本以为是新出的歌曲，故怀着激动的心情推荐给朋友，谁知朋友直接告诉我这首歌已经在酷狗top500排行榜高居榜首很久了。听到这个，不得不感慨，我是有多久没有了解酷狗的歌曲信息了。因此怀着好奇的心情去看了一下最新的酷狗top500排行，发现这首歌曲仍高居榜首，另外排行榜中也出现了很多我没有听说过的歌曲，真的打击到我了。对我这个喜欢听音乐的人来说，竟然对当下比较流行的一些歌曲竟然缺乏了基本认识。在这种耻辱心理的作用下，小编就想着统计一下最近的酷狗top500排行榜的歌曲信息，因此本期文章小编就和大家分享一下怎么使用python去爬取酷狗top500排行榜的歌曲信息，娱乐之余随时掌握点知识。下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>xlsxwriter库介绍—（（二）——workbook命令介绍</title>
+      <link>https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Fri, 01 Jun 2018 23:35:30 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-29&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;今天六一儿童节，可惜小编已不再孩童，不过仍希望能够保持一颗孩提时代的好奇与探索之心。上期文章中，小编和大脚聊了一下ggplot2中的快速绘图函数qplot，了解了qplot在作图时的快捷便利，在一定程度上也可以将其当作是ggplot2的快速入门，更多细节描述与介绍小编会在后续文章中一一介绍。而在本文中，小编准备和大家聊一下python中操作Excel的一个第三方库xlsxwriter的一些具体细节，本文将主要围绕xlsxwriter库中的workbook进行展开，着重介绍这类命令下的相关操作命令，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>xlsxwriter快速入门</title>
+      <link>https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</link>
+      <pubDate>Fri, 25 May 2018 22:18:11 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/xlsxwriter%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-21&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;写作之路愈行愈远，又到了新的一期文章更新之时。上期文章中小编和大家聊了一下怎么使用python去操作Word和PPT，即对python-docx和python-pptx进行了基本介绍，后续小编会增加对于这两个库的深入介绍。而本期文章中，小编准备开始讲解之前已经提及到的一个操作Excel的库：xlsxwriter。对于这个库的介绍，小编准备先后撰写7篇文章，争取将这个库的基本语法与命令讲解清楚。本期文章属于第一篇文章，主要对这个库进行概述性介绍，所以本期文章可以作为一篇快速入门的文章，后续文章会进行细节展开，下面进入主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>python操作Word和PPT</title>
+      <link>https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/</link>
+      <pubDate>Mon, 21 May 2018 21:51:45 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E6%93%8D%E4%BD%9Cword%E5%92%8Cppt/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-17&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周又开始了，祝愿各位新的一周一切顺利舒心！这两天家里断网，因此原定于周日进行更新的计划不得已推迟到今天，对此，小编先说声抱歉了。上期文章中小编和大家聊了一下matplotlib库的第二种绘图语法，了解到第二种绘图语法的便捷高效，从而为后期深化奠定了基础。这期文章中，小编准备讲一下python如何操作office办公中的三大神器——word/excel/ppt。鉴于前期文章中，小编已经对Excel和python的协作有所介绍，这一期文章中就不再进行说明。这期文章将重点讲解怎样使用python去操作word和PPT。笔者的目的是通过探索程序语言与办公软件的协作，从而争取去实现办公与报告撰写的自动化。现在正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用python库进行Excel读写</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/</link>
+      <pubDate>Tue, 15 May 2018 23:41:25 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-13&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python商务办公系列——pandas执行Excel筛选编辑功能</title>
+      <link>https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/</link>
+      <pubDate>Fri, 27 Apr 2018 01:19:42 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-4-23&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;各位大大，晚上好，我想死你们了！相信看这两期文章的朋友可能会注意到，这两期文章的开头都附带了小编自己的个人博客网址，没错，正是在这几周，小编终于完成了对于自己博客的搭建工作，以后小编会在微信公众号和博客上同步更新自己的文章，这两个平台总有一个适合你阅读的平台。至于微信公众号中的前期文章，小编也会在后面慢慢地将其全部转移至博客之中，争取以最大可能给支持小编的你们提供最舒适的阅读体验。上一期结尾，小编说过这一期文章将讲述一下机器学习之中的决策树算法，但是这几天小编正处于加班进行时，而那篇机器学习的文章又将是小编目前为止最长的一篇文章，因此，在这工作日无非完全完成更新，所以这一期小编准备暂时讲一下最近最常用的一些关于pandas库的一些话题，而对于机器学习的那片文章暂定于周末更新，再次，先向各位朋友说声抱歉了。至于这一期的重点，小编会介绍怎么使用pandas库来快速完成Excel中的筛选和编辑功能。下面正式进入本期的主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

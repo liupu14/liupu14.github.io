@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>使用python库进行Excel读写 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="使用python库进行Excel读写" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-13
+
+写在前面
+新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/" />
+<meta property="article:published_time" content="2018-05-15T23:41:25+00:00" />
+<meta property="article:modified_time" content="2018-05-15T23:41:25+00:00" />
+<meta itemprop="name" content="使用python库进行Excel读写">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-13
+
+写在前面
+新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。">
+<meta itemprop="datePublished" content="2018-05-15T23:41:25&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-15T23:41:25&#43;00:00" />
+<meta itemprop="wordCount" content="343">
+
+
+
+<meta itemprop="keywords" content="python,xlsxwriter,xlwt,excel," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用python库进行Excel读写"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+个人博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-5-13
+
+写在前面
+新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/&amp;text=%e4%bd%bf%e7%94%a8python%e5%ba%93%e8%bf%9b%e8%a1%8cExcel%e8%af%bb%e5%86%99" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/&amp;title=%e4%bd%bf%e7%94%a8python%e5%ba%93%e8%bf%9b%e8%a1%8cExcel%e8%af%bb%e5%86%99" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">使用python库进行Excel读写</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-05-15T23:41:25Z">May 15, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+个人博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-5-13</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。</p>
+<h3 id="pandasexcel">pandas库与Excel表格写入</h3>
+<p>pandas库，相信大家都不再陌生了吧，小编已经在多处地方进行了介绍，并且一再告诉大家这个库是进行数据分析的绝对王者，所以在今后的数据处理与分析系列文章中我们将会再一次不断地接触到它。但是尽管pandas库在进行数据分析时相当给力，但是不可否认的是pandas库在对Excel表格文件进行写入操作这一块相对不是很优秀，虽然pandas可以很方便地将数据写入进Excel表格，但是这种写入却是无法进行Excel格式设置的写入，所以在很多时候我们必须对pandas导出的Excel表格进行二次修改，以便使得表格显得美观可读。需要跟随练习的朋友请下载练习文件<a href="https://liupu14.github.io/download/exercise.xlsx">exercise</a>。
+小编默认各位都已经在电脑上正确地安装了pandas库，如果还没有进行安装，那你可以参考小编前期的文章进行安装，然后使用pandas库导入刚刚下载的练习文件（请记住一点，pandas库不仅可以写入Excel文件，更加方便的是它能够读取Excel文件，这相对于接下来介绍的另外两个库是极具优势的）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+exercise <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">exercise.xlsx</span><span style="color:#e6db74">&#39;</span>)
+exercise<span style="color:#f92672">.</span>head()
+</code></pre></div><p>第一行代码导入了pandas库，第二行代码读取了练习文件exercise.xlsx，第三行我们来看一下这一数据集的大致构成，见下图：
+<img src="https://i.imgur.com/xpULl7l.png" alt="练习数据">
+数据表共有10列，后三列分别表示1-3月的销售额，而倒数第四列的quota列表示的报价总额。既然小编的目的是导出Excel表格，所以直接的方式就是原数据原路导出，不过小编可不是那种无聊的人，在导出之前进行些许的操作也不枉导入之累了，顺便给大家介绍一个pandas库中的超好用函数<code>assign</code>。小编打算在原数据表中增加一列汇总列去加总前三个月的销售额，其次小编还想计算一下销售总而占报价总额的比例，为了达到这一目的，小编使用以下代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">exercise <span style="color:#f92672">=</span> exercise<span style="color:#f92672">.</span>assign(total<span style="color:#f92672">=</span>(exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Jan</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">+</span>exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Feb</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">+</span>exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mar</span><span style="color:#e6db74">&#39;</span>]))
+exercise <span style="color:#f92672">=</span> exercise<span style="color:#f92672">.</span>assign(pct<span style="color:#f92672">=</span>(exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">total</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">/</span>exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">quota</span><span style="color:#e6db74">&#39;</span>]))
+exercise<span style="color:#f92672">.</span>head()
+</code></pre></div><p><img src="https://i.imgur.com/wXK0sAO.png" alt="增加两列后数据">
+当然你如果不习惯使用<code>assign</code>函数的话，还是可以采用之前小编所讲解的方法，即通过使用下面的命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">total</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Jan</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">+</span>exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Feb</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">+</span>exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mar</span><span style="color:#e6db74">&#39;</span>]
+exerciese[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">pct</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">total</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">/</span>exercise[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">quota</span><span style="color:#e6db74">&#39;</span>]
+</code></pre></div><p>不过小编强烈推荐你使用<code>assign</code>命令，既然已经完成了数据集的调整，那么接下来就是需要把Excel表格导出，这及时一条命令的事情。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">exercise<span style="color:#f92672">.</span>to_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">调整后练习数据.xlsx</span><span style="color:#e6db74">&#39;</span>,index <span style="color:#f92672">=</span> False)
+</code></pre></div><p>这样便在工作目录下创建了一个名为调整后练习数据的Excel文件，至于在导出命令中加上<code>index=False</code>是因为要禁止pandas将数据的索引好也导出，下面看一下导出后的Excel文件：
+<img src="https://i.imgur.com/sh4UhVv.png" alt="调整后练习数据">
+对此笔者只想说，什麼仇什麼怨，这种格式的数据表如果发给老总，估计你可以直接卷铺盖走人了。所以说pandas库虽然提供了一项极其便利的Excel文件写入操作，但是这种便利是以牺牲美观可读为代价的，这就是下面将要介绍的两个包横空出世的原因。</p>
+<h3 id="xlwtexcel">xlwt库与Excel文件写入</h3>
+<p>上面介绍了使用pandas库快速读写Excel文件，可以看出使用pandas库可以很方便快速导出Excel文件，但是这种便利伴随着你每天吃鱿鱼的风险（虽然小编最近酷爱烧汁鱿鱼须，但是真的不想被炒呀）。所以有需求就有创造，xlwt库即可诞生，这个库可以很方便地对Excel文件进行格式化调整，因此可以输出干净整洁美观可读的Excel文件。不过这个库的是服务于office2003及之前的Excel文档的，虽然它也可以出来之后的文档，但是在这方面要稍稍逊色与后面将讲到的xlsxwriter库。所以小编这里不将对其进行详细讲解，只对其最基本的命令进行介绍，对这个库有特殊偏好的朋友可以参看其官方文档。</p>
+<p>在使用这个库之前，你必须确保你已经安装了这个库，所以请在命令行中使用以下代码进行xlwt库的安装。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install xlwt
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#f92672">import</span> xlwt
+<span style="color:#f92672">&gt;&gt;</span><span style="color:#f92672">&gt;</span> xlwt<span style="color:#f92672">.</span>__VERSION__
+<span style="color:#ae81ff">1.2</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0</span>
+</code></pre></div><p>小编的xlwt库版本是1.2.0，所以在上面的命令中自然会输出这个数字序列，你也可以通过这条命令去检查一下自己是否已经正确地安装了xlwt库。现在假设你已经完成了安装，那么下面就开始使用这个库进行Excel文件的写入吧。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> xlwt
+workbook <span style="color:#f92672">=</span> xlwt<span style="color:#f92672">.</span>Workbook()
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_sheet(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt示例</span><span style="color:#e6db74">&#39;</span>)
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt操作测试</span><span style="color:#e6db74">&#39;</span>)
+workbook<span style="color:#f92672">.</span>save(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt示例.xls</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p>这样就在当前目录下创建了一个名为xlwt示例的Excel03文件，可以看一下输出效果：
+<img src="https://i.imgur.com/xiK88WT.png" alt="xlwt操作示例">
+需要注意的是xlwt中对于行列的编号是从0,0开始的，这和python是一样的，所以还没有习惯Python序列编号的朋友当注意这一点，下面在用一个进行格式化设置的例子来结束对于xlwt库的介绍。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> xlwt
+workbook <span style="color:#f92672">=</span> xlwt<span style="color:#f92672">.</span>Workbook()
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_sheet(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt格式化示例</span><span style="color:#e6db74">&#39;</span>)
+style <span style="color:#f92672">=</span> xlwt<span style="color:#f92672">.</span>XFStyle() <span style="color:#75715e"># 初始化样式</span>
+font <span style="color:#f92672">=</span> xlwt<span style="color:#f92672">.</span>Font() <span style="color:#75715e"># 为样式创建字体</span>
+font<span style="color:#f92672">.</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Times New Roman</span><span style="color:#e6db74">&#39;</span> 
+font<span style="color:#f92672">.</span>bold <span style="color:#f92672">=</span> True <span style="color:#75715e"># 黑体</span>
+font<span style="color:#f92672">.</span>underline <span style="color:#f92672">=</span> True <span style="color:#75715e"># 下划线</span>
+font<span style="color:#f92672">.</span>italic <span style="color:#f92672">=</span> True <span style="color:#75715e"># 斜体字</span>
+style<span style="color:#f92672">.</span>font <span style="color:#f92672">=</span> font <span style="color:#75715e"># 设定样式</span>
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt操作测试（非格式化）</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 不带样式的写入</span>
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt操作测试（格式化）</span><span style="color:#e6db74">&#39;</span>, style) <span style="color:#75715e"># 带样式的写入</span>
+workbook<span style="color:#f92672">.</span>save(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlwt格式化示例.xls</span><span style="color:#e6db74">&#39;</span>) <span style="color:#75715e"># 保存文件</span>
+</code></pre></div><p><img src="https://i.imgur.com/oN3W1V9.png" alt="xlwt格式化示例">
+可以看出相对于A1单元格中的内容，A2单元格中内容进行了加黑加粗添加下划线以及字体斜体的格式化设置。这相对于pandas库的输出是不是要很看太多了，虽然中间使用的代码可能相对较多，但是你不要忘记代码的存在不是为了解决一个问题的，而是为了解决同类型的一系列问题的，所以这点前期的代码写作投入成本几乎是可以忽略不计的。</p>
+<p>正如小编在文章开头所讲到的那样，对于使用python进行Excel文件写入，小编最喜欢的一个库就是xlsxwriter了，所以下面小编重点来讲一下xlsxwriter库。</p>
+<h3 id="xlsxwriterexcel">xlsxwriter库与Excel文件写入</h3>
+<p>“千呼万唤始出来，xlsxwriter闪亮登场”！下面小编就开始重点地讲述一下python中进行Excel表格文件写入操作神器般的操作库xlsxwriter（虽然这里说重点讲解，但是小编也不会对这个库的各种操作细节进行讲解，本期主要是对其最基本的命令进行一下介绍，同时通过一个示例说明它的“变态”，更加详细的介绍小编会在后续文章中使用5-7篇文章进行逐步介绍。）。如果一直阅读小编文章的朋友绝对会对这个库的名字有一个特别深刻的了解，<code>xlsxwriter=xlsx+writer</code>，还需要小编进一步解释吗？所以这个库主要针对的是Excel2007版及之后的版本，而对于Excel03版本等缺少支持，不过我现在在想，大家谁还在使用Excel2003呢。当然你如果一定要告诉我，你偏偏喜欢Excel2003，那么小编只能对你说，python+xlwt比较适合你。</p>
+<h4 id="xlsxwriter">xlsxwriter的安装与基本操作</h4>
+<p>要使用xlsxwriter，你必须确保你先安装了这个库，为了让各位朋友都能成功地安装这个库，小编这里提供四种安装方式，我相信总要一款适合你。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip install xlsxwriter  <span style="color:#75715e"># 使用pip方式进行安装</span>
+easy_install xlsxwriter <span style="color:#75715e"># 使用easy_install进行安装</span>
+</code></pre></div><p>第三种方式是你首先在官网下载xlsxwriter库的压缩包，然后将工作目录改变到<code>setup.py</code>所在的文件夹，继而运行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pip setup<span style="color:#f92672">.</span>py install 
+</code></pre></div><p>第四种方式是通过github进行安装，见下面命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">git clone https:<span style="color:#f92672">/</span><span style="color:#f92672">/</span>github<span style="color:#f92672">.</span>com<span style="color:#f92672">/</span>jmcnamara<span style="color:#f92672">/</span>XlsxWriter<span style="color:#f92672">.</span>git
+cd XlsxWriter
+python setup<span style="color:#f92672">.</span>py install
+</code></pre></div><p>所以小编还是建议你不要折腾了，直接使用第一种安装方式进行安装吧，只有你不是上辈子毁了全宇宙，你就基本能够安装成功。既然安装成功了，那就让我们稍微嘚瑟一下来适应一下它的语法命令吧。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> xlsxwriter
+workbook <span style="color:#f92672">=</span> xlsxwriter<span style="color:#f92672">.</span>Workbook(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlsxwriter操作示例.xlsx</span><span style="color:#e6db74">&#39;</span>)
+worksheet <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_worksheet()
+worksheet<span style="color:#f92672">.</span>write(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">A1</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Hello xlsxwriter</span><span style="color:#e6db74">&#39;</span>)
+workbook<span style="color:#f92672">.</span>close()
+</code></pre></div><p><img src="https://i.imgur.com/aIv9iif.png" alt="xlsxwriter操作示例">
+第一行代码导入xlsxwriter库，第二行代码创建一个名为xlsxwriter操作示例的Excel工作簿，第三行在这个工作簿创建了一个工作表，第四行是在新创建的工作表的A1单元格中输入“Hello xlsxwriter”这个字符串，第五行用来关闭工作簿。这就是xlsxwriter库用来进行Excel表格写入时最基本的几条命令，更多格式化命令以及高级命令小编会在后续文章中进行介绍，诸公不必着急。下面，小编以一个格式化的例子来完成对于xlsxwriter库以及本期文章的讲解。</p>
+<h4 id="xlsxwriterexcel1">xlsxwriter操作Excel文件示例</h4>
+<p>这里小编以文章开头给出的Excel数据集为例来进行演示，考虑到xlsxwriter库无法读入Excel文件（请一定要记住，xlsxwriter是无法读入Excel的），这里使用pandas配合xlsxwriter完成对于数据集的格式化设置。直接上代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 导入相关的库</span>
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">from</span> xlsxwriter.utility <span style="color:#f92672">import</span> xl_rowcol_to_cell
+<span style="color:#f92672">import</span> xlsxwriter
+
+<span style="color:#75715e"># 读入exercise文件，并增加两列</span>
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">exercise.xlsx</span><span style="color:#e6db74">&#34;</span>)
+number_rows <span style="color:#f92672">=</span> len(df<span style="color:#f92672">.</span>index)
+df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>assign(total<span style="color:#f92672">=</span>(df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Jan</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">+</span> df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Feb</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">+</span> df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Mar</span><span style="color:#e6db74">&#39;</span>]))
+df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>assign(pct<span style="color:#f92672">=</span>(df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">total</span><span style="color:#e6db74">&#39;</span>]<span style="color:#f92672">/</span>df[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">quota</span><span style="color:#e6db74">&#39;</span>]))
+
+<span style="color:#75715e"># 采用xlsxwriter内核，使用pandas创建一个Excel文件xlsxwriter格式化示例</span>
+writer <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>ExcelWriter(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlsxwriter格式化示例.xlsx</span><span style="color:#e6db74">&#39;</span>, engine<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">xlsxwriter</span><span style="color:#e6db74">&#39;</span>)
+df<span style="color:#f92672">.</span>to_excel(writer, index<span style="color:#f92672">=</span>False, sheet_name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">report</span><span style="color:#e6db74">&#39;</span>)
+
+<span style="color:#75715e"># 激活工作簿和工作表以便进行下面写入</span>
+workbook <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span>book
+worksheet <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span>sheets[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">report</span><span style="color:#e6db74">&#39;</span>]
+
+<span style="color:#75715e"># 设置工作表的窗口</span>
+worksheet<span style="color:#f92672">.</span>set_zoom(<span style="color:#ae81ff">90</span>)
+
+<span style="color:#75715e"># 增加一个货币格式，以便使用到销售额上面</span>
+money_fmt <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$#,##0</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: True})
+
+<span style="color:#75715e"># 增加一个百分比格式，以便使用到pct上面</span>
+percent_fmt <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">0.0</span><span style="color:#e6db74">%</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: True})
+
+<span style="color:#75715e"># 对于工作表的总体格式设置</span>
+total_fmt <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">align</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">right</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$#,##0</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: True, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bottom</span><span style="color:#e6db74">&#39;</span>:<span style="color:#ae81ff">6</span>})
+<span style="color:#75715e"># 对于表格中百分比数字的总体格式设置</span>
+total_percent_fmt <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">align</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">right</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">num_format</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">0.0</span><span style="color:#e6db74">%</span><span style="color:#e6db74">&#39;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bold</span><span style="color:#e6db74">&#39;</span>: True, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bottom</span><span style="color:#e6db74">&#39;</span>:<span style="color:#ae81ff">6</span>})
+
+<span style="color:#75715e"># 对数据表列宽以及数值格式进行设置</span>
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">B:D</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">20</span>)
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">E:E</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">5</span>)
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">F:F</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">10</span>)
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">G:K</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">12</span>, money_fmt)
+worksheet<span style="color:#f92672">.</span>set_column(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">L:L</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">12</span>, percent_fmt)
+
+<span style="color:#75715e"># 在数据表中增加一行汇总行</span>
+<span style="color:#66d9ef">for</span> column <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">11</span>):
+    cell_location <span style="color:#f92672">=</span> xl_rowcol_to_cell(number_rows<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, column)
+    start_range <span style="color:#f92672">=</span> xl_rowcol_to_cell(<span style="color:#ae81ff">1</span>, column)
+    end_range <span style="color:#f92672">=</span> xl_rowcol_to_cell(number_rows, column)
+    formula <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">=SUM({:s}:{:s})</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(start_range, end_range)
+    worksheet<span style="color:#f92672">.</span>write_formula(cell_location, formula, total_fmt)
+
+<span style="color:#75715e"># 给汇总行增加一个总计标签</span>
+worksheet<span style="color:#f92672">.</span>write_string(number_rows<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Total</span><span style="color:#e6db74">&#34;</span>,total_fmt)
+percent_formula <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">=1+(K{0}-G{0})/G{0}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(number_rows<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>)
+worksheet<span style="color:#f92672">.</span>write_formula(number_rows<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">11</span>, percent_formula, total_percent_fmt)
+
+<span style="color:#75715e"># 颜色设置</span>
+color_range <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">L2:L{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(number_rows<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+format1 <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bg_color</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#FFC7CE</span><span style="color:#e6db74">&#39;</span>,
+                               <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font_color</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#9C0006</span><span style="color:#e6db74">&#39;</span>})
+format2 <span style="color:#f92672">=</span> workbook<span style="color:#f92672">.</span>add_format({<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bg_color</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#C6EFCE</span><span style="color:#e6db74">&#39;</span>,
+                               <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font_color</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">#006100</span><span style="color:#e6db74">&#39;</span>})
+worksheet<span style="color:#f92672">.</span>conditional_format(color_range, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">type</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">top</span><span style="color:#e6db74">&#39;</span>,
+                                           <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">value</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">5</span><span style="color:#e6db74">&#39;</span>,
+                                           <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">format</span><span style="color:#e6db74">&#39;</span>: format2})
+worksheet<span style="color:#f92672">.</span>conditional_format(color_range, {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">type</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bottom</span><span style="color:#e6db74">&#39;</span>,
+                                           <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">value</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">5</span><span style="color:#e6db74">&#39;</span>,
+                                           <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">format</span><span style="color:#e6db74">&#39;</span>: format1})
+writer<span style="color:#f92672">.</span>save()
+</code></pre></div><p><img src="https://i.imgur.com/Mc5jzsZ.png" alt="xlsxwriter格式化示例">
+相比最先开始直接由pandas库导出的Excel表格，这个表格是不是美观与可读了。我想你发这样的表格给你老板应该不至于被炒鱿鱼吧。更多的设置技巧要在实践中根据自己的创意一步步进行提升，关键是你的思维与创意！讲到这里就暂时完成了xlsxwriter库的初步探讨，更多内容会在后续继续更新。</p>
+<h3 id="heading1">后记</h3>
+<p>本文讲到这里就暂时告一段落了，本期文章主要介绍了三种用于操作Excel写入的相关库，通过介绍，小编最终将重点以及后续的实践侧重置于pandas+xlsxwriter上。本文只是对这种组合进行了初步地探讨，后续会进一步加大对这一主题的讲解。下期文章小编准备接着回到matplotlib库上，讲解这一库的另外一种绘图语法，敬请期待！再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/xlsxwriter" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">xlsxwriter</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/xlwt" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">xlwt</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/excel" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">excel</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/">Python商务办公系列——pandas执行Excel筛选编辑功能</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8matplotlib%E7%BB%99%E5%A6%88%E5%A6%88%E7%BB%98%E5%88%B6%E4%B8%80%E5%89%AF%E5%BF%83%E5%BD%A2%E5%9B%BE/">使用matplotlib给妈妈绘制一副心形图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/">Python绘图——matplotlib初探</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python-pandas%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0excel%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">Python&#43;pandas快速实现Excel文件合并与数据处理</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0/">Python基础知识系列——函数</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/">pdvega绘制常用商务图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%B3%BB%E5%88%97%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">Python基础知识系列——条件语句和循环语句</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

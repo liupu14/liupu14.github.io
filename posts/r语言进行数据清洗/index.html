@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>R语言进行数据清洗 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="R语言进行数据清洗" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-26
+
+写在前面
+上次更新后已经有将近三个月没有进行文章更新，所以这里要向那些一直关注小编文章的朋友致以最诚挚的抱歉。因为在这三个月中一些琐事以及工作方面的事情一直缠绕着我，使得我总是没有精力或者心情去及时进行文章更新，再次向喜欢小编文章的各位朋友进行道歉！这也让小编感觉到一个人坚持做一件事情是多么的困难。我一直觉得自己还算是具有一种比较能够坚持的性格，然而实践证明，坚持总是说着容易。在反思了这段时间之后，小编决定在接下来的文章更新中尽量做到每周都有更新，不过每周更新的频率将有所调整，小编会尽量做到每周两更，然而考虑到工作人士的身不由己，一周一更也将成为一种常态，但是小编会保证每周都至少会有一篇文章更新，以感激你们这群长期支持小编的朋友。可能太久没有写文章了，所以一时间有点话痨，下面开始介绍一下本期的主题。本期文章中，小编将和大家介绍一下怎么使用R语言去进行数据的清洗以及规整。因为任何形式的数据分析都离不开数据清洗，可以说数据清洗整理占据了整个数据分析工作时间的80%，因此小编一直以来就极为重视这一点。长久以来小编一直使用Python和R进行数据分析，所以小编不可能只介绍R语言的数据清洗过程，也会介绍怎么使用Python去进行同类型的数据清洗工作，因为数据清洗真的比较重要，所以这期文章只介绍怎么使用R语言去进行数据清洗，下期文章介绍Python的处理过程。而本文选择进行清洗的数据来源于美国的UFO观察数据，考虑到数据将有80M的存量，这里就不将数据上传了，需要的朋友请给小编发私信或者留言，小编会及时发给你们！好了，这里就不再多说废话了，下面正式进入主题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/" />
+<meta property="article:published_time" content="2019-01-21T21:38:27+00:00" />
+<meta property="article:modified_time" content="2019-01-21T21:38:27+00:00" />
+<meta itemprop="name" content="R语言进行数据清洗">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-26
+
+写在前面
+上次更新后已经有将近三个月没有进行文章更新，所以这里要向那些一直关注小编文章的朋友致以最诚挚的抱歉。因为在这三个月中一些琐事以及工作方面的事情一直缠绕着我，使得我总是没有精力或者心情去及时进行文章更新，再次向喜欢小编文章的各位朋友进行道歉！这也让小编感觉到一个人坚持做一件事情是多么的困难。我一直觉得自己还算是具有一种比较能够坚持的性格，然而实践证明，坚持总是说着容易。在反思了这段时间之后，小编决定在接下来的文章更新中尽量做到每周都有更新，不过每周更新的频率将有所调整，小编会尽量做到每周两更，然而考虑到工作人士的身不由己，一周一更也将成为一种常态，但是小编会保证每周都至少会有一篇文章更新，以感激你们这群长期支持小编的朋友。可能太久没有写文章了，所以一时间有点话痨，下面开始介绍一下本期的主题。本期文章中，小编将和大家介绍一下怎么使用R语言去进行数据的清洗以及规整。因为任何形式的数据分析都离不开数据清洗，可以说数据清洗整理占据了整个数据分析工作时间的80%，因此小编一直以来就极为重视这一点。长久以来小编一直使用Python和R进行数据分析，所以小编不可能只介绍R语言的数据清洗过程，也会介绍怎么使用Python去进行同类型的数据清洗工作，因为数据清洗真的比较重要，所以这期文章只介绍怎么使用R语言去进行数据清洗，下期文章介绍Python的处理过程。而本文选择进行清洗的数据来源于美国的UFO观察数据，考虑到数据将有80M的存量，这里就不将数据上传了，需要的朋友请给小编发私信或者留言，小编会及时发给你们！好了，这里就不再多说废话了，下面正式进入主题。">
+<meta itemprop="datePublished" content="2019-01-21T21:38:27&#43;00:00" />
+<meta itemprop="dateModified" content="2019-01-21T21:38:27&#43;00:00" />
+<meta itemprop="wordCount" content="268">
+
+
+
+<meta itemprop="keywords" content="R语言,数据分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="R语言进行数据清洗"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-26
+
+写在前面
+上次更新后已经有将近三个月没有进行文章更新，所以这里要向那些一直关注小编文章的朋友致以最诚挚的抱歉。因为在这三个月中一些琐事以及工作方面的事情一直缠绕着我，使得我总是没有精力或者心情去及时进行文章更新，再次向喜欢小编文章的各位朋友进行道歉！这也让小编感觉到一个人坚持做一件事情是多么的困难。我一直觉得自己还算是具有一种比较能够坚持的性格，然而实践证明，坚持总是说着容易。在反思了这段时间之后，小编决定在接下来的文章更新中尽量做到每周都有更新，不过每周更新的频率将有所调整，小编会尽量做到每周两更，然而考虑到工作人士的身不由己，一周一更也将成为一种常态，但是小编会保证每周都至少会有一篇文章更新，以感激你们这群长期支持小编的朋友。可能太久没有写文章了，所以一时间有点话痨，下面开始介绍一下本期的主题。本期文章中，小编将和大家介绍一下怎么使用R语言去进行数据的清洗以及规整。因为任何形式的数据分析都离不开数据清洗，可以说数据清洗整理占据了整个数据分析工作时间的80%，因此小编一直以来就极为重视这一点。长久以来小编一直使用Python和R进行数据分析，所以小编不可能只介绍R语言的数据清洗过程，也会介绍怎么使用Python去进行同类型的数据清洗工作，因为数据清洗真的比较重要，所以这期文章只介绍怎么使用R语言去进行数据清洗，下期文章介绍Python的处理过程。而本文选择进行清洗的数据来源于美国的UFO观察数据，考虑到数据将有80M的存量，这里就不将数据上传了，需要的朋友请给小编发私信或者留言，小编会及时发给你们！好了，这里就不再多说废话了，下面正式进入主题。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/&amp;text=R%e8%af%ad%e8%a8%80%e8%bf%9b%e8%a1%8c%e6%95%b0%e6%8d%ae%e6%b8%85%e6%b4%97" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97/&amp;title=R%e8%af%ad%e8%a8%80%e8%bf%9b%e8%a1%8c%e6%95%b0%e6%8d%ae%e6%b8%85%e6%b4%97" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">R语言进行数据清洗</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2019-01-21T21:38:27Z">January 21, 2019</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-9-26</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>上次更新后已经有将近三个月没有进行文章更新，所以这里要向那些一直关注小编文章的朋友致以最诚挚的抱歉。因为在这三个月中一些琐事以及工作方面的事情一直缠绕着我，使得我总是没有精力或者心情去及时进行文章更新，再次向喜欢小编文章的各位朋友进行道歉！这也让小编感觉到一个人坚持做一件事情是多么的困难。我一直觉得自己还算是具有一种比较能够坚持的性格，然而实践证明，坚持总是说着容易。在反思了这段时间之后，小编决定在接下来的文章更新中尽量做到每周都有更新，不过每周更新的频率将有所调整，小编会尽量做到每周两更，然而考虑到工作人士的身不由己，一周一更也将成为一种常态，但是小编会保证每周都至少会有一篇文章更新，以感激你们这群长期支持小编的朋友。可能太久没有写文章了，所以一时间有点话痨，下面开始介绍一下本期的主题。本期文章中，小编将和大家介绍一下怎么使用R语言去进行数据的清洗以及规整。因为任何形式的数据分析都离不开数据清洗，可以说数据清洗整理占据了整个数据分析工作时间的80%，因此小编一直以来就极为重视这一点。长久以来小编一直使用Python和R进行数据分析，所以小编不可能只介绍R语言的数据清洗过程，也会介绍怎么使用Python去进行同类型的数据清洗工作，因为数据清洗真的比较重要，所以这期文章只介绍怎么使用R语言去进行数据清洗，下期文章介绍Python的处理过程。而本文选择进行清洗的数据来源于美国的UFO观察数据，考虑到数据将有80M的存量，这里就不将数据上传了，需要的朋友请给小编发私信或者留言，小编会及时发给你们！好了，这里就不再多说废话了，下面正式进入主题。</p>
+<h3 id="heading1">先观察一下数据吧</h3>
+<p>正如前面小编说过的一样，数据集是一份存量为80M的固定分割文本文件（也就是tsv格式文件），因此使用记事本或者其他程序打开文件真的会需要一点时间（尤其是配置比较差的电脑更是如此），好在我们并没有打算浏览全部数据，我们仅仅需要观察一下数据集的构成与特征，所以这个时候直接使用命令行工具会显得更加方便快捷。如果大家看过小编之前的文章，那么就应该知道怎么去打开命令行工具（windows下存在两种命令行工具：cmd和powershell，打开的方式类似，win+R后输入cmd或者powershell分别打开这两种形式的命令行；苹果电脑下通过command+空格键，然后输入terminal打开命令行终端）。这里小编选择windows系统下的powershell命令行工具进行介绍。在打开命令行工具后，首先将路径转移到ufo数据所在的路径，而后使用查看命令查看文件即可。在命令行窗口中输入以下代码完成查看。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 改变路径到文件所在路径，小编的文件存放在桌面，所以这里改变路径到桌面</span>
+cd C:<span style="color:#f92672">/</span>Users<span style="color:#f92672">/</span>Administrator<span style="color:#f92672">/</span>Desktop<span style="color:#f92672">/</span>
+<span style="color:#75715e"># 查看文件前五行内容</span>
+head <span style="color:#f92672">-</span><span style="color:#ae81ff">5</span> ufo_awesome<span style="color:#f92672">.</span>tsv   <span style="color:#75715e"># 记得可以使用tab键补全哈</span>
+<span style="color:#75715e"># 如果你的电脑是32位机，上面的head命令可能正常运行，然而如果你的电脑</span>
+<span style="color:#75715e"># 是64位机的话，你可能需要用下面的命令，这也是小编推荐的命令:</span>
+Get<span style="color:#f92672">-</span>content <span style="color:#f92672">-</span>First <span style="color:#ae81ff">5</span> <span style="color:#f92672">.</span>\ufo_awesome<span style="color:#f92672">.</span>tsv
+</code></pre></div><p><img src="https://i.imgur.com/E5il3Wx.png" alt="ufo数据文件查看">
+通过前五行数据的观察，我们了解了数据集中存在着六个字段（即数据集有六列），并且数据集没有标题行。进一步观察可以看出，前两列数据为日期数据，第三列数据为地点，第四列数据为文本，第五列为历时时间（文本），最后一列为文本。根据官方给出的数据介绍，这六列数据分别为UFO出现日期；UFO被报告日期；UFO出现地点；对于本次UFO的简短描述；UFO出现历时时间；对于本次UFO的详细描述。既然已经知道了数据集的基本特征，那么下面就要开始使用R语言导入数据集进入正式工作了。</p>
+<h3 id="ufo">读取UFO数据集</h3>
+<p>通过前面的观察，已经知道数据集为固定分隔符文件，同时文件具有六列，并且没有标题行，因此下面需要用R语言去做的就是使用合适的文件读取函数读取文件，同时为数据集命名各列。这里小编的所有操作都是在Rstudio中进行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 设置R语言的工作路径为文件所在路径</span>
+setwd(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">C:/Users/Administrator/Desktop/</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#75715e"># 加载需要的包</span>
+library(tidyverse) <span style="color:#75715e"># 用于数据清洗规整可视化等</span>
+library(lubridate)  <span style="color:#75715e"># 用于处理日期数据处理</span>
+library(scales)    <span style="color:#75715e"># 用于可视化时日期数据的格式化</span>
+<span style="color:#75715e"># 使用R语言中的read.delim()函数读取文件</span>
+ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> read<span style="color:#f92672">.</span>delim(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ufo_awesome.tsv</span><span style="color:#e6db74">&#34;</span>,
+                   header <span style="color:#f92672">=</span> FALSE,
+                   sep <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>,
+                   stringsAsFactors <span style="color:#f92672">=</span> FALSE,
+                   na<span style="color:#f92672">.</span>strings <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#75715e"># 命名各列</span>
+names(ufo) <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> c(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">OccurDate</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ReportDate</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Location</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ShortDescription</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Duration</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">DetailDescription</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#75715e"># 查看数据</span>
+head(ufo,n<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</code></pre></div><p><img src="https://i.imgur.com/KsRXP4o.png" alt="查看数据">
+可以看出数据已经按照我们的想法组织成数据框了，不过总感觉这种组织不是太好看呀（后面会用另外一种组织方式），这里先来解释一下其中的命令。read.delim()函数主要用来读取固定分隔符文件，该函数的第一个参数就是文件路径；因为文件中没有标题行，所以这里使用header=FALSE；sep=&rdquo;\t&quot;用来指定文件中的分隔符，这里文件的分隔符为制表符；因为在读取文件的过程中，R语言会将字符串转换为因子，为了避免这种转换，这里使用stringsAsFactors = FALSE；最后的na.strings = &ldquo;&ldquo;参数则用来将文件中的空值替换成R语言中的标准空值NA。names()函数主要用来对数据集的各列进行命名，这里不过多解释。下面介绍另一种比较友好的组织数据形式tibble。请输入以下代码将原始数据框转化为tibble.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>tibble(ufo)
+<span style="color:#75715e"># 因为ufo数据集已经对各列进行命名了，所以这里不需要再次命名，</span>
+<span style="color:#75715e"># 如果你还没有命名，则可以通过以下代码进行命名</span>
+rename(ufo,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">OccurDate</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">=</span>V1, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ReportDate</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">=</span>V2,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Location</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">=</span>V3, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ShortDescription</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">=</span>V4,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Duration</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">=</span>V5, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">DetailDescription</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">=</span>V6)
+<span style="color:#75715e"># 看一下数据</span>
+ufo
+</code></pre></div><p><img src="https://i.imgur.com/Nib4WTX.png" alt="tibble">
+我想不用我过多说明，你也会觉得这种组织方式更好看吧。既然已经读取了数据，那么下面就需要进行数据的清洗与规整了。主要要做到三点：第一，将第一列和第二列转为日期格式；第二，将地址列的数据拆分为城市和州，而不是放置在一起；第三，将历时时间的数据单独提取出来用于数据运算。</p>
+<h3 id="heading2">数据规整</h3>
+<p>数据规整主要集中在三部分：日期格式转换；城市与州分拆以及提取时间数据，下面依次进行介绍。</p>
+<h4 id="heading3">日期格式转换</h4>
+<p>在R语言中存在着多种函数进行日期数据的转换，这里主要介绍R基础包中的as.Date()函数和lubridate包。首先使用as.Date()函数来转换第一列：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate,format <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%</span><span style="color:#e6db74">Y</span><span style="color:#e6db74">%</span><span style="color:#e6db74">m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/tXxfGFv.png" alt="转换错误">
+这里显示出错了，没法转换，遇到这种情况千万不要慌，好好看一下错误信息，这里根据错误信息知道，数据中存在着某些数据字符串过长从而无法转换，所以必要重新审视一下数据。因为根据转换要求，需要转换的数据应该是具有8个字符的数据字符串，所以必须看一下那些长度不为8的字符串特征。你可以通过运行以下代码看一下存在多少不符合的行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">good_rows <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> ifelse(nchar(ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span>
+                    nchar(ufo<span style="color:#960050;background-color:#1e0010">$</span>ReportDate) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">8</span>,
+                    FALSE,
+                    TRUE)
+length(which(<span style="color:#960050;background-color:#1e0010">!</span>good_rows)) 
+</code></pre></div><p>通过以上代码，可以看出仅有688行不规则，对于6万多条记录来说，这里可以很潇洒地将这些行剔除，仅保留其他数据，见以下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> ufo[good_rows, ]
+ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate, format <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%</span><span style="color:#e6db74">Y</span><span style="color:#e6db74">%</span><span style="color:#e6db74">m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
+ufo<span style="color:#960050;background-color:#1e0010">$</span>ReportDate <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(ufo<span style="color:#960050;background-color:#1e0010">$</span>ReportDate, format <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%</span><span style="color:#e6db74">Y</span><span style="color:#e6db74">%</span><span style="color:#e6db74">m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p>这里主要使用了as.Date()函数进行日期转换，当然也存在着一个更加容易的进行日期转换的包lubridate，通过该包中的相关函数可以很便利地实现日期转换，这里给出以上转换的同类代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> ymd(ufo<span style="color:#960050;background-color:#1e0010">$</span>OccurDate)
+ufo<span style="color:#960050;background-color:#1e0010">$</span>ReportDate <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> ymd(ufo<span style="color:#960050;background-color:#1e0010">$</span>ReportDate)
+ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> filter(ufo,(<span style="color:#960050;background-color:#1e0010">!</span><span style="color:#f92672">is</span><span style="color:#f92672">.</span>na(OccurDate))<span style="color:#f92672">|</span>(<span style="color:#960050;background-color:#1e0010">!</span><span style="color:#f92672">is</span><span style="color:#f92672">.</span>na(ReportDate)))
+</code></pre></div><p>这里唯一的不同就是使用as.Date()函数进行转换时，如果数据存在格式不正确则会抛出错误提示从而无法转换，而使用lubridate包中的ymd()函数会默认进行转换，而将那些无法转换的直接转为空值，所以最后的语句是只选取了数据中非空的数据。一般来讲小编比较喜欢使用as.Date()函数来转换那些自己不是很了解的数据，而使用ymd()来转换那些比较了解的数据，所以各位请智者见智。讲完了日期转换，下面介绍城市与州的分拆。</p>
+<h4 id="heading4">城市与州的分拆</h4>
+<p>前面看到，在地址一列中，城市和州是通过逗号合并在一起的，然而这种存储方式并不利于进行数据分析，有必要将城市和州分别拆分出来存储在城市（city）和州（state）两列中，这就需要用到R语言中的字符串处理函数，见下面代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 创建一个进行字符串分割的函数</span>
+split_city_state <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> function(loc)
+{
+  split<span style="color:#f92672">.</span>location <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> tryCatch(strsplit(loc, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">,</span><span style="color:#e6db74">&#34;</span>)[[<span style="color:#ae81ff">1</span>]],
+                             error <span style="color:#f92672">=</span> function(e) <span style="color:#66d9ef">return</span>(c(NA, NA)))
+  clean<span style="color:#f92672">.</span>location <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> gsub(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">^ </span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&#34;</span>,split<span style="color:#f92672">.</span>location)
+  <span style="color:#66d9ef">if</span> (length(clean<span style="color:#f92672">.</span>location) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span>)
+  {
+    <span style="color:#66d9ef">return</span>(c(NA,NA))
+  }
+  <span style="color:#66d9ef">else</span>
+  {
+    <span style="color:#66d9ef">return</span>(clean<span style="color:#f92672">.</span>location)
+  }
+}
+<span style="color:#75715e"># 将分拆函数作用到地址列的每一个元素上</span>
+city_state <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> lapply(ufo<span style="color:#960050;background-color:#1e0010">$</span>Location,split_city_state)
+<span style="color:#75715e"># 将分拆的后的每行数据合并成一个2维数组，便于后面引用</span>
+loc_matrix <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> do<span style="color:#f92672">.</span>call(rbind,city_state)
+<span style="color:#75715e"># 将城市数据和州数据分别存储在各自列上</span>
+ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> mutate(ufo,City <span style="color:#f92672">=</span> loc_matrix[,<span style="color:#ae81ff">1</span>],State <span style="color:#f92672">=</span> loc<span style="color:#f92672">.</span>matrix[,<span style="color:#ae81ff">2</span>])
+</code></pre></div><p>这样就实现了州和城市的分拆，至于显示结果在完成历时时间分拆之后统一显示。这里介绍一下其中的命令：首先小编创建了一个用于拆分州和城市的函数，其中涉及的字符串函数通过表面意思就可以理解，所以不再对其进行过多解释；而后使用lapply函数对地址列的每一个数据进行拆分，通过lapply()函数得到的一个列表，这样每一个原数据集中的数据都被拆分成了两个元素；而后使用do.call()函数将每两个元素以行的形式连接在一起，从而形成了一个二维数组；最后使用mutate函数在ufo数据集中创建新列，并将相应的数据存放其中。下面讲述历时时间的数据提取。</p>
+<h4 id="heading5">历时时间数据的提取</h4>
+<p>因为历时时间主要是数字+空格+min三部分构成，所以可以借鉴城市与州拆分的环节，这里直接给出代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">get_time <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> function(Dur)
+{
+  split<span style="color:#f92672">.</span>duration <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> tryCatch(strsplit(Dur, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74"> </span><span style="color:#e6db74">&#34;</span>)[[<span style="color:#ae81ff">1</span>]],
+                             error <span style="color:#f92672">=</span> function(e) <span style="color:#66d9ef">return</span>(c(NA, NA)))
+  clean<span style="color:#f92672">.</span>duration <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> gsub(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">^ </span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&#34;</span>,split<span style="color:#f92672">.</span>duration)
+  <span style="color:#66d9ef">if</span> (length(clean<span style="color:#f92672">.</span>duration) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span>)
+  {
+    <span style="color:#66d9ef">return</span>(c(NA,NA))
+  }
+  <span style="color:#66d9ef">else</span>
+  {
+    <span style="color:#66d9ef">return</span>(clean<span style="color:#f92672">.</span>duration)
+  }
+}
+<span style="color:#75715e"># 将分拆函数作用到地址列的每一个元素上</span>
+Time <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> lapply(ufo<span style="color:#960050;background-color:#1e0010">$</span>Duration,get_time)
+<span style="color:#75715e"># 将分拆的后的每行数据合并成一个2维数组，便于后面引用</span>
+Time_matrix <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> do<span style="color:#f92672">.</span>call(rbind,Time)
+<span style="color:#75715e"># 将城市数据和州数据分别存储在各自列上</span>
+ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> mutate(ufo,Dur <span style="color:#f92672">=</span> Time_matrix[,<span style="color:#ae81ff">1</span>])
+<span style="color:#75715e"># 剔除不需要的列，仅保留需要的列</span>
+ufo <span style="color:#f92672">&lt;</span><span style="color:#f92672">-</span> select(ufo,c(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">OccurDate</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">ReportDate</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">City</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">State</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Dur</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">DetailDescription</span><span style="color:#e6db74">&#34;</span>)
+ufo
+</code></pre></div><p><img src="https://i.imgur.com/gAZq0SN.png" alt="最终形成数据表">
+现在数据是不是看上去就规范多了，那么下面就可以利用这些数据进行一些初步的数据分析，探讨一下这些数据具有什麼特征，因为本期文章主要是讲述数据清洗的，所以对于数据分析，本期文章不将进行过多阐述，仅仅探讨一下ufo出现的日期分布特征。</p>
+<h4 id="heading6">可视化</h4>
+<p>这部分主要分析一下ufo出现的年份分布特征，从而对ufo的出现有一个潜在的认识。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># 直方图——全部数据</span>
+ggplot(ufo, aes(x <span style="color:#f92672">=</span> OccurDate)) <span style="color:#f92672">+</span> 
+       geom_histogram() <span style="color:#f92672">+</span> 
+       scale_x_date(breaks <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">50 years</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/RDsm3tr.png" alt="直方图1——ufo主要出现在1950年之后">
+通过上图可以看出ufo主要出现在1950年之后，更加详细的分析可以自己动手实验一下，本文就不再过多介绍了。</p>
+<h3 id="heading7">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下怎么使用R语言去进行数据的清洗规整，对数据的清洗过程有了一个比较直观的认识，关于数据的深入分析与建模会在后续的文章中逐步介绍，同时在下期文章中小编将介绍怎么使用python去实现同类的操作，敬请期待。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/r%E8%AF%AD%E8%A8%80" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">R语言</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">数据分析</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/">从qplot快速入门ggplot2</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BEr%E8%AF%AD%E8%A8%80%E7%BB%98%E5%88%B6%E7%83%AD%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/">R语言绘图——R语言绘制热地图实战</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

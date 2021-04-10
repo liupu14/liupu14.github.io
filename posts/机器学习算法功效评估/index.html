@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>机器学习算法功效评估 | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="机器学习算法功效评估" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-17
+
+写在前面
+讲了这么多期爬虫，是时候换换口味了（是时候表演真正的技术了）。因为在先前的文章中，小编介绍了一些机器学习方面的算法，然而对于任何算法来说，如果没有一个比较好的评估标准，那就相当于脱了裤子跳海——瞎扯淡呗！你总不能指望通过你的臆想和主观臆断来评价一个模型吧，还好大神们已经为我们确定好了一些评价算法优劣的标准，所以，这期文章就来谈一下算法的评价标准这个话题。下面开始吧！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%8A%9F%E6%95%88%E8%AF%84%E4%BC%B0/" />
+<meta property="article:published_time" content="2018-09-21T22:17:08+00:00" />
+<meta property="article:modified_time" content="2018-09-21T22:17:08+00:00" />
+<meta itemprop="name" content="机器学习算法功效评估">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-17
+
+写在前面
+讲了这么多期爬虫，是时候换换口味了（是时候表演真正的技术了）。因为在先前的文章中，小编介绍了一些机器学习方面的算法，然而对于任何算法来说，如果没有一个比较好的评估标准，那就相当于脱了裤子跳海——瞎扯淡呗！你总不能指望通过你的臆想和主观臆断来评价一个模型吧，还好大神们已经为我们确定好了一些评价算法优劣的标准，所以，这期文章就来谈一下算法的评价标准这个话题。下面开始吧！">
+<meta itemprop="datePublished" content="2018-09-21T22:17:08&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-21T22:17:08&#43;00:00" />
+<meta itemprop="wordCount" content="111">
+
+
+
+<meta itemprop="keywords" content="python,机器学习," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="机器学习算法功效评估"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-17
+
+写在前面
+讲了这么多期爬虫，是时候换换口味了（是时候表演真正的技术了）。因为在先前的文章中，小编介绍了一些机器学习方面的算法，然而对于任何算法来说，如果没有一个比较好的评估标准，那就相当于脱了裤子跳海——瞎扯淡呗！你总不能指望通过你的臆想和主观臆断来评价一个模型吧，还好大神们已经为我们确定好了一些评价算法优劣的标准，所以，这期文章就来谈一下算法的评价标准这个话题。下面开始吧！"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%8A%9F%E6%95%88%E8%AF%84%E4%BC%B0/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%8A%9F%E6%95%88%E8%AF%84%E4%BC%B0/&amp;text=%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%ae%97%e6%b3%95%e5%8a%9f%e6%95%88%e8%af%84%e4%bc%b0" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%8A%9F%E6%95%88%E8%AF%84%E4%BC%B0/&amp;title=%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%ae%97%e6%b3%95%e5%8a%9f%e6%95%88%e8%af%84%e4%bc%b0" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">机器学习算法功效评估</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-09-21T22:17:08Z">September 21, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-9-17</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>讲了这么多期爬虫，是时候换换口味了（是时候表演真正的技术了）。因为在先前的文章中，小编介绍了一些机器学习方面的算法，然而对于任何算法来说，如果没有一个比较好的评估标准，那就相当于脱了裤子跳海——瞎扯淡呗！你总不能指望通过你的臆想和主观臆断来评价一个模型吧，还好大神们已经为我们确定好了一些评价算法优劣的标准，所以，这期文章就来谈一下算法的评价标准这个话题。下面开始吧！</p>
+<h3 id="heading1">错误率与精度</h3>
+<p>如果你还记得小编前面讲解的机器学习方面的算法，就应该还记得这两个概念。所谓精度就是指你所训练得出的算法在用于测试数据时预测成功的概率即预测成功的样本个数占总的待测试样本个数的比率，所以用数学公式表达就是：
+$$ACC(f,D) = \frac{1}{m}\sum_{i=1}^nI(f(x_i) = y_i)$$
+这个公式应该不难理解吧，所以小编可以省一些时间了，不用再唠叨这个公式了，唯一需要说明的是I()函数是一个示性函数，当函数的参数满足时条件是等于1，否则等于0，所以上面的公式就是统计预测成功的个数占总样本个数的比率。而错误率就是用1减去精度就可以了，所以错误率一般就可以通过两种算法得到：
+$$ERROR(f,D) = \frac{1}{m}\sum_{i=1}^nI(f(x_i) \ne y_i)$$
+或者通过精度反推出错误率：
+$$ERROR(f,D) = 1-ACC(f,D)=1-\frac{1}{m}\sum_{i=1}^nI(f(x_i) = y_i)$$
+可以看出这两个指标的计算很简单，一般在实践中更多的用错误率这个指标，一个模型的错误率越高，那么这个模型的实践效果就越差，此时你就要慎重运用你的模型了。因为这两个指标通常是在评估一个模型时首先用到的，所以小编这里当然要先对这两个指标进行介绍了。我希望各位也能够记住这个，在完全一个机器学习的模型确定之后，都能够先用这两个指标先来评估一些模型的优劣，切勿直接就把你的模型用于实践了，须知，一个坏了的模型是很难出产精品结果的。</p>
+<p>错误率和精度虽常用，但并不能满足所有任务需求．以邮件问题为例，假定现在有一堆邮件，此时用训练好的模型对这些邮件进行判别，显然，错误率衡量了有多少比例的邮件被判别错误．但是很多时候我们关系关心的问题是“挑出的邮件中有多少比例是非垃圾邮件”，或者“所有非垃圾邮件中有多少比例被挑了出来”。</p>
+<p>类似的需求在信息检索、Web搜索等应用中经常出现，例如在信息检索中，经常会关心“检索出的信息中有多少比例是用户感兴趣的”或者需要确定的是“用户感兴趣的信息中有多少被检索出来了，此时如果再使用精度和错误率显然就不太合适了。这个就需要运用查准率(precision)和查全率(recall)这两个指标了。</p>
+<h3 id="heading2">查全率和查准率</h3>
+<p>在正式介绍这两个概念之前，小编先带大家回顾一下统计学中的一些知识。如果你还没有把统计学完全还给老师的话，那么应该还记得第一类错误和第二类错误吧，这两类错误在小编的学生时代真的把小编整的天天犯错。这里还是以邮件分类为例来进行说，对于邮件本身类别以及预测的结果类别，一共能形成四种情况：预测为垃圾邮件，实际为垃圾邮件；预测为非垃圾邮件，时间为垃圾邮件；预测为垃圾邮件，实际为非垃圾邮件；预测为垃圾邮件，实际为垃圾邮件。对于这四种情况存在四种专门的术语：</p>
+<ul>
+<li>真阳性：“这封邮件是垃圾邮件，我们做了正确的预测。”</li>
+<li>假阳性（第1类错误）：“这封邮件不是垃圾邮件，但是我们预测它是垃圾邮件。”</li>
+<li>假阴性（第2类错误）：“这封邮件是垃圾邮件，但是我们预测它不是垃圾邮件。”</li>
+<li>真阴性：这封邮件不是垃圾邮件，而且我们正确地预测了它不是垃圾邮件。”</li>
+</ul>
+<p>但愿你还没有疯。之所以使用阳性和阴性是因为这种概念的形成最初来源与医学上对于疾病的诊断结果。而查全率和查准率的定义就是基于这种结分类，这里小编以TP、FP、TN、FN分别代表真阳性、假阳性、真阴性和假阴性，而后构造一个结果矩阵：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">垃圾邮件</th>
+<th align="center">非垃圾邮件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">预测为垃圾邮件</td>
+<td align="center">TP</td>
+<td align="center">FP</td>
+</tr>
+<tr>
+<td align="center">预测为垃圾邮件</td>
+<td align="center">FN</td>
+<td align="center">TN</td>
+</tr>
+</tbody>
+</table>
+<p>所以查准率P和查全率R的定义为：
+$$ P = \frac{TP}{TP+FP} $$
+$$ R = \frac{TP}{TP+FN} $$
+查准率和查全率是一对矛盾的度量．一般来说，查准率高时，查全率往往偏低；而查全率高时，查准率往往偏低。例如，若希望将垃圾邮件尽可能多地选出来，则可通过增加选择邮件的数量来实现，如果将所有邮件都选上，那么所有的垃圾邮件也必然都被选上了，但这样查准率就会较低；若希望选出的邮件中垃圾邮件比例尽可能高，则可只挑选最有把握的邮件，但这样就难免会漏掉不少垃圾邮件，使得查全率较低．通常只有在一些简单任务中，才可能使查全率和查准率都很高。所以很多时候，如果直接使用这两个指标未免存在冲突，因此就相继有了F1和更一般扩展形式。</p>
+<h3 id="f1">F1和其扩展形式</h3>
+<p>为了兼顾查准率和查全率，F1及其扩展形式并相继诞生。F1的定义为：
+$$ F1 = \frac{2<em>P</em>R}{P+R}$$
+或者你也可以直接表示为：
+$$ F1 = \frac{2*TP}{样本总个数+TP-TN}$$</p>
+<p>数学基础比较好的朋友应该一眼就可以看出F1就是查全率和查准率的调和平均数，没看出的朋友也不用在意，这里不是考点。在一些应用中，对查准率和查全率的重视程度有所不同。例如在商品推荐系统中，为尽可能少打扰用户，更希望推荐内容确是用户感兴趣的，此时查准率更重要；而在逃犯信息检索系统中，更希望尽可能少漏掉逃犯，此时查全率更重要。Fl度量的一般形式$F_{\beta}$，能表达出对查准率/查全率的不同偏好，定义为：
+$$F_{\beta} = \frac{(1+\beta)*P*R}{(\beta*P)+R}$$</p>
+<p>其中$\beta$ &gt; 0 度量了查全率对查准率的相对重要性$\beta$ = 1时退化为标准的Fl; $\beta$ &gt; 1时查全率有更大影响；$\beta$ &lt;1时查准率有更大影响．</p>
+<p>很多时候有多个二分类混淆矩阵，例如进行多次训练／测试，每次得到一个混淆矩阵；或是在多个数据集上进行训练／测试，希望估计算法的“全局”性能；甚或是执行多分类任务，每两两类别的组合都对应一个泪淆矩阵；总之，希望在n个二分类混淆矩阵上综合考察查准率和查全率。</p>
+<p>一种直接做法是先在各混淆矩阵上计算出查准率和查全率，记为(P1, R1),(P2,R2)等，再计算平均值，这样就得到“宏查准率”（macro-P）、“宏查全率”（macro-R），以及相应的“宏Fl”（macro-F1):
+$$ macro-P = \frac{1}{n}\sum_{i=1}^nP_i$$
+$$ macro-R = \frac{1}{n}\sum_{i=1}^nR_i$$
+$$ macro-F1 = \frac{2*macrp-P*macro-R}{macro-P+macro-R}$$</p>
+<p>还可先将各混淆矩阵的对应元素进行平均，得到TP、FP 、TN、FN的平均值，而后基于平均值值计算“微查准率”(micro-P)、“微查全率＂(micro-R)和“微Fl”(micro-Fl):
+$$ micro-P = \frac{\overline{TP}}{\overline{TP}+\overline{FP}}$$
+$$ micro-R = \frac{\overline{TP}}{\overline{TP}+\overline{FN}}$$
+$$ micro-F1 = \frac{2<em>micrp-P</em>micro-R}{micro-P+micro-R}$$</p>
+<h3 id="heading3">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下机器学习算法中对于模型的评价指标，通过这些指标的运用，你可以测算所训练模型的功效如何，为实践奠定基础。希望大家能够对此稍稍付出一些时间，毕竟只有经得起检验的模型才是好模型，所以切勿急躁使用模型，使用之前务必先进行一番功效评估。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">机器学习</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%86%B3%E7%AD%96%E6%A0%91/">机器学习系列——决策树</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E7%BB%88%E7%BB%93%E7%AF%87xpath%E8%AF%AD%E6%B3%95/">网页解析工具终结篇——xpath语法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%80%81%E4%B8%8A%E4%B8%80%E7%A2%97%E9%B8%A1%E6%B1%A4beautifulsoup%E7%BD%91%E9%A1%B5%E8%A7%A3%E6%9E%90%E4%BB%8B%E7%BB%8D/">送上一碗鸡汤——BeautifulSoup网页解析介绍</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E9%A3%8E%E9%9B%A8%E8%B7%AF%E6%AD%A3%E5%88%99%E7%9F%A5%E5%A4%9A%E5%B0%91/">爬虫风雨路，正则知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/">python生成随机漫步序列——醉鬼能回到家吗？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/">温故知新——python爬虫阶段总结</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MySQL数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MongoDB数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/">热地图绘制——基于python获取的经纬度坐标</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

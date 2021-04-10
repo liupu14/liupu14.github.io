@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>python生成随机漫步序列——醉鬼能回到家吗？ | Liupu&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.60.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="https://liupu14.github.io/dist/css/app.1cb140d8ba31d5b2f1114537dd04802a.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="python生成随机漫步序列——醉鬼能回到家吗？" />
+<meta property="og:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-3
+
+写在前面
+最近小编又重温了一下《随机漫步的傻瓜》这本书，再次被纳西姆的智慧所征服，不过本文小编可不准备讲这些读后感，而是准备着重讲一下随机漫步这个词汇。因为随机漫步这个词汇可以说现在已经广泛地被用于文理，这个词汇期初起源于科学杂志上面的一篇论文，用来介绍一个醉鬼行走的路线路径，而后这一次被引入数学、金融、哲学思想方面，更是诞生了想随机分析这些学科。因此，本文准备介绍一些怎么使用python来生成随机游走序列以及绘制相应的路径图，下面正式开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/" />
+<meta property="article:published_time" content="2018-09-07T22:12:41+00:00" />
+<meta property="article:modified_time" content="2018-09-07T22:12:41+00:00" />
+<meta itemprop="name" content="python生成随机漫步序列——醉鬼能回到家吗？">
+<meta itemprop="description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-3
+
+写在前面
+最近小编又重温了一下《随机漫步的傻瓜》这本书，再次被纳西姆的智慧所征服，不过本文小编可不准备讲这些读后感，而是准备着重讲一下随机漫步这个词汇。因为随机漫步这个词汇可以说现在已经广泛地被用于文理，这个词汇期初起源于科学杂志上面的一篇论文，用来介绍一个醉鬼行走的路线路径，而后这一次被引入数学、金融、哲学思想方面，更是诞生了想随机分析这些学科。因此，本文准备介绍一些怎么使用python来生成随机游走序列以及绘制相应的路径图，下面正式开始。">
+<meta itemprop="datePublished" content="2018-09-07T22:12:41&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-07T22:12:41&#43;00:00" />
+<meta itemprop="wordCount" content="120">
+
+
+
+<meta itemprop="keywords" content="python,numpy," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python生成随机漫步序列——醉鬼能回到家吗？"/>
+<meta name="twitter:description" content="
+微信公众号：Python商务实践
+博客网址：www.liupu.top
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：2018-9-3
+
+写在前面
+最近小编又重温了一下《随机漫步的傻瓜》这本书，再次被纳西姆的智慧所征服，不过本文小编可不准备讲这些读后感，而是准备着重讲一下随机漫步这个词汇。因为随机漫步这个词汇可以说现在已经广泛地被用于文理，这个词汇期初起源于科学杂志上面的一篇论文，用来介绍一个醉鬼行走的路线路径，而后这一次被引入数学、金融、哲学思想方面，更是诞生了想随机分析这些学科。因此，本文准备介绍一些怎么使用python来生成随机游走序列以及绘制相应的路径图，下面正式开始。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://liupu14.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Liupu&#39;s Blog
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/contact/" title="Contact page">
+              Contact
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="https://liupu14.github.io/projects/" title="Project page">
+              Project
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        BLOG
+      </aside>
+      
+
+
+
+
+  <div id="sharing" class="mt3">
+
+    
+    <a href="https://www.facebook.com/sharer.php?u=https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/" class="facebook no-underline" aria-label="share on Facebook">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M28.765,50.32h6.744V33.998h4.499l0.596-5.624h-5.095  l0.007-2.816c0-1.466,0.14-2.253,2.244-2.253h2.812V17.68h-4.5c-5.405,0-7.307,2.729-7.307,7.317v3.377h-3.369v5.625h3.369V50.32z   M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;"/></svg>
+
+    </a>
+
+    
+    
+    <a href="https://twitter.com/share?url=https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/&amp;text=python%e7%94%9f%e6%88%90%e9%9a%8f%e6%9c%ba%e6%bc%ab%e6%ad%a5%e5%ba%8f%e5%88%97%e2%80%94%e2%80%94%e9%86%89%e9%ac%bc%e8%83%bd%e5%9b%9e%e5%88%b0%e5%ae%b6%e5%90%97%ef%bc%9f" class="twitter no-underline" aria-label="share on Twitter">
+      <svg height="32px"  style="enable-background:new 0 0 67 67;" version="1.1" viewBox="0 0 67 67" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M37.167,22.283c-2.619,0.953-4.274,3.411-4.086,6.101  l0.063,1.038l-1.048-0.127c-3.813-0.487-7.145-2.139-9.974-4.915l-1.383-1.377l-0.356,1.017c-0.754,2.267-0.272,4.661,1.299,6.271  c0.838,0.89,0.649,1.017-0.796,0.487c-0.503-0.169-0.943-0.296-0.985-0.233c-0.146,0.149,0.356,2.076,0.754,2.839  c0.545,1.06,1.655,2.097,2.871,2.712l1.027,0.487l-1.215,0.021c-1.173,0-1.215,0.021-1.089,0.467  c0.419,1.377,2.074,2.839,3.918,3.475l1.299,0.444l-1.131,0.678c-1.676,0.976-3.646,1.526-5.616,1.568  C19.775,43.256,19,43.341,19,43.405c0,0.211,2.557,1.397,4.044,1.864c4.463,1.377,9.765,0.783,13.746-1.568  c2.829-1.673,5.657-5,6.978-8.221c0.713-1.716,1.425-4.851,1.425-6.354c0-0.975,0.063-1.102,1.236-2.267  c0.692-0.678,1.341-1.419,1.467-1.631c0.21-0.403,0.188-0.403-0.88-0.043c-1.781,0.636-2.033,0.551-1.152-0.402  c0.649-0.678,1.425-1.907,1.425-2.267c0-0.063-0.314,0.042-0.671,0.233c-0.377,0.212-1.215,0.53-1.844,0.72l-1.131,0.361l-1.027-0.7  c-0.566-0.381-1.361-0.805-1.781-0.932C39.766,21.902,38.131,21.944,37.167,22.283z M33,64C16.432,64,3,50.569,3,34S16.432,4,33,4  s30,13.431,30,30S49.568,64,33,64z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/></svg>
+
+    </a>
+
+    
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://liupu14.github.io/posts/python%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5%E5%BA%8F%E5%88%97%E9%86%89%E9%AC%BC%E8%83%BD%E5%9B%9E%E5%88%B0%E5%AE%B6%E5%90%97/&amp;title=python%e7%94%9f%e6%88%90%e9%9a%8f%e6%9c%ba%e6%bc%ab%e6%ad%a5%e5%ba%8f%e5%88%97%e2%80%94%e2%80%94%e9%86%89%e9%ac%bc%e8%83%bd%e5%9b%9e%e5%88%b0%e5%ae%b6%e5%90%97%ef%bc%9f" class="linkedin no-underline" aria-label="share on LinkedIn">
+      <svg  height="32px"  style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+
+    </a>
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">python生成随机漫步序列——醉鬼能回到家吗？</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-09-07T22:12:41Z">September 7, 2018</time>
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>微信公众号：Python商务实践
+博客网址：<a href="www.liupu.top"><a href="http://www.liupu.top">www.liupu.top</a></a>
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：<code>2018-9-3</code></p>
+</blockquote>
+<h3 id="heading">写在前面</h3>
+<p>最近小编又重温了一下《随机漫步的傻瓜》这本书，再次被纳西姆的智慧所征服，不过本文小编可不准备讲这些读后感，而是准备着重讲一下随机漫步这个词汇。因为随机漫步这个词汇可以说现在已经广泛地被用于文理，这个词汇期初起源于科学杂志上面的一篇论文，用来介绍一个醉鬼行走的路线路径，而后这一次被引入数学、金融、哲学思想方面，更是诞生了想随机分析这些学科。因此，本文准备介绍一些怎么使用python来生成随机游走序列以及绘制相应的路径图，下面正式开始。</p>
+<h3 id="heading1">随机漫步简介</h3>
+<p>随机漫步源于科学杂志上面的一篇《醉鬼漫步》的论文，主要用来形容后期事件对于前期事件的非依赖性，如果用时间序列的术语来讲就是滞后一期的数据不依赖于前一期的数据，历史数据的发生对于后续数据的产生不具备影响。可以用以下公式表示：
+$$X_t = X_{t-1} + \sigma_t $$
+其中$X_t$代表第t期的值，$\sigma_t$是一个服从标准正态分布的白噪声序列，如果将这个等式进行展开，即可得到：
+$$ X_t = \sigma_t + \sigma_{t-1} + \cdots + \sigma_1 + X_0$$
+所以现在的值不过是一系列随机数的和，因此历史数据对当期值不存在任何预测与指示作用，任何依赖于历史数据的预测都是无效的。不够本文可不准备将这些，毕竟讲述随机分析绝对是一件大工程（不然也不会有随机过程分析以及随机分析这些相关学科）。本文主要是介绍怎么使用python去生成随机漫步序列并且绘制相应的路径图。</p>
+<h3 id="python">python与随机漫步序列生成</h3>
+<p>在这一部分，小编着重介绍一下怎么使用python去生成随机漫步序列，小编会在这这里介绍两种方法：直接使用python中的内置函数去实现；使用第三方库numpy实现。下面先介绍怎么使用python内置的函数去生成随机漫步序列。因为随机漫步中每一步数字的生成都是随机的，出现正数和负数的概率相同，因此这里使用1和-1来代表每一步生成的数字，这可以通过python内置模块random实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> random
+position <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+walk <span style="color:#f92672">=</span> [position]
+steps <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
+<span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(steps):
+    step <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">else</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+    position <span style="color:#f92672">+</span><span style="color:#f92672">=</span> step
+    walk<span style="color:#f92672">.</span>append(position)
+</code></pre></div><p>这样便生成了一个随机漫步序列，为了看一下生成的序列情况，这里使用matplotlib中的绘图函数进行图形展示。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">%</span>matplotlib inline
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">font.sans-serif</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">SimHei</span><span style="color:#e6db74">&#39;</span>]
+plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">axes.unicode_minus</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> False
+<span style="color:#f92672">from</span> matplotlib <span style="color:#f92672">import</span> pyplot <span style="color:#66d9ef">as</span> plt
+plt<span style="color:#f92672">.</span>plot(walk)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">步数</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">累计和</span><span style="color:#e6db74">&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">随机漫步示例</span><span style="color:#e6db74">&#39;</span>)
+</code></pre></div><p><img src="https://i.imgur.com/R3g19m2.png" alt="随机漫步示例">
+可以看出生成的序列中-1相对较多，使得累计的和最终程序负值。这里是使用python中内置的random模块实现的，不过使用random模块去生成序列一般效率较低，这方面numpy的优势就显得更加明显，下面可以参考一下numpy的生成过程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+steps <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2000</span>)
+walk <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(steps<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+walks <span style="color:#f92672">=</span> walk<span style="color:#f92672">.</span>cumsum()
+</code></pre></div><p>这种方式更加快捷，基本是python中内置模块random的100倍左右，当然这里生成的数相对较少，可能你体会不到此间的效率，但是当你需要生成的数据量较大时，两种方式的效率就出现了极大的差距。所以后面对于随机漫步序列的生成主要使用numpy。</p>
+<h3 id="heading2">醉鬼能够走到目的地吗</h3>
+<p>随机漫步源自于醉鬼，所以最后小编就和大家一起分析一下醉鬼漫步的结果，主要考虑一下醉鬼是否能够回到家。这里考虑醉鬼的出发点就是零点，而家就距离0点2000步的水平线上，所以如果醉鬼最终能够到家，那么他又会再一次处于0水平线上。当然，如果使用一个例子的话会显得不能说明问题，因此这里重复生成5000个随机漫步序列，来统计回到0水平线的频数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">nwalks <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>
+nsteps <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
+draws <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>,size <span style="color:#f92672">=</span> (nwalks,nsteps))
+walk <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(draws<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+walks <span style="color:#f92672">=</span> walk<span style="color:#f92672">.</span>cumsum(<span style="color:#ae81ff">1</span>)
+pro <span style="color:#f92672">=</span> (walks[:,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>sum() <span style="color:#f92672">/</span> <span style="color:#ae81ff">5000</span>
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">醉鬼成功回到家的概率为：</span><span style="color:#e6db74">&#39;</span>,pro)
+</code></pre></div><p>最终得出了醉鬼回到家的概率为1.88%，可见当你喝醉酒了，你真的很难正常回到家的，为了安全考虑，最好还是不要喝多，除非你是和熟人在一起。</p>
+<h3 id="heading3">后记</h3>
+<p>本文讲到这里就暂告一段落了，本期文章和大家聊了一下随机漫步序列的一些话题，主要介绍了怎么使用python去生成随机漫步序列以及绘制随机漫步路径图。这期文章也给大家初步地聊了一下numpy的使用方法，关于这个库后续会有更多介绍，敬请期待。最后再次感谢你们的支持与鼓励，你们的陪伴是小编前进的动力！</p><ul class="pa0">
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">python</a>
+   </li>
+  
+   <li class="list">
+     <a href="https://liupu14.github.io/tags/numpy" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">numpy</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0python%E7%88%AC%E8%99%AB%E9%98%B6%E6%AE%B5%E6%80%BB%E7%BB%93/">温故知新——python爬虫阶段总结</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MySQL数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%88%AC%E8%99%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8mongodb%E6%95%B0%E6%8D%AE%E5%BA%93/">爬虫数据的数据库存储——MongoDB数据库</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E7%83%AD%E5%9C%B0%E5%9B%BE%E7%BB%98%E5%88%B6%E5%9F%BA%E4%BA%8Epython%E8%8E%B7%E5%8F%96%E7%9A%84%E7%BB%8F%E7%BA%AC%E5%BA%A6%E5%9D%90%E6%A0%87/">热地图绘制——基于python获取的经纬度坐标</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%93%BE%E5%AE%B6%E7%BD%91%E7%A7%9F%E6%88%BF%E6%95%B0%E6%8D%AE/">python爬取链家网租房数据</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/rython%E4%B8%8E%E6%95%A3%E7%82%B9%E5%9B%BE%E7%BB%98%E5%88%B6/">Rython与散点图绘制</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E7%88%AC%E5%8F%96%E9%85%B7%E7%8B%97top500%E6%8E%92%E8%A1%8C%E6%A6%9C/">python爬取酷狗Top500排行榜</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E9%AB%98%E7%BA%A7python%E5%87%BD%E6%95%B0%E7%9F%A5%E5%A4%9A%E5%B0%91/">高级python函数知多少？</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/pandas%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F%E7%9F%A9%E9%98%B5/">pandas高级技巧——快速生成虚拟变量矩阵</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BA%8C/">Python与股市数据分析（二）</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/python%E4%B8%8E%E8%82%A1%E5%B8%82%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">Python与股市数据分析</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95/">机器学习系列——朴素贝叶斯算法</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E5%80%BC%E5%BE%97%E7%BB%86%E7%BB%86%E5%93%81%E5%91%B3%E7%9A%84%E4%B8%83%E7%A7%8Dpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">值得细细品味的七种python可视化工具</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/r%E8%AF%AD%E8%A8%80%E4%B8%8Epython%E7%BB%98%E5%88%B6k%E7%BA%BF%E5%9B%BE/">R语言与Python绘制K线图</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/">你的微信好友在哪里？使用python绘制好友分布热地图</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://liupu14.github.io/" >
+    &copy;  Liupu's Blog 2021 
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+<a href="https://github.com/liupu14" target="_blank" class="link-transition github link dib z-999 pt3 pt0-l mr1" title="Github link" rel="noopener" aria-label="follow on Github——Opens in a new window">
+  <svg  height="32px"  style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000" width="8px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;fill:;"/>
+</svg>
+</span></a>
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="https://liupu14.github.io/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

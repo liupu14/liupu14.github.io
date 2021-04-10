@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python绘图 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/categories/python%E7%BB%98%E5%9B%BE/</link>
+    <description>Recent content in python绘图 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 Jun 2018 23:18:57 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/categories/python%E7%BB%98%E5%9B%BE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>你的微信好友在哪里？使用python绘制好友分布热地图</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/</link>
+      <pubDate>Mon, 04 Jun 2018 23:18:57 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%A0%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%A5%BD%E5%8F%8B%E5%9C%A8%E5%93%AA%E9%87%8C%E4%BD%BF%E7%94%A8python%E7%BB%98%E5%88%B6%E5%A5%BD%E5%8F%8B%E5%88%86%E5%B8%83%E7%83%AD%E5%9C%B0%E5%9B%BE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-6-1&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周，一切顺利！上期文章中，小编和大家聊了一下python中操作Excel的一个第三方库xlsxwriter的一些具体细节，当然主要是围绕xlsxwriter库中的workbook进行展开，了解了这类命令下的相关操作命令。不过延续的介绍会在后续接着展开，本期文章中，小编将和大家聊一下怎么使用python去绘制你的微信好友的省份分布的热地图，进而了解你应该重点去发展哪里的朋友，好了，现在就赶快开始吧。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python绘图——matplotlib初探</title>
+      <link>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/</link>
+      <pubDate>Thu, 10 May 2018 20:45:18 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E7%BB%98%E5%9B%BEmatplotlib%E5%88%9D%E6%8E%A2/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-7&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;忙碌的一周只剩下最后一天了，欢快的周末正在向你招手！这一周总体说来是过的真心不爽，每天不是被雨淋就是在被雨淋的路上，对此小编毫无办法（毕竟龙王不认识咱），不过想到每天的读书与写作的快乐，这种郁闷的心情就一扫而过了。上期文章中，小编和大家讲述了怎么使用python+pandas去高效地进行Excel文件的合并与处理，初步了解到了python中pandas库的强大，这个库是小编使用最频繁以及也将是后续文章中讲述最频繁的一个话题之一。不过本期文章并不打算继续介绍这个库，本期文章小编将要和大家唠唠的是python中的绘图王者matplotlib库，初步了解一下怎么使用这个绘图库快速便捷地绘制出美观的图表。至于本期文章为什麼不接着讲解pandas库而转向matplotlib，小编这里还是对此说几句吧。这种转变归因于两点：其一，秉持荤素搭配干活不累的原则，使各个主题相互穿插，给阅读带了点乐趣与神秘感；其二，小编的公众号说到底是对自己所学所思的一些总结实践，而不是致力于教育，所以不会想课本那样系统性地阐述某一个话题。这就使得小编会在写作中会根据自己最近最为常用或者最感兴趣的方向进行话题选择。好了，废话说完了，下面进入本期主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>pdvega绘制常用商务图</title>
+      <link>https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/</link>
+      <pubDate>Fri, 20 Apr 2018 23:16:08 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/pdvega%E7%BB%98%E5%88%B6%E5%B8%B8%E7%94%A8%E5%95%86%E5%8A%A1%E5%9B%BE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+任何问题与讨论，请在在文末评论处或公众号留言
+最新更新时间：&lt;code&gt;2018-4-17&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;heading&#34;&gt;写在前面&lt;/h2&gt;
+&lt;p&gt;千呼万唤始出来，文章继续更新时！上一期小编说过，这一期文章中将讲一讲python中绘图那些事。相信一听到Python绘图，各位大大脑海中最先涌现出的绘图库应该就是Matplotlib库了（什麼，你说你从没有涌现出这个想法，小编只能说要不你就是小白，要不你就真的是Python小白）。但是，本期文章中，小编并不准备直接开始讲述这一Python绘图神器，原因小编有在上一期文章中提到过，这里就不再多说。那么大家肯定很疑惑，既然你小编你不准备讲述Matplotlib库，那你是准备这一期忽悠我们嘛（13万万中国人不会答应）。各位先别急着丢板砖呀，小编虽然不准备讲述这一绘图库，但已经准备了另外一个更加高效的绘图库予以大家，这个库就是基于altair库语法开发出来的一个快捷简便绘图库pdvega。至于小编为什麼要从这一个库开始讲起，这里是处于两个原因：其一，让大家了解到Python中绘图也可以如此简单美观，从而提升各位继续Python之路的兴趣；其二，正如公众号所明确的那样，本公众号旨在介绍一些简化办公的方法，那么在绘图方面自然需要不断介绍更加快捷便利的绘图库。好了，闲话不再多说，下面正式进入pdvega的世界。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

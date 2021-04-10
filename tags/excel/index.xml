@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>excel on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/excel/</link>
+    <description>Recent content in excel on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Jun 2018 23:35:30 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/excel/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>xlsxwriter库介绍—（（二）——workbook命令介绍</title>
+      <link>https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Fri, 01 Jun 2018 23:35:30 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/xlsxwriter%E5%BA%93%E4%BB%8B%E7%BB%8D%E4%BA%8Cworkbook%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-29&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;今天六一儿童节，可惜小编已不再孩童，不过仍希望能够保持一颗孩提时代的好奇与探索之心。上期文章中，小编和大脚聊了一下ggplot2中的快速绘图函数qplot，了解了qplot在作图时的快捷便利，在一定程度上也可以将其当作是ggplot2的快速入门，更多细节描述与介绍小编会在后续文章中一一介绍。而在本文中，小编准备和大家聊一下python中操作Excel的一个第三方库xlsxwriter的一些具体细节，本文将主要围绕xlsxwriter库中的workbook进行展开，着重介绍这类命令下的相关操作命令，下面正式开始。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用python库进行Excel读写</title>
+      <link>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/</link>
+      <pubDate>Tue, 15 May 2018 23:41:25 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BD%BF%E7%94%A8python%E5%BA%93%E8%BF%9B%E8%A1%8Cexcel%E8%AF%BB%E5%86%99/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-13&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;新的一周，各位辛苦了，那就继续辛苦三天吧！先前系列的文章中，小编和大家初步讲解了一些怎么使用Python中的相关库去绘制各种商务图表，这绝对是我们工作中相当重要的一个环节。但是，在我们的平时工作中，我们除了可视化的需求之外，我们还需要返回一些整理好的Excel表格，因此，善良的小编怎么能忽视各位的这种潜在需求呢，本期文章，小编就和大家探讨一下怎么使用python去操作Excel表格。对于Excel表格的操作主要包括三部分：读入Excel表格、处理Excel表格以及写入Excel表格。这三者中最重要以及最需要时间投入的就是Excel表格数据的分析与处理，这也将是笔者写作的一大主题，后续文章中会逐步进行介绍；而对于Excel表格的读入，在python中也存在着一些相对比较高效与实用的方法，这部分内容小编会在后期通过一篇文章进行专门讲解。排除了不讲的，剩下的自然就是本期文章将要进行介绍的了，本期文章将和大家一起探讨一下如何使用python去写入Excel表格。使用python写入Excel存在多种方法，但是本期文章小编将主要介绍三种方法：使用pandas库、使用xlwt库以及使用xlsxwriter库。所以下文主要分成三部分，分别围绕这三种方法，不过小编会将重点放在第三部分也就是xlsxwriter库的介绍中，在那里小编会给出一个详细的操作示例来对这一库进行一个直观性认识，而对其余两部分的介绍小编会尽量只给出常用操作命令，下面我们正式进入主题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python商务办公系列——pandas执行Excel筛选编辑功能</title>
+      <link>https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/</link>
+      <pubDate>Fri, 27 Apr 2018 01:19:42 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/python%E5%95%86%E5%8A%A1%E5%8A%9E%E5%85%AC%E7%B3%BB%E5%88%97pandas%E6%89%A7%E8%A1%8Cexcel%E7%AD%9B%E9%80%89%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+个人博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-4-23&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;各位大大，晚上好，我想死你们了！相信看这两期文章的朋友可能会注意到，这两期文章的开头都附带了小编自己的个人博客网址，没错，正是在这几周，小编终于完成了对于自己博客的搭建工作，以后小编会在微信公众号和博客上同步更新自己的文章，这两个平台总有一个适合你阅读的平台。至于微信公众号中的前期文章，小编也会在后面慢慢地将其全部转移至博客之中，争取以最大可能给支持小编的你们提供最舒适的阅读体验。上一期结尾，小编说过这一期文章将讲述一下机器学习之中的决策树算法，但是这几天小编正处于加班进行时，而那篇机器学习的文章又将是小编目前为止最长的一篇文章，因此，在这工作日无非完全完成更新，所以这一期小编准备暂时讲一下最近最常用的一些关于pandas库的一些话题，而对于机器学习的那片文章暂定于周末更新，再次，先向各位朋友说声抱歉了。至于这一期的重点，小编会介绍怎么使用pandas库来快速完成Excel中的筛选和编辑功能。下面正式进入本期的主题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

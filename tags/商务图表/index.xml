@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>商务图表 on Liupu&#39;s Blog</title>
+    <link>https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%9B%BE%E8%A1%A8/</link>
+    <description>Recent content in 商务图表 on Liupu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 May 2018 20:46:28 +0000</lastBuildDate>
+    
+	<atom:link href="https://liupu14.github.io/tags/%E5%95%86%E5%8A%A1%E5%9B%BE%E8%A1%A8/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>从qplot快速入门ggplot2</title>
+      <link>https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/</link>
+      <pubDate>Tue, 29 May 2018 20:46:28 +0000</pubDate>
+      
+      <guid>https://liupu14.github.io/posts/%E4%BB%8Eqplot%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8ggplot2/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;微信公众号：Python商务实践
+博客网址：&lt;a href=&#34;www.liupu.top&#34;&gt;&lt;a href=&#34;http://www.liupu.top&#34;&gt;www.liupu.top&lt;/a&gt;&lt;/a&gt;
+任何问题和建议，请在博客评论区或公众号留言
+最近更新时间：&lt;code&gt;2018-5-25&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;heading&#34;&gt;写在前面&lt;/h3&gt;
+&lt;p&gt;这两天小编有点事情要处理，所以文章没有及时更新，先对各位说声抱歉了。上期文章中，小编和大家介绍了xlsxwriter库的快速入门，对xlsxwriter操作Excel的基本过程有了一个基本了解，后续会进一步加大对于这个库的相关介绍。本期文章中，小编将和大家继续聊一下图形绘制那些事，所谓一图胜万表，所以小编会定期地介绍一下图表的绘制方法。本期文章中，小编将和大家聊一下小编目前为止所接触的最优秀的绘图库ggplot2，这个库目前运行在R语言中，不过在python中也已经存在了这个库的低级版本ggplot。所以了解这个库系列对于绘图实践可以说大有益处，小编会用一系列的文章将这个绘图包的语法介绍清楚，本期文章将作为这个系列的开篇之作，也可以算作是快速入门教程吧。现在就让我们进入这个神器一般的绘图包吧！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
